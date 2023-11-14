@@ -14,9 +14,11 @@
                     :casename="'default'"
                 ></demolink>
 
-                <w-spt-plot-depths
-                    :sts="WSptPlotDepths.st1"
-                ></w-spt-plot-depths>
+                <div style="width:calc( 100vw - 40px ); overflow-y:hidden; overflow-x:auto;">
+                    <w-spt-plot-depths
+                        :sts="WSptPlotDepths.st1"
+                    ></w-spt-plot-depths>
+                </div>
 
             </div>
 
