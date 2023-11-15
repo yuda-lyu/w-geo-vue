@@ -8,13 +8,13 @@
         <div style="padding:0px;">
 
 
-            <div class="bk">
+            <div class="bk" style="margin:0px;">
                 <demolink
                     :kbname="'w-spt-plot-depths'"
                     :casename="'default'"
                 ></demolink>
 
-                <div style="width:calc( 100vw - 40px ); overflow-y:hidden; overflow-x:auto;">
+                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
                     <w-spt-plot-depths
                         :sts="WSptPlotDepths.st1"
                     ></w-spt-plot-depths>
@@ -45,7 +45,7 @@ export default {
             'WSptPlotDepths': {
                 'st1': [
                     {
-                        key: '柱狀圖',
+                        key: 'Geolayer',
                         width: 350,
                         height: 550,
                         valueTitle: 'geologic',
@@ -54,7 +54,7 @@ export default {
                         depthMax: 20,
                         waterLevel: 0,
                         item: {
-                            type: 'geologic column',
+                            type: 'geolayer',
                             name: '',
                             data: [
                                 {
@@ -76,7 +76,7 @@ export default {
                                     depthEnd: '6.525',
                                     depth: 5.775,
                                     legendCode: '227',
-                                    description: 'Silty Medium Fine Sand',
+                                    description: 'Silty Fine Sand',
                                 },
                                 {
                                     depthStart: '6.525',
@@ -135,9 +135,8 @@ export default {
                                     description: 'Low Plasticity Clay',
                                 },
                             ],
-
                         },
-                        forceNoLine: false,
+                        plotType: 'none',
                     },
                     {
                         key: 'N60',
@@ -165,7 +164,7 @@ export default {
                                 [19.2625, 43.17],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'FC(%)',
@@ -193,7 +192,7 @@ export default {
                                 [19.2625, 99],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'Vertical stress(MPa)',
@@ -221,7 +220,7 @@ export default {
                                 [19.2625, 0.3719980220785881],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptSeed-FS',
@@ -249,7 +248,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -278,7 +277,7 @@ export default {
                                 [19.2625, 12.95199841],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -307,7 +306,7 @@ export default {
                                 [19.2625, null],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -336,7 +335,7 @@ export default {
                                 [19.2625, 0.195755264],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -365,7 +364,7 @@ export default {
                                 [19.2625, null],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -394,7 +393,7 @@ export default {
                                 [19.2625, 0.181694155],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
 
                     {
@@ -423,7 +422,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptHBF2017-FS',
@@ -451,7 +450,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptNCEER-FS',
@@ -479,7 +478,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptJRA1996-FS',
@@ -507,7 +506,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptJRA2017-FS',
@@ -535,7 +534,7 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
                         key: 'sptTY-FS',
@@ -563,10 +562,10 @@ export default {
                                 [19.2625, 2],
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                     {
-                        key: 'Compare-FS',
+                        key: 'All-cmpFS',
                         width: 260,
                         height: 550,
                         valueTitle: 'FS',
@@ -574,7 +573,7 @@ export default {
                         depthMin: 0,
                         depthMax: 20,
                         item: {
-                            name: 'Compare-FS',
+                            name: 'All-cmpFS',
                             data: [
                                 {
                                     name: 'sptSeed-FS',
@@ -704,7 +703,7 @@ export default {
                                 },
                             ],
                         },
-                        forceNoLine: false,
+                        plotType: 'line+marker',
                     },
                 ],
             },

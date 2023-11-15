@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="">
 
 
         <template v-if="!isNarrow">
@@ -10,19 +10,21 @@
 
 
         <div style="background:#f5f5f5;">
-            <WListHorizontal
-                :items="cmps"
-                :itemActive.sync="cmpPick"
-                :itemBackgroundColor="'transparent'"
-                :itemBackgroundColorHover="'transparent'"
-                :itemBackgroundColorActive="'transparent'"
-            >
-                <template v-slot:item="props">
-                    <div style="display:flex; align-items:center;">
-                        {{kebabCase(props.item)}}
-                    </div>
-                </template>
-            </WListHorizontal>
+            <div style="width:calc( 100vw - 20px ); overflow-x:auto;">
+                <WListHorizontal
+                    :items="cmps"
+                    :itemActive.sync="cmpPick"
+                    :itemBackgroundColor="'transparent'"
+                    :itemBackgroundColorHover="'transparent'"
+                    :itemBackgroundColorActive="'transparent'"
+                >
+                    <template v-slot:item="props">
+                        <div style="display:flex; align-items:center;">
+                            {{kebabCase(props.item)}}
+                        </div>
+                    </template>
+                </WListHorizontal>
+            </div>
         </div>
 
 
@@ -35,6 +37,8 @@
             <AppZoneWSptPlotDepths v-if="cmpPick==='WSptPlotDepths'"></AppZoneWSptPlotDepths>
 
             <AppZoneWSptPlotDepthsWithGrades v-if="cmpPick==='WSptPlotDepthsWithGrades'"></AppZoneWSptPlotDepthsWithGrades>
+
+            <AppZoneWSptPlotDepthsWithGradesAndTools v-if="cmpPick==='WSptPlotDepthsWithGradesAndTools'"></AppZoneWSptPlotDepthsWithGradesAndTools>
 
         </div>
 
@@ -53,6 +57,7 @@ import AppZoneWPlot from './AppZoneWPlot.vue'
 import AppZoneWSptPlotDepth from './AppZoneWSptPlotDepth.vue'
 import AppZoneWSptPlotDepths from './AppZoneWSptPlotDepths.vue'
 import AppZoneWSptPlotDepthsWithGrades from './AppZoneWSptPlotDepthsWithGrades.vue'
+import AppZoneWSptPlotDepthsWithGradesAndTools from './AppZoneWSptPlotDepthsWithGradesAndTools.vue'
 
 
 export default {
@@ -62,6 +67,7 @@ export default {
         AppZoneWSptPlotDepth,
         AppZoneWSptPlotDepths,
         AppZoneWSptPlotDepthsWithGrades,
+        AppZoneWSptPlotDepthsWithGradesAndTools,
     },
     data: function() {
         return {
@@ -76,6 +82,7 @@ export default {
                 'WSptPlotDepth',
                 'WSptPlotDepths',
                 'WSptPlotDepthsWithGrades',
+                'WSptPlotDepthsWithGradesAndTools',
             ],
 
             cmpPick: 'WPlot',

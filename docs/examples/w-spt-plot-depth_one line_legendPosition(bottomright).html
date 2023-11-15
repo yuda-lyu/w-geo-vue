@@ -80,7 +80,7 @@
     </script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.1/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.2/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -134,7 +134,7 @@
 
             <w-spt-plot-depth
                 :st="WSptPlotDepth.st1"
-                :opt-set="{
+                :options-ext="{
                         legendPosition:'bottomright',
                     }"
             ></w-spt-plot-depth>
@@ -153,7 +153,7 @@
       return {
         WSptPlotDepth: {
           st1: {
-            key: "Compare-FS",
+            key: "All-cmpFS",
             width: 260,
             height: 550,
             valueTitle: "FS",
@@ -178,10 +178,10 @@
                 [19.2625, 2]
               ]
             },
-            forceNoLine: false
+            plotType: "line+marker"
           },
           st2: {
-            key: "Compare-FS",
+            key: "All-cmpFS",
             width: 260,
             height: 550,
             valueTitle: "FS",
@@ -189,7 +189,7 @@
             depthMin: 0,
             depthMax: 20,
             item: {
-              name: "Compare-FS",
+              name: "All-cmpFS",
               data: [
                 {
                   name: "sptSeed-FS",
@@ -319,7 +319,7 @@
                 }
               ]
             },
-            forceNoLine: false
+            plotType: "line+marker"
           }
         }
       };

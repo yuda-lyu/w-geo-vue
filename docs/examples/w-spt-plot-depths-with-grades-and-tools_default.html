@@ -127,7 +127,7 @@
                 style="cursor:pointer;"
                 title="open for copy link to view component"
                 onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
-            >w-spt-plot-depths</span>
+            >w-spt-plot-depths-with-grades-and-tools</span>
         </div>
         <div class="bk" style="margin:0px;">
             <div class="item">default</div>
@@ -135,7 +135,9 @@
             <div
                 style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;"
             >
-                <w-spt-plot-depths :sts="WSptPlotDepths.st1"></w-spt-plot-depths>
+                <w-spt-plot-depths-with-grades-and-tools
+                    :sts="WSptPlotDepthsWithGradesAndTools.st1"
+                ></w-spt-plot-depths-with-grades-and-tools>
             </div>
         </div>
     </v-app>
@@ -150,12 +152,12 @@
 
     data: function() {
       return {
-        WSptPlotDepths: {
+        WSptPlotDepthsWithGradesAndTools: {
           st1: [
             {
               key: "Geolayer",
               width: 350,
-              height: 550,
+              // height: 550,
               valueTitle: "geologic",
               depthTitle: "Depth(m)",
               depthMin: 0,
@@ -248,8 +250,8 @@
             },
             {
               key: "N60",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "N60",
               depthTitle: "Depth(m)",
               depthMin: 0,
@@ -276,10 +278,10 @@
             },
             {
               key: "FC(%)",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FC(%)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -304,10 +306,10 @@
             },
             {
               key: "Vertical stress(MPa)",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "Vertical stress(MPa)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -332,10 +334,10 @@
             },
             {
               key: "sptSeed-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -361,10 +363,10 @@
 
             {
               key: "sptSeed-PL",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "PL",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -390,10 +392,10 @@
 
             {
               key: "sptSeed-vstrTS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "Volumetric Strain(%)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -419,10 +421,10 @@
 
             {
               key: "sptSeed-stlTS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "Settlement(m)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -448,10 +450,10 @@
 
             {
               key: "sptSeed-vstrIY",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "Volumetric Strain(%)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -477,10 +479,10 @@
 
             {
               key: "sptSeed-stlIY",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "Settlement(m)",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -506,10 +508,10 @@
 
             {
               key: "sptHBF2012-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -534,10 +536,10 @@
             },
             {
               key: "sptHBF2017-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -562,10 +564,10 @@
             },
             {
               key: "sptNCEER-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -590,10 +592,10 @@
             },
             {
               key: "sptJRA1996-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -618,10 +620,10 @@
             },
             {
               key: "sptJRA2017-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -646,10 +648,10 @@
             },
             {
               key: "sptTY-FS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {
@@ -674,10 +676,10 @@
             },
             {
               key: "All-cmpFS",
-              width: 260,
-              height: 550,
+              // width: 260,
+              // height: 550,
               valueTitle: "FS",
-              depthTitle: "",
+              depthTitle: "Depth(m)",
               depthMin: 0,
               depthMax: 20,
               item: {

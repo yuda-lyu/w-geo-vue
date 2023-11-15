@@ -28,7 +28,7 @@
 <script>
 import get from 'lodash/get'
 import map from 'lodash/map'
-import merge from 'lodash/merge'
+import cloneDeep from 'lodash/cloneDeep'
 import isestr from 'wsemi/src/isestr.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import WPlot from './WPlot.vue'
@@ -40,21 +40,32 @@ import getDefLegend from '../js/getDefLegend.mjs'
 import setLegendLoc from '../js/setLegendLoc.mjs'
 
 
-function genLine(name, data, forceNoLine = false) {
+function genLine(name, data, plotType) {
+
+    //useLine
+    let useLine = plotType.indexOf('line') >= 0
+
+    //useMarker
+    let useMarker = plotType.indexOf('marker') >= 0
+
+    let type = 'line' //default
+    if (useLine) {
+        type = 'line'
+    }
+    if (plotType === 'marker') {
+        type = 'scatter'
+    }
 
     //ds
     let d = {
-        type: 'line',
+        type,
         name: unit2html(name),
         data,
         color: '#69f',
-        lineWidth: forceNoLine ? 0 : 1,
+        lineWidth: useLine ? 1 : 0,
         marker: {
-            enabled: true,
+            enabled: useMarker,
         },
-        // fillOpacity: 1,
-        //showInLegend: false,
-        forceNoLine,
     }
 
     return d
@@ -160,10 +171,10 @@ function addLineFs(opt) {
 }
 
 
-function genOpt(st = {}, optSet = {}, optionsExt = {}) {
+function genOpt(st = {}, optionsExt = {}) {
 
     //params
-    let { item, width, height, valueTitle, depthTitle, depthMin, depthMax, forceNoLine } = st
+    let { item, width, height, valueTitle, depthTitle, depthMin, depthMax, plotType } = st
     // console.log('st', st)
 
     //oneLine
@@ -184,14 +195,14 @@ function genOpt(st = {}, optSet = {}, optionsExt = {}) {
     if (oneLine) {
         let lineName = name
         let lineData = get(item, 'data', [])
-        let o = genLine(lineName, lineData, forceNoLine)
+        let o = genLine(lineName, lineData, plotType)
         ds = [o]
     }
     else {
         ds = map(get(item, 'data', []), (v) => {
             let lineName = get(v, 'name', '')
             let lineData = get(v, 'data', [])
-            let o = genLine(lineName, lineData, forceNoLine)
+            let o = genLine(lineName, lineData, plotType)
             o.color = null //多線時自動刪除指定顏色, 由highcharts自動決定各線顏色
             return o
         })
@@ -203,17 +214,17 @@ function genOpt(st = {}, optSet = {}, optionsExt = {}) {
     // console.log('opt', opt)
 
     //addLineFs
-    if (name.indexOf('-FS') >= 0) {
+    if (name.indexOf('-FS') >= 0 || name.indexOf('-cmpFS') >= 0) {
         opt = addLineFs(opt, ds)
         // console.log('opt', opt)
     }
 
     //setLegendLoc
-    opt = setLegendLoc(opt, optSet)
+    opt = setLegendLoc(opt, optionsExt)
 
-    //merge
-    opt = merge(opt, optionsExt)
-    // console.log('opt', opt)
+    // //merge
+    // opt = merge(opt, optionsExt)
+    // // console.log('opt', opt)
 
     return opt
 }
@@ -228,10 +239,6 @@ export default {
     },
     props: {
         st: {
-            type: Object,
-            default: () => {},
-        },
-        optSet: {
             type: Object,
             default: () => {},
         },
@@ -263,7 +270,8 @@ export default {
 
             let r = null
             try {
-                r = genOpt(vo.st, vo.optSet, vo.optionsExt)
+                // console.log('vo.optionsExt', cloneDeep(vo.optionsExt))
+                r = genOpt(vo.st, vo.optionsExt, vo.optionsExt)
             }
             catch (err) {
                 console.log(err)

@@ -1,12 +1,13 @@
 <template>
-    <div style="">
+    <div :style="``">
 
+        <!-- 預設給予zoneTopHeight與zoneBottomHeight, 若外部有另外給予可覆蓋 -->
         <WSptPlotDepths
             :sts="sts"
             :optionsExt="{
+                zoneTopHeight:115,
+                zoneBottomHeight:0,
                 ...optionsExt,
-                zoneTopHeight,
-                zoneBottomHeight,
             }"
         >
 
@@ -19,7 +20,7 @@
 
             <template v-slot:zone-top-pic="props">
                 <div
-                    style="padding-left:6px;"
+                    style="padding:6px 0px 0px 6px;"
                     v-if="iseobj(parseSt(props.st))"
                 >
 
@@ -147,75 +148,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        zoneTopHeight: {
-            type: Number,
-            default: 110,
-        },
-        zoneBottomHeight: {
-            type: Number,
-            default: 0,
-        },
-        kpGrade: {
-            type: Object,
-            default: () => {
-                return {
-                    '-PL': {
-                        title: 'PL',
-                        valueDig: 2,
-                        unit: '',
-                        n: 3,
-                        tv0: 0,
-                        tv1: 5,
-                        tv2: 10,
-                        tv3: 15,
-                        c0: 'rgba(102, 238, 119, 0.6)',
-                        c1: 'rgba(255, 238, 102, 0.6)',
-                        c2: 'rgba(255, 153, 34, 0.6)',
-                        c3: 'rgba(238, 34, 51, 0.6)',
-                        l0: '(Low)',
-                        l1: '(Mid-low)',
-                        l2: '(Mid-high)',
-                        l3: '(High)',
-                    },
-                    '-stlTS': {
-                        title: 'Settlement',
-                        valueDig: 2,
-                        unit: '(m)',
-                        n: 3,
-                        tv0: 0,
-                        tv1: 0.1,
-                        tv2: 0.2,
-                        tv3: 0.3,
-                        c0: 'rgba(102, 238, 119, 0.6)',
-                        c1: 'rgba(255, 238, 102, 0.6)',
-                        c2: 'rgba(255, 153, 34, 0.6)',
-                        c3: 'rgba(238, 34, 51, 0.6)',
-                        l0: '(Low)',
-                        l1: '(Mid-low)',
-                        l2: '(Mid-high)',
-                        l3: '(High)',
-                    },
-                    '-stlIY': {
-                        title: 'Settlement',
-                        valueDig: 2,
-                        unit: '(m)',
-                        n: 3,
-                        tv0: 0,
-                        tv1: 0.1,
-                        tv2: 0.2,
-                        tv3: 0.3,
-                        c0: 'rgba(102, 238, 119, 0.6)',
-                        c1: 'rgba(255, 238, 102, 0.6)',
-                        c2: 'rgba(255, 153, 34, 0.6)',
-                        c3: 'rgba(238, 34, 51, 0.6)',
-                        l0: '(Low)',
-                        l1: '(Mid-low)',
-                        l2: '(Mid-high)',
-                        l3: '(High)',
-                    },
-                }
-            },
-        },
         optionsExt: {
             type: Object,
             default: () => {},
@@ -225,9 +157,77 @@ export default {
         return {
             get,
             iseobj,
+
+            kpGradeDef: {
+                '-PL': {
+                    title: 'PL',
+                    valueDig: 2,
+                    unit: '',
+                    n: 3,
+                    tv0: 0,
+                    tv1: 5,
+                    tv2: 10,
+                    tv3: 15,
+                    c0: 'rgba(102, 238, 119, 0.6)',
+                    c1: 'rgba(255, 238, 102, 0.6)',
+                    c2: 'rgba(255, 153, 34, 0.6)',
+                    c3: 'rgba(238, 34, 51, 0.6)',
+                    l0: '(Low)',
+                    l1: '(Mid-low)',
+                    l2: '(Mid-high)',
+                    l3: '(High)',
+                },
+                '-stlTS': {
+                    title: 'Settlement',
+                    valueDig: 2,
+                    unit: '(m)',
+                    n: 3,
+                    tv0: 0,
+                    tv1: 0.1,
+                    tv2: 0.2,
+                    tv3: 0.3,
+                    c0: 'rgba(102, 238, 119, 0.6)',
+                    c1: 'rgba(255, 238, 102, 0.6)',
+                    c2: 'rgba(255, 153, 34, 0.6)',
+                    c3: 'rgba(238, 34, 51, 0.6)',
+                    l0: '(Low)',
+                    l1: '(Mid-low)',
+                    l2: '(Mid-high)',
+                    l3: '(High)',
+                },
+                '-stlIY': {
+                    title: 'Settlement',
+                    valueDig: 2,
+                    unit: '(m)',
+                    n: 3,
+                    tv0: 0,
+                    tv1: 0.1,
+                    tv2: 0.2,
+                    tv3: 0.3,
+                    c0: 'rgba(102, 238, 119, 0.6)',
+                    c1: 'rgba(255, 238, 102, 0.6)',
+                    c2: 'rgba(255, 153, 34, 0.6)',
+                    c3: 'rgba(238, 34, 51, 0.6)',
+                    l0: '(Low)',
+                    l1: '(Mid-low)',
+                    l2: '(Mid-high)',
+                    l3: '(High)',
+                },
+            },
+
         }
     },
     computed: {
+
+        kpGrade: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.kpGrade', {})
+            if (!iseobj(r)) {
+                r = vo.kpGradeDef
+            }
+            // console.log('kpGrade', r)
+            return r
+        },
 
     },
     methods: {

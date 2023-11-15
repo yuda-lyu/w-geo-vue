@@ -1,7 +1,10 @@
 <template>
-    <div style="display:flex;">
+    <div :style="`display:flex;`">
 
-        <div :style="``">
+        <div
+            :style="``"
+            v-if="hasGeolayer"
+        >
 
             <div :style="`width:${st0.width}px; height:${zoneTopHeight}px; overflow:auto;`">
                 <slot
@@ -13,7 +16,7 @@
 
             <!-- paddingStyle須配合getDefChart的margin值 -->
             <WSegmentsVertical
-                :items="st0.item.data"
+                :items="geocolItems"
                 :width="st0.width"
                 :height="st0.height"
                 :paddingStyle="{
@@ -29,14 +32,13 @@
                 :segmentBorderColor="{v:'transparent',h:'#444'}"
                 :axisColor="'transparent'"
                 :tickColor="'#444'"
-                :keyValueStart="'depthStart'"
-                :keyValueEnd="'depthEnd'"
-                :keyText="'description'"
+                :keyValueStart="geocolKeyValueStart"
+                :keyValueEnd="geocolKeyValueEnd"
+                :keyText="geocolKeyText"
                 :alignEnd="'left'"
                 :textShift="80"
                 :title="st0.depthTitle"
                 :funFormatTickValue="getTickValue"
-                v-if="st0.item.type==='geologic column'"
             >
                 <template v-slot:support-right="props">
                     <div :style="`padding-top:${props.convertValueToY(waterLevel)}px;`">
@@ -90,10 +92,11 @@
             <div style="display:flex; align-items:flex-start;">
 
                 <div
-                    :style="`height:${st.height}px;`"
+                    :style="``"
                     :key="kst"
                     v-for="(st,kst) in stOthers"
                 >
+
                     <WSptPlotDepth
                         :st="st"
                         :optionsExt="optionsExt"
@@ -133,8 +136,13 @@
 
 <script>
 import get from 'lodash/get'
+import each from 'lodash/each'
+import map from 'lodash/map'
+import trim from 'lodash/trim'
 import filter from 'lodash/filter'
+import cloneDeep from 'lodash/cloneDeep'
 import dig from 'wsemi/src/dig.mjs'
+import iseobj from 'wsemi/src/iseobj.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
 import WSptPlotDepth from './WSptPlotDepth.vue'
 
@@ -163,15 +171,38 @@ export default {
     },
     computed: {
 
+        // heightMax: function() {
+        //     let vo = this
+        //     let hm = 0
+        //     each(vo.sts, (v) => {
+        //         let h = get(v, 'height', 0)
+        //         hm = Math.max(hm, h)
+        //     })
+        //     return hm
+        // },
+
+        // zoneHeight: function() {
+        //     let vo = this
+        //     let h = vo.heightMax + vo.zoneTopHeight + vo.zoneBottomHeight
+        //     // console.log('zoneHeight', h)
+        //     return h
+        // },
+
         st0: function() {
             //console.log('computed st0')
 
             let vo = this
 
-            let r = get(vo.sts, 0, [])
+            let st0 = get(vo.sts, 0, [])
             // console.log('st0', r)
 
-            return r
+            return st0
+        },
+
+        hasGeolayer: function() {
+            let vo = this
+            let type = get(vo, 'st0.item.type', '')
+            return type === 'geolayer'
         },
 
         waterLevel: function() {
@@ -179,10 +210,10 @@ export default {
 
             let vo = this
 
-            let r = get(vo, 'st0.waterLevel', 0)
-            // console.log('waterLevel', r)
+            let wl = get(vo, 'st0.waterLevel', 0)
+            // console.log('waterLevel', wl)
 
-            return r
+            return wl
         },
 
         stOthers: function() {
@@ -190,13 +221,25 @@ export default {
 
             let vo = this
 
-            let r = filter(vo.sts, (v) => {
+            let stOthers = filter(vo.sts, (v) => {
                 let type = get(v, 'item.type', '')
-                return type !== 'geologic column'
+                return type !== 'geolayer'
             })
-            // console.log(JSON.stringify(r))
-            // console.log(JSON.stringify(r[r.length - 1]))
-            return r
+            // console.log('stOthers', stOthers)
+
+            stOthers = map(stOthers, (v, k) => {
+                let depthTitle = v.depthTitle
+                if (k > 0) {
+                    depthTitle = '' //非最左側參數圖自動清除軸標題
+                }
+                return {
+                    ...v,
+                    depthTitle,
+                }
+            })
+            // console.log('stOthers(自動清除軸標題)', stOthers)
+
+            return stOthers
         },
 
         zoneTopHeight: function() {
@@ -211,15 +254,57 @@ export default {
             return h
         },
 
+        geocolKeyValueStart: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.geocolKeyValueStart', 'depthStart')
+            return r
+        },
+
+        geocolKeyValueEnd: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.geocolKeyValueEnd', 'depthEnd')
+            return r
+        },
+
+        geocolKeyText: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.geocolKeyText', 'description')
+            return r
+        },
+
+        geocolKeyLegendCode: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.geocolKeyLegendCode', 'legendCode')
+            return r
+        },
+
+        geocolMergeSameCode: function() {
+            let vo = this
+            let r = get(vo, 'optionsExt.geocolMergeSameCode', false)
+            return r
+        },
+
+        geocolItems: function() {
+            let vo = this
+            let items = get(vo, 'st0.item.data', [])
+            if (vo.geocolMergeSameCode) {
+                items = vo.mergeSameLegendCodeAndText(items)
+            }
+            return items
+        },
+
+
     },
     methods: {
 
         getSegmentBackgroundIcon: function(item) {
             // console.log('getSegmentBackgroundIcon', item)
+            let vo = this
             let kp = window.dataCivilSoilCodeIcon
             // console.log('dataCivilSoilCodeIcon', kp)
-            // console.log('item.legendCode', item.legendCode)
-            let bgicon = kp[item.legendCode]
+            let legendCode = get(item, vo.geocolKeyLegendCode, '')
+            // console.log('legendCode', legendCode)
+            let bgicon = get(kp, legendCode, '')
             // console.log('bgicon', bgicon)
             return bgicon
         },
@@ -231,6 +316,29 @@ export default {
         getWidth: function(opt) {
             let w = get(opt, 'chart.width', 0)
             return w
+        },
+
+        mergeSameLegendCodeAndText: function(items) {
+            let vo = this
+            let itemsTemp = cloneDeep(items)
+            each(itemsTemp, (_v, k) => {
+                if (k === 0) {
+                    return true //跳出換下一個
+                }
+                let k0 = k - 1
+                let k1 = k
+                let v0 = get(itemsTemp, k0, {})
+                let v1 = get(itemsTemp, k1, {})
+                let b1 = v0[vo.geocolKeyLegendCode] === v1[vo.geocolKeyLegendCode]
+                let b2 = trim(v0[vo.geocolKeyText]) === trim(v1[vo.geocolKeyText]) //土壤描述也要相同才合併
+                let b = b1 && b2
+                if (b) {
+                    itemsTemp[k1][vo.geocolKeyValueStart] = v0[vo.geocolKeyValueStart] //使用前一層depthStart
+                    itemsTemp[k0] = null
+                }
+            })
+            itemsTemp = filter(itemsTemp, iseobj)
+            return itemsTemp
         },
 
     }

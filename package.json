@@ -1,6 +1,6 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
     "@mdi/js": "^7.2.96",

@@ -42,7 +42,7 @@
 
                 <w-spt-plot-depth
                     :st="WSptPlotDepth.st1"
-                    :optSet="{
+                    :optionsExt="{
                         legendPosition:'topleft',
                     }"
                 ></w-spt-plot-depth>
@@ -58,7 +58,7 @@
 
                 <w-spt-plot-depth
                     :st="WSptPlotDepth.st1"
-                    :optSet="{
+                    :optionsExt="{
                         legendPosition:'topright',
                     }"
                 ></w-spt-plot-depth>
@@ -74,7 +74,7 @@
 
                 <w-spt-plot-depth
                     :st="WSptPlotDepth.st1"
-                    :optSet="{
+                    :optionsExt="{
                         legendPosition:'bottomleft',
                     }"
                 ></w-spt-plot-depth>
@@ -90,7 +90,7 @@
 
                 <w-spt-plot-depth
                     :st="WSptPlotDepth.st1"
-                    :optSet="{
+                    :optionsExt="{
                         legendPosition:'bottomright',
                     }"
                 ></w-spt-plot-depth>
@@ -119,7 +119,7 @@ export default {
         return {
             'WSptPlotDepth': {
                 'st1': {
-                    key: 'Compare-FS',
+                    key: 'All-cmpFS',
                     width: 260,
                     height: 550,
                     valueTitle: 'FS',
@@ -144,10 +144,10 @@ export default {
                             [19.2625, 2],
                         ],
                     },
-                    forceNoLine: false,
+                    plotType: 'line+marker',
                 },
                 'st2': {
-                    key: 'Compare-FS',
+                    key: 'All-cmpFS',
                     width: 260,
                     height: 550,
                     valueTitle: 'FS',
@@ -155,7 +155,7 @@ export default {
                     depthMin: 0,
                     depthMax: 20,
                     item: {
-                        name: 'Compare-FS',
+                        name: 'All-cmpFS',
                         data: [
                             {
                                 name: 'sptSeed-FS',
@@ -285,7 +285,7 @@ export default {
                             },
                         ],
                     },
-                    forceNoLine: false,
+                    plotType: 'line+marker',
                 },
             },
         }

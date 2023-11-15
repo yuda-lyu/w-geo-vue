@@ -3,15 +3,15 @@ import cdbl from 'wsemi/src/cdbl.mjs'
 
 
 /**
- * 使用繪圖集設定物件針對Highcharts物件處理圖例位置
+ * 使用繪圖設定物件針對Highcharts物件處理圖例位置
  *
  * @param {Object} [opt={}] 輸入設定物件，預設{}
- * @param {Object} [optSet={}] 輸入繪圖集設定物件，預設{}
+ * @param {Object} [optionsExt={}] 輸入繪圖設定物件，預設{}
  * @returns {Object} 回傳物件
  */
-function setLegendLoc(opt, optSet = {}) {
+function setLegendLoc(opt, optionsExt = {}) {
 
-    let legendPosition = get(optSet, 'legendPosition', 'bottomleft')
+    let legendPosition = get(optionsExt, 'legendPosition', 'bottomleft')
 
     let ml = get(opt, 'chart.marginLeft') || get(opt, 'chart.margin-left')
     ml = cdbl(ml)
