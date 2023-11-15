@@ -80,7 +80,7 @@
     </script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.2/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.3/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -127,7 +127,7 @@
                 style="cursor:pointer;"
                 title="open for copy link to view component"
                 onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
-            >w-spt-plot-depths-with-grades-and-tools</span>
+            >w-spt-liq-plot-depths-with-grades-and-tools</span>
         </div>
         <div class="bk" style="margin:0px;">
             <div class="item">default</div>
@@ -135,9 +135,9 @@
             <div
                 style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;"
             >
-                <w-spt-plot-depths-with-grades-and-tools
-                    :sts="WSptPlotDepthsWithGradesAndTools.st1"
-                ></w-spt-plot-depths-with-grades-and-tools>
+                <w-spt-liq-plot-depths-with-grades-and-tools
+                    :sts="WSptLiqPlotDepthsWithGradesAndTools.st1"
+                ></w-spt-liq-plot-depths-with-grades-and-tools>
             </div>
         </div>
     </v-app>
@@ -152,7 +152,7 @@
 
     data: function() {
       return {
-        WSptPlotDepthsWithGradesAndTools: {
+        WSptLiqPlotDepthsWithGradesAndTools: {
           st1: [
             {
               key: "Geolayer",

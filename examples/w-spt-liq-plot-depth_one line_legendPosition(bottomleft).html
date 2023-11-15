@@ -80,7 +80,7 @@
     </script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.2/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.3/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -127,12 +127,17 @@
                 style="cursor:pointer;"
                 title="open for copy link to view component"
                 onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
-            >w-spt-plot-depth</span>
+            >w-spt-liq-plot-depth</span>
         </div>
         <div class="bk">
-            <div class="item">one line</div>
+            <div class="item">one line &amp; legendPosition(bottomleft)</div>
 
-            <w-spt-plot-depth :st="WSptPlotDepth.st1"></w-spt-plot-depth>
+            <w-spt-liq-plot-depth
+                :st="WSptLiqPlotDepth.st1"
+                :options-ext="{
+                        legendPosition:'bottomleft',
+                    }"
+            ></w-spt-liq-plot-depth>
         </div>
     </v-app>
 
@@ -146,7 +151,7 @@
 
     data: function() {
       return {
-        WSptPlotDepth: {
+        WSptLiqPlotDepth: {
           st1: {
             key: "All-cmpFS",
             width: 260,
