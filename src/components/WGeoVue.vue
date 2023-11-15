@@ -1,17 +1,17 @@
 <script>
 import WPlot from './WPlot.vue'
-import WSptPlotDepth from './WSptPlotDepth.vue'
-import WSptPlotDepths from './WSptPlotDepths.vue'
-import WSptPlotDepthsWithGrades from './WSptPlotDepthsWithGrades.vue'
-import WSptPlotDepthsWithGradesAndTools from './WSptPlotDepthsWithGradesAndTools.vue'
+import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
+import WSptLiqPlotDepths from './WSptLiqPlotDepths.vue'
+import WSptLiqPlotDepthsWithGrades from './WSptLiqPlotDepthsWithGrades.vue'
+import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAndTools.vue'
 
 let WGeoVue = {
     install: function(Vue) {
         Vue.component('w-plot', WPlot)
-        Vue.component('w-spt-plot-depth', WSptPlotDepth)
-        Vue.component('w-spt-plot-depths', WSptPlotDepths)
-        Vue.component('w-spt-plot-depths-with-grades', WSptPlotDepthsWithGrades)
-        Vue.component('w-spt-plot-depths-with-grades-and-tools', WSptPlotDepthsWithGradesAndTools)
+        Vue.component('w-spt-liq-plot-depth', WSptLiqPlotDepth)
+        Vue.component('w-spt-liq-plot-depths', WSptLiqPlotDepths)
+        Vue.component('w-spt-liq-plot-depths-with-grades', WSptLiqPlotDepthsWithGrades)
+        Vue.component('w-spt-liq-plot-depths-with-grades-and-tools', WSptLiqPlotDepthsWithGradesAndTools)
     }
 }
 

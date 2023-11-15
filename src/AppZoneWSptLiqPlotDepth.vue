@@ -2,7 +2,7 @@
     <div>
 
 
-        <div class="head1"><span style="cursor:pointer;" title="open for copy link to view component" onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')">w-spt-plot-depth</span></div>
+        <div class="head1"><span style="cursor:pointer;" title="open for copy link to view component" onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')">w-spt-liq-plot-depth</span></div>
 
 
         <div style="padding:0px;">
@@ -10,90 +10,90 @@
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st1"
-                ></w-spt-plot-depth>
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st1"
+                ></w-spt-liq-plot-depth>
 
             </div>
 
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'multi line'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st2"
-                ></w-spt-plot-depth>
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st2"
+                ></w-spt-liq-plot-depth>
 
             </div>
 
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(topleft)'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st1"
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st1"
                     :optionsExt="{
                         legendPosition:'topleft',
                     }"
-                ></w-spt-plot-depth>
+                ></w-spt-liq-plot-depth>
 
             </div>
 
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(topright)'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st1"
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st1"
                     :optionsExt="{
                         legendPosition:'topright',
                     }"
-                ></w-spt-plot-depth>
+                ></w-spt-liq-plot-depth>
 
             </div>
 
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(bottomleft)'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st1"
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st1"
                     :optionsExt="{
                         legendPosition:'bottomleft',
                     }"
-                ></w-spt-plot-depth>
+                ></w-spt-liq-plot-depth>
 
             </div>
 
 
             <div class="bk">
                 <demolink
-                    :kbname="'w-spt-plot-depth'"
+                    :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(bottomright)'"
                 ></demolink>
 
-                <w-spt-plot-depth
-                    :st="WSptPlotDepth.st1"
+                <w-spt-liq-plot-depth
+                    :st="WSptLiqPlotDepth.st1"
                     :optionsExt="{
                         legendPosition:'bottomright',
                     }"
-                ></w-spt-plot-depth>
+                ></w-spt-liq-plot-depth>
 
             </div>
 
@@ -106,18 +106,18 @@
 
 <script>
 import demolink from './components/demolink.vue'
-import WSptPlotDepth from './components/WSptPlotDepth.vue'
+import WSptLiqPlotDepth from './components/WSptLiqPlotDepth.vue'
 
 export default {
     components: {
         demolink,
-        WSptPlotDepth,
+        WSptLiqPlotDepth,
     },
     props: {
     },
     data: function() {
         return {
-            'WSptPlotDepth': {
+            'WSptLiqPlotDepth': {
                 'st1': {
                     key: 'All-cmpFS',
                     width: 260,

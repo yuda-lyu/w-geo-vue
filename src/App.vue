@@ -32,13 +32,13 @@
 
             <AppZoneWPlot v-if="cmpPick==='WPlot'"></AppZoneWPlot>
 
-            <AppZoneWSptPlotDepth v-if="cmpPick==='WSptPlotDepth'"></AppZoneWSptPlotDepth>
+            <AppZoneWSptLiqPlotDepth v-if="cmpPick==='WSptLiqPlotDepth'"></AppZoneWSptLiqPlotDepth>
 
-            <AppZoneWSptPlotDepths v-if="cmpPick==='WSptPlotDepths'"></AppZoneWSptPlotDepths>
+            <AppZoneWSptLiqPlotDepths v-if="cmpPick==='WSptLiqPlotDepths'"></AppZoneWSptLiqPlotDepths>
 
-            <AppZoneWSptPlotDepthsWithGrades v-if="cmpPick==='WSptPlotDepthsWithGrades'"></AppZoneWSptPlotDepthsWithGrades>
+            <AppZoneWSptLiqPlotDepthsWithGrades v-if="cmpPick==='WSptLiqPlotDepthsWithGrades'"></AppZoneWSptLiqPlotDepthsWithGrades>
 
-            <AppZoneWSptPlotDepthsWithGradesAndTools v-if="cmpPick==='WSptPlotDepthsWithGradesAndTools'"></AppZoneWSptPlotDepthsWithGradesAndTools>
+            <AppZoneWSptLiqPlotDepthsWithGradesAndTools v-if="cmpPick==='WSptLiqPlotDepthsWithGradesAndTools'"></AppZoneWSptLiqPlotDepthsWithGradesAndTools>
 
         </div>
 
@@ -54,20 +54,20 @@ import kebabCase from 'lodash/kebabCase'
 // import urlParse from 'wsemi/src/urlParse.mjs'
 import WListHorizontal from 'w-component-vue/src/components/WListHorizontal.vue'
 import AppZoneWPlot from './AppZoneWPlot.vue'
-import AppZoneWSptPlotDepth from './AppZoneWSptPlotDepth.vue'
-import AppZoneWSptPlotDepths from './AppZoneWSptPlotDepths.vue'
-import AppZoneWSptPlotDepthsWithGrades from './AppZoneWSptPlotDepthsWithGrades.vue'
-import AppZoneWSptPlotDepthsWithGradesAndTools from './AppZoneWSptPlotDepthsWithGradesAndTools.vue'
+import AppZoneWSptLiqPlotDepth from './AppZoneWSptLiqPlotDepth.vue'
+import AppZoneWSptLiqPlotDepths from './AppZoneWSptLiqPlotDepths.vue'
+import AppZoneWSptLiqPlotDepthsWithGrades from './AppZoneWSptLiqPlotDepthsWithGrades.vue'
+import AppZoneWSptLiqPlotDepthsWithGradesAndTools from './AppZoneWSptLiqPlotDepthsWithGradesAndTools.vue'
 
 
 export default {
     components: {
         WListHorizontal,
         AppZoneWPlot,
-        AppZoneWSptPlotDepth,
-        AppZoneWSptPlotDepths,
-        AppZoneWSptPlotDepthsWithGrades,
-        AppZoneWSptPlotDepthsWithGradesAndTools,
+        AppZoneWSptLiqPlotDepth,
+        AppZoneWSptLiqPlotDepths,
+        AppZoneWSptLiqPlotDepthsWithGrades,
+        AppZoneWSptLiqPlotDepthsWithGradesAndTools,
     },
     data: function() {
         return {
@@ -79,10 +79,10 @@ export default {
 
             cmps: [
                 'WPlot',
-                'WSptPlotDepth',
-                'WSptPlotDepths',
-                'WSptPlotDepthsWithGrades',
-                'WSptPlotDepthsWithGradesAndTools',
+                'WSptLiqPlotDepth',
+                'WSptLiqPlotDepths',
+                'WSptLiqPlotDepthsWithGrades',
+                'WSptLiqPlotDepthsWithGradesAndTools',
             ],
 
             cmpPick: 'WPlot',

@@ -2,7 +2,7 @@
     <div>
 
 
-        <div class="head1"><span style="cursor:pointer;" title="open for copy link to view component" onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')">w-spt-plot-depths</span></div>
+        <div class="head1"><span style="cursor:pointer;" title="open for copy link to view component" onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')">w-spt-liq-plot-depths</span></div>
 
 
         <div style="padding:0px;">
@@ -10,14 +10,14 @@
 
             <div class="bk" style="margin:0px;">
                 <demolink
-                    :kbname="'w-spt-plot-depths'"
+                    :kbname="'w-spt-liq-plot-depths'"
                     :casename="'default'"
                 ></demolink>
 
                 <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
-                    <w-spt-plot-depths
-                        :sts="WSptPlotDepths.st1"
-                    ></w-spt-plot-depths>
+                    <w-spt-liq-plot-depths
+                        :sts="WSptLiqPlotDepths.st1"
+                    ></w-spt-liq-plot-depths>
                 </div>
 
             </div>
@@ -31,18 +31,18 @@
 
 <script>
 import demolink from './components/demolink.vue'
-import WSptPlotDepths from './components/WSptPlotDepths.vue'
+import WSptLiqPlotDepths from './components/WSptLiqPlotDepths.vue'
 
 export default {
     components: {
         demolink,
-        WSptPlotDepths,
+        WSptLiqPlotDepths,
     },
     props: {
     },
     data: function() {
         return {
-            'WSptPlotDepths': {
+            'WSptLiqPlotDepths': {
                 'st1': [
                     {
                         key: 'Geolayer',

@@ -2,7 +2,7 @@
     <div :style="``">
 
         <!-- 預設給予zoneTopHeight與zoneBottomHeight, 若外部有另外給予可覆蓋 -->
-        <WSptPlotDepths
+        <WSptLiqPlotDepths
             :sts="sts"
             :optionsExt="{
                 zoneTopHeight:115,
@@ -61,7 +61,7 @@
                 </div>
             </template>
 
-        </WSptPlotDepths>
+        </WSptLiqPlotDepths>
 
     </div>
 </template>
@@ -78,7 +78,7 @@ import dig from 'wsemi/src/dig.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import cstr from 'wsemi/src/cstr.mjs'
 import WLevelGrade from 'w-component-vue/src/components/WLevelGrade.vue'
-import WSptPlotDepths from './WSptPlotDepths.vue'
+import WSptLiqPlotDepths from './WSptLiqPlotDepths.vue'
 
 
 function getLevelsAndValue(grade, v) {
@@ -141,7 +141,7 @@ function getLevelsAndValue(grade, v) {
 export default {
     components: {
         WLevelGrade,
-        WSptPlotDepths,
+        WSptLiqPlotDepths,
     },
     props: {
         sts: {

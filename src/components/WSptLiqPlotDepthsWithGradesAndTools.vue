@@ -59,12 +59,12 @@
                 <div style="display:flex; align-items:center; height:30px;">
 
                     <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textGeocolMergeSameCode}}:
+                        {{textGeocolMergeSameLayers}}:
                     </div>
 
                     <WSwitch
-                        v-model="geocolMergeSameCode"
-                        @input="modifyGeocolMergeSameCode"
+                        v-model="geocolMergeSameLayers"
+                        @input="modifyGeocolMergeSameLayers"
                     ></WSwitch>
 
                 </div>
@@ -74,12 +74,12 @@
                 <div style="display:flex; align-items:center; height:30px;">
 
                     <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textForceNoLine}}:
+                        {{textPlotWithLine}}:
                     </div>
 
                     <WSwitch
-                        v-model="forceNoLine"
-                        @input="modifyForceNoLine"
+                        v-model="plotWithLine"
+                        @input="modifyPlotWithLine"
                     ></WSwitch>
 
                 </div>
@@ -137,10 +137,10 @@
             </div>
 
             <!-- 不提供slot, 調整設定時若有提供slot會造成強制渲染, 進而導致其內組件一直重繪出現效能問題 -->
-            <WSptPlotDepthsWithGrades
+            <WSptLiqPlotDepthsWithGrades
                 :sts="useSts"
                 :optionsExt="useOptionsExt"
-            ></WSptPlotDepthsWithGrades>
+            ></WSptLiqPlotDepthsWithGrades>
 
         </div>
 
@@ -163,7 +163,7 @@ import WCheckbox from 'w-component-vue/src/components/WCheckbox.vue'
 import WButtonChip from 'w-component-vue/src/components/WButtonChip.vue'
 import WSwitch from 'w-component-vue/src/components/WSwitch.vue'
 import WSlider from 'w-component-vue/src/components/WSlider.vue'
-import WSptPlotDepthsWithGrades from './WSptPlotDepthsWithGrades.vue'
+import WSptLiqPlotDepthsWithGrades from './WSptLiqPlotDepthsWithGrades.vue'
 
 
 /**
@@ -175,7 +175,7 @@ export default {
         WButtonChip,
         WSwitch,
         WSlider,
-        WSptPlotDepthsWithGrades,
+        WSptLiqPlotDepthsWithGrades,
     },
     props: {
         sts: {
@@ -186,13 +186,13 @@ export default {
             type: Object,
             default: () => {},
         },
-        textGeocolMergeSameCode: {
+        textGeocolMergeSameLayers: {
             type: String,
-            default: 'Merge same code', //土柱合併重複
+            default: 'Merge same layers', //土柱合併重複
         },
-        textForceNoLine: {
+        textPlotWithLine: {
             type: String,
-            default: 'Hide lines', //隱藏折線
+            default: 'With line', //繪製折線
         },
         textPlotWidth: {
             type: String,
@@ -304,14 +304,13 @@ export default {
 
             dbc: debounce(),
 
-            forceNoLine: false,
-
+            plotWithLine: true,
             plotWidth: 260,
             plotHeight: 550,
 
             geocolPlotWidth: 350,
             // geocolPlotHeight = plotHeight
-            geocolMergeSameCode: true,
+            geocolMergeSameLayers: true,
 
             downloadPicProcessing: false,
 
@@ -432,7 +431,10 @@ export default {
 
                 //plotType
                 let plotType = get(v, 'plotType', '')
-                if (vo.forceNoLine) {
+                if (vo.plotWithLine) {
+                    plotType = 'line+marker'
+                }
+                else {
                     plotType = 'marker'
                 }
 
@@ -458,7 +460,7 @@ export default {
             //optionsExt
             let optionsExt = {
                 ...vo.optionsExt,
-                geocolMergeSameCode: vo.geocolMergeSameCode,
+                geocolMergeSameLayers: vo.geocolMergeSameLayers,
             }
 
             return optionsExt
@@ -472,13 +474,13 @@ export default {
     },
     methods: {
 
-        modifyGeocolMergeSameCode: function() {
-            //console.log('methods modifyGeocolMergeSameCode')
+        modifyGeocolMergeSameLayers: function() {
+            //console.log('methods modifyGeocolMergeSameLayers')
             // let vo = this
         },
 
-        modifyForceNoLine: function() {
-            //console.log('methods modifyForceNoLine')
+        modifyPlotWithLine: function() {
+            //console.log('methods modifyPlotWithLine')
             // let vo = this
         },
 

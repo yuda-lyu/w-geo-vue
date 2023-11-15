@@ -97,7 +97,7 @@
                     v-for="(st,kst) in stOthers"
                 >
 
-                    <WSptPlotDepth
+                    <WSptLiqPlotDepth
                         :st="st"
                         :optionsExt="optionsExt"
                     >
@@ -124,7 +124,7 @@
                             </div>
                         </template>
 
-                    </WSptPlotDepth>
+                    </WSptLiqPlotDepth>
                 </div>
 
             </div>
@@ -144,7 +144,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import dig from 'wsemi/src/dig.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
-import WSptPlotDepth from './WSptPlotDepth.vue'
+import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
 
 
 /**
@@ -153,7 +153,7 @@ import WSptPlotDepth from './WSptPlotDepth.vue'
 export default {
     components: {
         WSegmentsVertical,
-        WSptPlotDepth,
+        WSptLiqPlotDepth,
     },
     props: {
         sts: {
@@ -278,16 +278,16 @@ export default {
             return r
         },
 
-        geocolMergeSameCode: function() {
+        geocolMergeSameLayers: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolMergeSameCode', false)
+            let r = get(vo, 'optionsExt.geocolMergeSameLayers', false)
             return r
         },
 
         geocolItems: function() {
             let vo = this
             let items = get(vo, 'st0.item.data', [])
-            if (vo.geocolMergeSameCode) {
+            if (vo.geocolMergeSameLayers) {
                 items = vo.mergeSameLegendCodeAndText(items)
             }
             return items
