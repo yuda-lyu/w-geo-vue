@@ -4,10 +4,10 @@
         <!-- 預設給予zoneTopHeight與zoneBottomHeight, 若外部有另外給予可覆蓋 -->
         <WSptLiqPlotDepths
             :sts="sts"
-            :optionsExt="{
+            :optionsPic="{
                 zoneTopHeight:115,
                 zoneBottomHeight:0,
-                ...optionsExt,
+                ...optionsPic,
             }"
         >
 
@@ -148,7 +148,7 @@ export default {
             type: Array,
             default: () => [],
         },
-        optionsExt: {
+        optionsPic: {
             type: Object,
             default: () => {},
         },
@@ -221,7 +221,7 @@ export default {
 
         kpGrade: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.kpGrade', {})
+            let r = get(vo, 'optionsPic.kpGrade', {})
             if (!iseobj(r)) {
                 r = vo.kpGradeDef
             }

@@ -28,7 +28,7 @@
 <script>
 import get from 'lodash/get'
 import map from 'lodash/map'
-import cloneDeep from 'lodash/cloneDeep'
+// import cloneDeep from 'lodash/cloneDeep'
 import isestr from 'wsemi/src/isestr.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import WPlot from './WPlot.vue'
@@ -72,13 +72,13 @@ function genLine(name, data, plotType) {
 }
 
 
-function genHc(width, height, ytitle, xtitle, xmin, xmax, ds, optionsExt = {}) {
+function genHc(width, height, ytitle, xtitle, xmin, xmax, ds, optionsPic = {}) {
 
     //dopt
-    let dopt = getDefOpt(optionsExt)
+    let dopt = getDefOpt(optionsPic)
 
     //dct
-    let dct = getDefChart(optionsExt)
+    let dct = getDefChart(optionsPic)
 
     //marginLeft
     let marginLeft = get(dct, 'marginLeft', 0)
@@ -105,14 +105,14 @@ function genHc(width, height, ytitle, xtitle, xmin, xmax, ds, optionsExt = {}) {
     // console.log('dax', dax)
 
     //day
-    let day = getDefAxis(optionsExt)
+    let day = getDefAxis(optionsPic)
     day.title.text = spc2html(ytitle)
     day.min = 0 //從0開始
     day.opposite = false
     // console.log('day', day)
 
     //dlg
-    let dlg = getDefLegend(optionsExt)
+    let dlg = getDefLegend(optionsPic)
 
     //opt
     let opt = {
@@ -171,7 +171,7 @@ function addLineFs(opt) {
 }
 
 
-function genOpt(st = {}, optionsExt = {}) {
+function genOpt(st = {}, optionsPic = {}) {
 
     //params
     let { item, width, height, valueTitle, depthTitle, depthMin, depthMax, plotType } = st
@@ -210,7 +210,7 @@ function genOpt(st = {}, optionsExt = {}) {
     // console.log('ds', ds)
 
     //opt
-    let opt = genHc(width, height, valueTitle, depthTitle, depthMin, depthMax, ds, optionsExt)
+    let opt = genHc(width, height, valueTitle, depthTitle, depthMin, depthMax, ds, optionsPic)
     // console.log('opt', opt)
 
     //addLineFs
@@ -220,10 +220,10 @@ function genOpt(st = {}, optionsExt = {}) {
     }
 
     //setLegendLoc
-    opt = setLegendLoc(opt, optionsExt)
+    opt = setLegendLoc(opt, optionsPic)
 
     // //merge
-    // opt = merge(opt, optionsExt)
+    // opt = merge(opt, optionsPic)
     // // console.log('opt', opt)
 
     return opt
@@ -242,7 +242,7 @@ export default {
             type: Object,
             default: () => {},
         },
-        optionsExt: {
+        optionsPic: {
             type: Object,
             default: () => {},
         },
@@ -270,8 +270,8 @@ export default {
 
             let r = null
             try {
-                // console.log('vo.optionsExt', cloneDeep(vo.optionsExt))
-                r = genOpt(vo.st, vo.optionsExt, vo.optionsExt)
+                // console.log('vo.optionsPic', cloneDeep(vo.optionsPic))
+                r = genOpt(vo.st, vo.optionsPic)
             }
             catch (err) {
                 console.log(err)

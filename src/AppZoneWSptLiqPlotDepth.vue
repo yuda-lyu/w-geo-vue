@@ -42,7 +42,7 @@
 
                 <w-spt-liq-plot-depth
                     :st="WSptLiqPlotDepth.st1"
-                    :optionsExt="{
+                    :optionsPic="{
                         legendPosition:'topleft',
                     }"
                 ></w-spt-liq-plot-depth>
@@ -58,7 +58,7 @@
 
                 <w-spt-liq-plot-depth
                     :st="WSptLiqPlotDepth.st1"
-                    :optionsExt="{
+                    :optionsPic="{
                         legendPosition:'topright',
                     }"
                 ></w-spt-liq-plot-depth>
@@ -74,7 +74,7 @@
 
                 <w-spt-liq-plot-depth
                     :st="WSptLiqPlotDepth.st1"
-                    :optionsExt="{
+                    :optionsPic="{
                         legendPosition:'bottomleft',
                     }"
                 ></w-spt-liq-plot-depth>
@@ -90,7 +90,7 @@
 
                 <w-spt-liq-plot-depth
                     :st="WSptLiqPlotDepth.st1"
-                    :optionsExt="{
+                    :optionsPic="{
                         legendPosition:'bottomright',
                     }"
                 ></w-spt-liq-plot-depth>

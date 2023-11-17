@@ -75,7 +75,7 @@
                     :editable="true"
                     @success="evSuccess"
                     @error="evError"
-                    v-bind="optionsTableExt"
+                    v-bind="optionsTable"
                 ></WTableDyn>
             </div>
 
@@ -88,8 +88,8 @@
 
             <WSptLiqPlotDepthsWithGradesAndTools
                 :sts="sts"
-                :optionsExt="optionsExt"
-                v-bind="optionsGradesExt"
+                :optionsPic="optionsPic"
+                v-bind="optionsToolPlot"
                 :keyParamSelects="keyParamSelects"
             >
                 <template v-slot:zone-top-geolayer>
@@ -645,22 +645,6 @@ export default {
             type: String,
             default: 'MPa',
         },
-        // waterLevelUsual: {
-        //     type: Number,
-        //     default: null,
-        // },
-        // waterLevelDesign: {
-        //     type: Number,
-        //     default: null,
-        // },
-        // PGA: {
-        //     type: Number,
-        //     default: 0.32,
-        // },
-        // Mw: {
-        //     type: Number,
-        //     default: 6.8,
-        // },
         rows: {
             type: Array,
             default: () => [],
@@ -749,19 +733,19 @@ export default {
             type: Number,
             default: 240,
         },
-        optionsExt: {
+        optionsPic: {
             type: Object,
             default: () => {},
         },
-        optionsTableExt: {
+        optionsTable: {
             type: Object,
             default: () => {},
         },
-        optionsGradesExt: {
+        optionsToolPlot: {
             type: Object,
             default: () => {},
         },
-        optionsMethodAndDataExt: {
+        optionsMethodData: {
             type: Object,
             default: () => {},
         },
@@ -827,13 +811,13 @@ export default {
 
         textMethods: function() {
             let vo = this
-            let t = get(vo, 'optionsMethodAndDataExt.textMethods', 'Methods') //液化分析方法
+            let t = get(vo, 'optionsMethodData.textMethods', 'Methods') //液化分析方法
             return t
         },
 
         textTable: function() {
             let vo = this
-            let t = get(vo, 'optionsMethodAndDataExt.textTable', 'Table data') //數據表格
+            let t = get(vo, 'optionsMethodData.textTable', 'Table data') //數據表格
             return t
         },
 

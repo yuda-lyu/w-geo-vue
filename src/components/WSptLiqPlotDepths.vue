@@ -3,7 +3,7 @@
 
         <div
             :style="``"
-            v-if="hasGeolayer"
+            v-if="hasGeolayer && hasKpGlIcon"
         >
 
             <div :style="`width:${stGl.width}px; height:${zoneTopHeight}px; overflow:auto;`">
@@ -99,7 +99,7 @@
 
                     <WSptLiqPlotDepth
                         :st="st"
-                        :optionsExt="optionsExt"
+                        :optionsPic="optionsPic"
                     >
 
                         <template v-slot:top="props">
@@ -143,6 +143,7 @@ import filter from 'lodash/filter'
 import cloneDeep from 'lodash/cloneDeep'
 import dig from 'wsemi/src/dig.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
+import importResources from 'wsemi/src/importResources.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
 
@@ -160,7 +161,7 @@ export default {
             type: Array,
             default: () => [],
         },
-        optionsExt: {
+        optionsPic: {
             type: Object,
             default: () => {},
         },
@@ -172,7 +173,20 @@ export default {
             //marginLeft(60) - ml/2(3)
             dw: 60 - 3,
 
+            kpGlIcon: {},
+
         }
+    },
+    mounted: function() {
+        let vo = this
+
+        importResources('https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataCivilSoilCodeIcon.js')
+            .then((res) => {
+                // console.log(res)
+                // console.log('window.dataCivilSoilCodeIcon', window.dataCivilSoilCodeIcon)
+                vo.kpGlIcon = window.dataCivilSoilCodeIcon
+            })
+
     },
     computed: {
 
@@ -196,6 +210,12 @@ export default {
             let vo = this
             let b = iseobj(vo.stGl)
             // console.log('vo.stGl', vo.stGl, b)
+            return b
+        },
+
+        hasKpGlIcon: function() {
+            let vo = this
+            let b = iseobj(vo.kpGlIcon)
             return b
         },
 
@@ -238,43 +258,43 @@ export default {
 
         zoneTopHeight: function() {
             let vo = this
-            let h = get(vo, 'optionsExt.zoneTopHeight', 0)
+            let h = get(vo, 'optionsPic.zoneTopHeight', 0)
             return h
         },
 
         zoneBottomHeight: function() {
             let vo = this
-            let h = get(vo, 'optionsExt.zoneBottomHeight', 0)
+            let h = get(vo, 'optionsPic.zoneBottomHeight', 0)
             return h
         },
 
         geocolKeyValueStart: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolKeyValueStart', 'depthStart')
+            let r = get(vo, 'optionsPic.geocolKeyValueStart', 'depthStart')
             return r
         },
 
         geocolKeyValueEnd: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolKeyValueEnd', 'depthEnd')
+            let r = get(vo, 'optionsPic.geocolKeyValueEnd', 'depthEnd')
             return r
         },
 
         geocolKeyText: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolKeyText', 'description')
+            let r = get(vo, 'optionsPic.geocolKeyText', 'description')
             return r
         },
 
         geocolKeyLegendCode: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolKeyLegendCode', 'legendCode')
+            let r = get(vo, 'optionsPic.geocolKeyLegendCode', 'legendCode')
             return r
         },
 
         geocolMergeSameLayers: function() {
             let vo = this
-            let r = get(vo, 'optionsExt.geocolMergeSameLayers', false)
+            let r = get(vo, 'optionsPic.geocolMergeSameLayers', false)
             return r
         },
 
@@ -287,18 +307,15 @@ export default {
             return items
         },
 
-
     },
     methods: {
 
         getSegmentBackgroundIcon: function(item) {
             // console.log('getSegmentBackgroundIcon', item)
             let vo = this
-            let kp = window.dataCivilSoilCodeIcon
-            // console.log('dataCivilSoilCodeIcon', kp)
             let legendCode = get(item, vo.geocolKeyLegendCode, '')
             // console.log('legendCode', legendCode)
-            let bgicon = get(kp, legendCode, '')
+            let bgicon = get(vo.kpGlIcon, legendCode, '')
             // console.log('bgicon', bgicon)
             return bgicon
         },

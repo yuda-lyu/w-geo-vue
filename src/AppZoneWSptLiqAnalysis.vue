@@ -135,7 +135,7 @@
                     <w-spt-liq-analysis
                         :rows="WSptLiqAnalysis.rows3"
                         :geolayerWidth="320"
-                        :optionsGradesExt="{
+                        :optionsToolPlot="{
                             textParams:'參數',
                             textTools:'工具',
                             textPlots:'繪圖',
@@ -146,7 +146,7 @@
                             textDownloadPic:'下載成為圖片',
                             textDownloadPicProcessing:'下載中...',
                         }"
-                        :optionsMethodAndDataExt="{
+                        :optionsMethodData="{
                             textMethods:'液化分析方法',
                             textTable:'數據表格',
                         }"

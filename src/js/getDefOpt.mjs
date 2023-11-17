@@ -12,7 +12,7 @@ function getDefOpt(opt = {}) {
     //useTooltip
     let useTooltip = get(opt, 'useTooltip', true)
 
-    let obj = {
+    let _opt = {
 
         credits: {
             enabled: false //不顯示highchart icon
@@ -50,7 +50,7 @@ function getDefOpt(opt = {}) {
 
     }
 
-    return obj
+    return _opt
 }
 
 

@@ -201,7 +201,7 @@
                     <!-- 不提供slot, 調整設定時若有提供slot會造成強制渲染, 進而導致其內組件一直重繪出現效能問題 -->
                     <WSptLiqPlotDepthsWithGrades
                         :sts="useSts"
-                        :optionsExt="useOptionsExt"
+                        :optionsPic="useOptionsExt"
                     ></WSptLiqPlotDepthsWithGrades>
 
                 </div>
@@ -252,7 +252,7 @@ export default {
             type: Array,
             default: () => [],
         },
-        optionsExt: {
+        optionsPic: {
             type: Object,
             default: () => {},
         },
@@ -724,13 +724,13 @@ export default {
         useOptionsExt: function() {
             let vo = this
 
-            //optionsExt
-            let optionsExt = {
-                ...vo.optionsExt,
+            //optionsPic
+            let optionsPic = {
+                ...vo.optionsPic,
                 geocolMergeSameLayers: vo.geocolMergeSameLayers,
             }
 
-            return optionsExt
+            return optionsPic
         },
 
         useTextDownloadPic: function() {
