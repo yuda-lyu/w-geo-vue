@@ -1,0 +1,323 @@
+<template>
+    <div>
+
+
+        <div class="head1"><span style="cursor:pointer;" title="open for copy link to view component" onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')">w-spt-liq-analysis</span></div>
+
+
+        <div style="padding:0px;">
+
+
+            <div class="bk" style="margin:0px; padding:0px;">
+                <demolink
+                    :kbname="'w-spt-liq-analysis'"
+                    :casename="'default'"
+                ></demolink>
+
+                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
+                    <w-spt-liq-analysis
+                        :rows="WSptLiqAnalysis.rows1"
+                    ></w-spt-liq-analysis>
+                </div>
+
+            </div>
+
+
+            <div style="padding:70px 0px 50px 0px;">
+                <div style="border-top:1px solid #ddd;"></div>
+            </div>
+
+
+            <div class="bk" style="margin:0px; padding:0px;">
+                <demolink
+                    :kbname="'w-spt-liq-analysis'"
+                    :casename="'geolayerWidth'"
+                ></demolink>
+
+                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
+                    <w-spt-liq-analysis
+                        :rows="WSptLiqAnalysis.rows2"
+                        :geolayerWidth="320"
+                    ></w-spt-liq-analysis>
+                </div>
+
+            </div>
+
+
+            <div style="padding:70px 0px 50px 0px;">
+                <div style="border-top:1px solid #ddd;"></div>
+            </div>
+
+
+            <div class="bk" style="margin:0px; padding:0px;">
+                <demolink
+                    :kbname="'w-spt-liq-analysis'"
+                    :casename="'slot'"
+                ></demolink>
+
+                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
+                    <w-spt-liq-analysis
+                        :rows="WSptLiqAnalysis.rows2"
+                        :geolayerWidth="320"
+                    >
+                        <template v-slot:zone-top-geolayer="props">
+                            <div style="">
+
+                                <table>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="padding-right:10px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">Project Number: </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.projectNumber}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">Hole Id: </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.holeId}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-right:10px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">PGA(g): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.PGA}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">Usual W.L. (m): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.waterLevelUsual}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-right:10px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">Mw: </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.Mw}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">Design W.L. (m): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.waterLevelDesign}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </template>
+                    </w-spt-liq-analysis>
+                </div>
+
+            </div>
+
+
+            <div style="padding:70px 0px 50px 0px;">
+                <div style="border-top:1px solid #ddd;"></div>
+            </div>
+
+
+            <div class="bk" style="margin:0px; padding:0px;">
+                <demolink
+                    :kbname="'w-spt-liq-analysis'"
+                    :casename="'lang'"
+                ></demolink>
+
+                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
+                    <w-spt-liq-analysis
+                        :rows="WSptLiqAnalysis.rows3"
+                        :geolayerWidth="320"
+                        :optionsGradesExt="{
+                            textParams:'參數',
+                            textTools:'工具',
+                            textPlots:'繪圖',
+                            textGeocolMergeSameLayers:'土柱合併重複',
+                            textPlotWithLine:'繪製折線',
+                            textPlotWidth:'圖寬(px)',
+                            textPlotHeight:'圖高(px)',
+                            textDownloadPic:'下載成為圖片',
+                            textDownloadPicProcessing:'下載中...',
+                        }"
+                        :optionsMethodAndDataExt="{
+                            textMethods:'液化分析方法',
+                            textTable:'數據表格',
+                        }"
+                    >
+                        <template v-slot:zone-top-geolayer="props">
+                            <div style="">
+
+                                <table>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="padding-right:20px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">計畫編號: </span>
+                                                <span style="font-size:0.8rem; color:#f26;">{{props.row0.projectNumber}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">孔號: </span>
+                                                <span style="font-size:0.8rem; color:#62f;">{{props.row0.holeId}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-right:20px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">PGA(g): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.PGA}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">孔深(m): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.rown.depthEnd}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-right:20px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">芮式規模: </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.Ml}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">常時地下水位(m): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.waterLevelUsual}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="padding-right:20px;">
+
+                                                <span style="font-size:0.75rem; color:#777;">地震矩規模: </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.Mw}}</span>
+
+                                            </td>
+                                            <td>
+
+                                                <span style="font-size:0.75rem; color:#777;">設計地下水位(m): </span>
+                                                <span style="font-size:0.8rem; color:#444;">{{props.row0.waterLevelDesign}}</span>
+
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </template>
+                    </w-spt-liq-analysis>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+</template>
+
+<script>
+import demolink from './components/demolink.vue'
+import WSptLiqAnalysis from './components/WSptLiqAnalysis.vue'
+
+export default {
+    components: {
+        demolink,
+        WSptLiqAnalysis,
+    },
+    props: {
+    },
+    data: function() {
+        return {
+            'WSptLiqAnalysis': {
+                rows1: [
+                    { 'depthStart': '0', 'depthEnd': '2.025', 'depth': '1.0125', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'ML', 'N60': '9.6', 'FC': '83', 'rsat': '19.52', 'PI': '5', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '2.025', 'depthEnd': '3.525', 'depth': '2.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'CL', 'N60': '10.8', 'FC': '91', 'rsat': '18.64', 'PI': '20', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '3.525', 'depthEnd': '5.025', 'depth': '4.275', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'SM', 'N60': '24', 'FC': '14', 'rsat': '19.03', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '5.025', 'depthEnd': '6.525', 'depth': '5.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'SM', 'N60': '27.6', 'FC': '12', 'rsat': '18.54', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '6.525', 'depthEnd': '8.025', 'depth': '7.275', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'SM', 'N60': '19.2', 'FC': '15', 'rsat': '19.18', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '8.025', 'depthEnd': '9.525', 'depth': '8.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'SM', 'N60': '18', 'FC': '13', 'rsat': '18.84', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '9.525', 'depthEnd': '11.025', 'depth': '10.275', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'ML', 'N60': '8.4', 'FC': '52', 'rsat': '18.39', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '11.025', 'depthEnd': '12.525', 'depth': '11.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'ML', 'N60': '9.6', 'FC': '54', 'rsat': '19.28', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '12.525', 'depthEnd': '14.025', 'depth': '13.275', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'ML', 'N60': '10.8', 'FC': '57', 'rsat': '17.85', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '14.025', 'depthEnd': '15.525', 'depth': '14.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'SM', 'N60': '9.6', 'FC': '45', 'rsat': '19.42', 'PI': '', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '15.525', 'depthEnd': '17.025', 'depth': '16.275', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'CL', 'N60': '7.2', 'FC': '97', 'rsat': '18.64', 'PI': '11', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '17.025', 'depthEnd': '18.525', 'depth': '17.775', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'CL', 'N60': '7.2', 'FC': '95', 'rsat': '19.03', 'PI': '15', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'depthStart': '18.525', 'depthEnd': '20', 'depth': '19.2625', 'waterLevelUsual': '0', 'waterLevelDesign': '0', 'soilClassification': 'CL', 'N60': '8.4', 'FC': '94', 'rsat': '18.34', 'PI': '13', 'D50': '', 'D10': '', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' }
+                ],
+                rows2: [
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': '', 'depthStart': '0', 'depthEnd': '0.8', 'depth': '0.4', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Fill', 'SPTN': '5.333333333333333', 'GS': '2.7', 'WC': '25.9', 'Gt_sat': '18.82459459', 'Gt_dry': '14.3172973', 'LL': '34', 'PI': '14', 'D10': '0.0000', 'D50': '0.0142', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '6', 'ctSilt': '65', 'ctClay': '29', 'ctFine': '94', 'n': '', 'e': '0.85', 'S': '', 'code': '112', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-1-2', 'depthStart': '0.8', 'depthEnd': '2', 'depth': '1.4', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Clay', 'SPTN': '5.333333333333333', 'GS': '2.7', 'WC': '25.9', 'Gt_sat': '18.82459459', 'Gt_dry': '14.3172973', 'LL': '34', 'PI': '14', 'D10': '0.0000', 'D50': '0.0142', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '6', 'ctSilt': '65', 'ctClay': '29', 'ctFine': '94', 'n': '', 'e': '0.85', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-2-2', 'depthStart': '2', 'depthEnd': '3.5', 'depth': '2.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Clay', 'SPTN': '6.666666666666667', 'GS': '2.74', 'WC': '33.6', 'Gt_sat': '18.88946809', 'Gt_dry': '14.29755319', 'LL': '38', 'PI': '15', 'D10': '0.0000', 'D50': '0.0113', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '69', 'ctClay': '30', 'ctFine': '99', 'n': '', 'e': '0.88', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-3-3', 'depthStart': '3.5', 'depthEnd': '5', 'depth': '4.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Clay', 'SPTN': '5.333333333333333', 'GS': '2.73', 'WC': '34.7', 'Gt_sat': '18.64921875', 'Gt_dry': '13.94859375', 'LL': '39', 'PI': '17', 'D10': '0.0000', 'D50': '0.0105', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '66', 'ctClay': '33', 'ctFine': '99', 'n': '', 'e': '0.92', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-4-2', 'depthStart': '5', 'depthEnd': '6.5', 'depth': '5.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Clay', 'SPTN': '2.6666666666666665', 'GS': '2.74', 'WC': '45.1', 'Gt_sat': '17.10461538', 'Gt_dry': '11.48692308', 'LL': '54', 'PI': '28', 'D10': '0.0000', 'D50': '0.0034', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '38', 'ctClay': '61', 'ctFine': '99', 'n': '', 'e': '1.34', 'S': '', 'code': '106', 'USCS': 'CH', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-5-2', 'depthStart': '6.5', 'depthEnd': '8.4', 'depth': '7.45', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Clay', 'SPTN': '2.6666666666666665', 'GS': '2.66', 'WC': '69.9', 'Gt_sat': '16.37637097', 'Gt_dry': '10.52201613', 'LL': '79', 'PI': '46', 'D10': '0.0000', 'D50': '0.0035', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '40', 'ctClay': '59', 'ctFine': '99', 'n': '', 'e': '1.48', 'S': '', 'code': '106', 'USCS': 'CH', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-6-2', 'depthStart': '8.4', 'depthEnd': '9.5', 'depth': '8.95', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '26.666666666666668', 'GS': '2.74', 'WC': '21.5', 'Gt_sat': '19.24060773', 'Gt_dry': '14.85049724', 'LL': '-', 'PI': 'NP', 'D10': '0.0750', 'D50': '0.2642', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '90', 'ctSilt': '5', 'ctClay': '5', 'ctFine': '10', 'n': '', 'e': '0.81', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-7-2', 'depthStart': '9.5', 'depthEnd': '11', 'depth': '10.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '26.666666666666668', 'GS': '2.75', 'WC': '25.4', 'Gt_sat': '19.14016304', 'Gt_dry': '14.66168478', 'LL': '-', 'PI': 'NP', 'D10': '0.0750', 'D50': '0.2671', 'Cu': '', 'Cc': '', 'ctGravel': '3', 'ctSand': '87', 'ctSilt': '6', 'ctClay': '4', 'ctFine': '10', 'n': '', 'e': '0.84', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-8-2', 'depthStart': '11', 'depthEnd': '12.5', 'depth': '11.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '22.666666666666668', 'GS': '2.72', 'WC': '30.1', 'Gt_sat': '19.23636872', 'Gt_dry': '14.90681564', 'LL': '-', 'PI': 'NP', 'D10': '0.0520', 'D50': '0.2602', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '89', 'ctSilt': '8', 'ctClay': '3', 'ctFine': '11', 'n': '', 'e': '0.79', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-9-2', 'depthStart': '12.5', 'depthEnd': '14', 'depth': '13.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '20', 'GS': '2.73', 'WC': '18.5', 'Gt_sat': '19.91196429', 'Gt_dry': '15.94125', 'LL': '-', 'PI': 'NP', 'D10': '0.0284', 'D50': '0.2007', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '86', 'ctSilt': '10', 'ctClay': '4', 'ctFine': '14', 'n': '', 'e': '0.68', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-10-2', 'depthStart': '14', 'depthEnd': '15.5', 'depth': '14.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '28', 'GS': '2.74', 'WC': '24.6', 'Gt_sat': '19.24060773', 'Gt_dry': '14.85049724', 'LL': '-', 'PI': 'NP', 'D10': '0.1082', 'D50': '0.2449', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '93', 'ctSilt': '4', 'ctClay': '3', 'ctFine': '7', 'n': '', 'e': '0.81', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-11-2', 'depthStart': '15.5', 'depthEnd': '17', 'depth': '16.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '20', 'GS': '2.72', 'WC': '17.0', 'Gt_sat': '20.55726115', 'Gt_dry': '16.99566879', 'LL': '-', 'PI': 'NP', 'D10': '0.0155', 'D50': '0.2697', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '79', 'ctSilt': '16', 'ctClay': '5', 'ctFine': '21', 'n': '', 'e': '0.57', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-12-2', 'depthStart': '17', 'depthEnd': '18.5', 'depth': '17.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '16', 'GS': '2.73', 'WC': '26.6', 'Gt_sat': '19.56362069', 'Gt_dry': '15.39155172', 'LL': '-', 'PI': 'NP', 'D10': '0.1060', 'D50': '0.2400', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '92', 'ctSilt': '5', 'ctClay': '3', 'ctFine': '8', 'n': '', 'e': '0.74', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-13-2', 'depthStart': '18.5', 'depthEnd': '20', 'depth': '19.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '21.333333333333332', 'GS': '2.73', 'WC': '19.8', 'Gt_sat': '20.15835366', 'Gt_dry': '16.33006098', 'LL': '-', 'PI': 'NP', 'D10': '0.0277', 'D50': '0.2683', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '85', 'ctSilt': '11', 'ctClay': '4', 'ctFine': '15', 'n': '', 'e': '0.64', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-14-2', 'depthStart': '20', 'depthEnd': '21.5', 'depth': '20.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '29.333333333333332', 'GS': '2.74', 'WC': '32.6', 'Gt_sat': '18.51887755', 'Gt_dry': '13.71397959', 'LL': '-', 'PI': 'NP', 'D10': '0.0804', 'D50': '0.1805', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '91', 'ctSilt': '6', 'ctClay': '3', 'ctFine': '9', 'n': '', 'e': '0.96', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-15-2', 'depthStart': '21.5', 'depthEnd': '23', 'depth': '22.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '32', 'GS': '2.74', 'WC': '32.8', 'Gt_sat': '18.84142857', 'Gt_dry': '14.22190476', 'LL': '-', 'PI': 'NP', 'D10': '0.0460', 'D50': '0.2624', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '78', 'ctSilt': '20', 'ctClay': '2', 'ctFine': '22', 'n': '', 'e': '0.89', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-16-2', 'depthStart': '23', 'depthEnd': '24.5', 'depth': '23.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '38.666666666666664', 'GS': '2.73', 'WC': '21.4', 'Gt_sat': '21.35510204', 'Gt_dry': '18.21857143', 'LL': '-', 'PI': 'NP', 'D10': '0.0265', 'D50': '0.3032', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '85', 'ctSilt': '10', 'ctClay': '5', 'ctFine': '15', 'n': '', 'e': '0.47', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-17-2', 'depthStart': '24.5', 'depthEnd': '26', 'depth': '25.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '40', 'GS': '2.73', 'WC': '22.7', 'Gt_sat': '19.97245509', 'Gt_dry': '16.03670659', 'LL': '-', 'PI': 'NP', 'D10': '0.0428', 'D50': '0.3222', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '77', 'ctSilt': '19', 'ctClay': '4', 'ctFine': '23', 'n': '', 'e': '0.67', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-18-2', 'depthStart': '26', 'depthEnd': '27.5', 'depth': '26.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '38.666666666666664', 'GS': '2.74', 'WC': '27.1', 'Gt_sat': '19.62', 'Gt_dry': '15.44793103', 'LL': '-', 'PI': 'NP', 'D10': '0.1386', 'D50': '0.4250', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '95', 'ctSilt': '2', 'ctClay': '3', 'ctFine': '5', 'n': '', 'e': '0.74', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-19-2', 'depthStart': '27.5', 'depthEnd': '29', 'depth': '28.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '40', 'GS': '2.74', 'WC': '19.4', 'Gt_sat': '19.97035714', 'Gt_dry': '15.99964286', 'LL': '-', 'PI': 'NP', 'D10': '0.0350', 'D50': '0.1373', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '81', 'ctSilt': '15', 'ctClay': '4', 'ctFine': '19', 'n': '', 'e': '0.68', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-20-2', 'depthStart': '29', 'depthEnd': '30', 'depth': '29.5', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': 'Silt sand', 'SPTN': '38.666666666666664', 'GS': '2.75', 'WC': '28.8', 'Gt_sat': '18.43688442', 'Gt_dry': '13.55653266', 'LL': '-', 'PI': 'NP', 'D10': '0.0804', 'D50': '0.2075', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '91', 'ctSilt': '5', 'ctClay': '4', 'ctFine': '9', 'n': '', 'e': '0.99', 'S': '', 'code': '227', 'USCS': 'SP-SM' }
+                ],
+                rows3: [
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': '', 'depthStart': '0', 'depthEnd': '0.8', 'depth': '0.4', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '回填土', 'SPTN': '5.333333333333333', 'GS': '2.7', 'WC': '25.9', 'Gt_sat': '18.82459459', 'Gt_dry': '14.3172973', 'LL': '34', 'PI': '14', 'D10': '0.0000', 'D50': '0.0142', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '6', 'ctSilt': '65', 'ctClay': '29', 'ctFine': '94', 'n': '', 'e': '0.85', 'S': '', 'code': '112', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-1-2', 'depthStart': '0.8', 'depthEnd': '2', 'depth': '1.4', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '黏土', 'SPTN': '5.333333333333333', 'GS': '2.7', 'WC': '25.9', 'Gt_sat': '18.82459459', 'Gt_dry': '14.3172973', 'LL': '34', 'PI': '14', 'D10': '0.0000', 'D50': '0.0142', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '6', 'ctSilt': '65', 'ctClay': '29', 'ctFine': '94', 'n': '', 'e': '0.85', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-2-2', 'depthStart': '2', 'depthEnd': '3.5', 'depth': '2.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '黏土', 'SPTN': '6.666666666666667', 'GS': '2.74', 'WC': '33.6', 'Gt_sat': '18.88946809', 'Gt_dry': '14.29755319', 'LL': '38', 'PI': '15', 'D10': '0.0000', 'D50': '0.0113', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '69', 'ctClay': '30', 'ctFine': '99', 'n': '', 'e': '0.88', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-3-3', 'depthStart': '3.5', 'depthEnd': '5', 'depth': '4.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '黏土', 'SPTN': '5.333333333333333', 'GS': '2.73', 'WC': '34.7', 'Gt_sat': '18.64921875', 'Gt_dry': '13.94859375', 'LL': '39', 'PI': '17', 'D10': '0.0000', 'D50': '0.0105', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '66', 'ctClay': '33', 'ctFine': '99', 'n': '', 'e': '0.92', 'S': '', 'code': '106', 'USCS': 'CL', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-4-2', 'depthStart': '5', 'depthEnd': '6.5', 'depth': '5.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '黏土', 'SPTN': '2.6666666666666665', 'GS': '2.74', 'WC': '45.1', 'Gt_sat': '17.10461538', 'Gt_dry': '11.48692308', 'LL': '54', 'PI': '28', 'D10': '0.0000', 'D50': '0.0034', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '38', 'ctClay': '61', 'ctFine': '99', 'n': '', 'e': '1.34', 'S': '', 'code': '106', 'USCS': 'CH', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-5-2', 'depthStart': '6.5', 'depthEnd': '8.4', 'depth': '7.45', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '黏土', 'SPTN': '2.6666666666666665', 'GS': '2.66', 'WC': '69.9', 'Gt_sat': '16.37637097', 'Gt_dry': '10.52201613', 'LL': '79', 'PI': '46', 'D10': '0.0000', 'D50': '0.0035', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '1', 'ctSilt': '40', 'ctClay': '59', 'ctFine': '99', 'n': '', 'e': '1.48', 'S': '', 'code': '106', 'USCS': 'CH', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-6-2', 'depthStart': '8.4', 'depthEnd': '9.5', 'depth': '8.95', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '26.666666666666668', 'GS': '2.74', 'WC': '21.5', 'Gt_sat': '19.24060773', 'Gt_dry': '14.85049724', 'LL': '-', 'PI': 'NP', 'D10': '0.0750', 'D50': '0.2642', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '90', 'ctSilt': '5', 'ctClay': '5', 'ctFine': '10', 'n': '', 'e': '0.81', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-7-2', 'depthStart': '9.5', 'depthEnd': '11', 'depth': '10.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '26.666666666666668', 'GS': '2.75', 'WC': '25.4', 'Gt_sat': '19.14016304', 'Gt_dry': '14.66168478', 'LL': '-', 'PI': 'NP', 'D10': '0.0750', 'D50': '0.2671', 'Cu': '', 'Cc': '', 'ctGravel': '3', 'ctSand': '87', 'ctSilt': '6', 'ctClay': '4', 'ctFine': '10', 'n': '', 'e': '0.84', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-8-2', 'depthStart': '11', 'depthEnd': '12.5', 'depth': '11.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '22.666666666666668', 'GS': '2.72', 'WC': '30.1', 'Gt_sat': '19.23636872', 'Gt_dry': '14.90681564', 'LL': '-', 'PI': 'NP', 'D10': '0.0520', 'D50': '0.2602', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '89', 'ctSilt': '8', 'ctClay': '3', 'ctFine': '11', 'n': '', 'e': '0.79', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-9-2', 'depthStart': '12.5', 'depthEnd': '14', 'depth': '13.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '20', 'GS': '2.73', 'WC': '18.5', 'Gt_sat': '19.91196429', 'Gt_dry': '15.94125', 'LL': '-', 'PI': 'NP', 'D10': '0.0284', 'D50': '0.2007', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '86', 'ctSilt': '10', 'ctClay': '4', 'ctFine': '14', 'n': '', 'e': '0.68', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-10-2', 'depthStart': '14', 'depthEnd': '15.5', 'depth': '14.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '28', 'GS': '2.74', 'WC': '24.6', 'Gt_sat': '19.24060773', 'Gt_dry': '14.85049724', 'LL': '-', 'PI': 'NP', 'D10': '0.1082', 'D50': '0.2449', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '93', 'ctSilt': '4', 'ctClay': '3', 'ctFine': '7', 'n': '', 'e': '0.81', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-11-2', 'depthStart': '15.5', 'depthEnd': '17', 'depth': '16.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '20', 'GS': '2.72', 'WC': '17.0', 'Gt_sat': '20.55726115', 'Gt_dry': '16.99566879', 'LL': '-', 'PI': 'NP', 'D10': '0.0155', 'D50': '0.2697', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '79', 'ctSilt': '16', 'ctClay': '5', 'ctFine': '21', 'n': '', 'e': '0.57', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-12-2', 'depthStart': '17', 'depthEnd': '18.5', 'depth': '17.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '16', 'GS': '2.73', 'WC': '26.6', 'Gt_sat': '19.56362069', 'Gt_dry': '15.39155172', 'LL': '-', 'PI': 'NP', 'D10': '0.1060', 'D50': '0.2400', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '92', 'ctSilt': '5', 'ctClay': '3', 'ctFine': '8', 'n': '', 'e': '0.74', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-13-2', 'depthStart': '18.5', 'depthEnd': '20', 'depth': '19.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '21.333333333333332', 'GS': '2.73', 'WC': '19.8', 'Gt_sat': '20.15835366', 'Gt_dry': '16.33006098', 'LL': '-', 'PI': 'NP', 'D10': '0.0277', 'D50': '0.2683', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '85', 'ctSilt': '11', 'ctClay': '4', 'ctFine': '15', 'n': '', 'e': '0.64', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-14-2', 'depthStart': '20', 'depthEnd': '21.5', 'depth': '20.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '29.333333333333332', 'GS': '2.74', 'WC': '32.6', 'Gt_sat': '18.51887755', 'Gt_dry': '13.71397959', 'LL': '-', 'PI': 'NP', 'D10': '0.0804', 'D50': '0.1805', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '91', 'ctSilt': '6', 'ctClay': '3', 'ctFine': '9', 'n': '', 'e': '0.96', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-15-2', 'depthStart': '21.5', 'depthEnd': '23', 'depth': '22.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '32', 'GS': '2.74', 'WC': '32.8', 'Gt_sat': '18.84142857', 'Gt_dry': '14.22190476', 'LL': '-', 'PI': 'NP', 'D10': '0.0460', 'D50': '0.2624', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '78', 'ctSilt': '20', 'ctClay': '2', 'ctFine': '22', 'n': '', 'e': '0.89', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-16-2', 'depthStart': '23', 'depthEnd': '24.5', 'depth': '23.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '38.666666666666664', 'GS': '2.73', 'WC': '21.4', 'Gt_sat': '21.35510204', 'Gt_dry': '18.21857143', 'LL': '-', 'PI': 'NP', 'D10': '0.0265', 'D50': '0.3032', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '85', 'ctSilt': '10', 'ctClay': '5', 'ctFine': '15', 'n': '', 'e': '0.47', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-17-2', 'depthStart': '24.5', 'depthEnd': '26', 'depth': '25.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '40', 'GS': '2.73', 'WC': '22.7', 'Gt_sat': '19.97245509', 'Gt_dry': '16.03670659', 'LL': '-', 'PI': 'NP', 'D10': '0.0428', 'D50': '0.3222', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '77', 'ctSilt': '19', 'ctClay': '4', 'ctFine': '23', 'n': '', 'e': '0.67', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-18-2', 'depthStart': '26', 'depthEnd': '27.5', 'depth': '26.75', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '38.666666666666664', 'GS': '2.74', 'WC': '27.1', 'Gt_sat': '19.62', 'Gt_dry': '15.44793103', 'LL': '-', 'PI': 'NP', 'D10': '0.1386', 'D50': '0.4250', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '95', 'ctSilt': '2', 'ctClay': '3', 'ctFine': '5', 'n': '', 'e': '0.74', 'S': '', 'code': '227', 'USCS': 'SP-SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-19-2', 'depthStart': '27.5', 'depthEnd': '29', 'depth': '28.25', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '40', 'GS': '2.74', 'WC': '19.4', 'Gt_sat': '19.97035714', 'Gt_dry': '15.99964286', 'LL': '-', 'PI': 'NP', 'D10': '0.0350', 'D50': '0.1373', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '81', 'ctSilt': '15', 'ctClay': '4', 'ctFine': '19', 'n': '', 'e': '0.68', 'S': '', 'code': '227', 'USCS': 'SM', 'PGA': '0.32', 'Ml': '6.8', 'Mw': '7.1' },
+                    { 'projectNumber': 'PN:35A029', 'holeId': 'BH-1', 'sampleId': 'S-20-2', 'depthStart': '29', 'depthEnd': '30', 'depth': '29.5', 'waterLevelUsual': '0.72', 'waterLevelDesign': '0.5', 'description': '粉土質砂', 'SPTN': '38.666666666666664', 'GS': '2.75', 'WC': '28.8', 'Gt_sat': '18.43688442', 'Gt_dry': '13.55653266', 'LL': '-', 'PI': 'NP', 'D10': '0.0804', 'D50': '0.2075', 'Cu': '', 'Cc': '', 'ctGravel': '0', 'ctSand': '91', 'ctSilt': '5', 'ctClay': '4', 'ctFine': '9', 'n': '', 'e': '0.99', 'S': '', 'code': '227', 'USCS': 'SP-SM' }
+                ],
+            },
+        }
+    },
+    methods: {
+    }
+}
+</script>
+
+<style scoped>
+</style>

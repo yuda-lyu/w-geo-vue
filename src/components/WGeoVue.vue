@@ -1,5 +1,6 @@
 <script>
 import WPlot from './WPlot.vue'
+import WSptLiqAnalysis from './WSptLiqAnalysis.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
 import WSptLiqPlotDepths from './WSptLiqPlotDepths.vue'
 import WSptLiqPlotDepthsWithGrades from './WSptLiqPlotDepthsWithGrades.vue'
@@ -8,6 +9,7 @@ import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAn
 let WGeoVue = {
     install: function(Vue) {
         Vue.component('w-plot', WPlot)
+        Vue.component('w-spt-liq-analysis', WSptLiqAnalysis)
         Vue.component('w-spt-liq-plot-depth', WSptLiqPlotDepth)
         Vue.component('w-spt-liq-plot-depths', WSptLiqPlotDepths)
         Vue.component('w-spt-liq-plot-depths-with-grades', WSptLiqPlotDepthsWithGrades)

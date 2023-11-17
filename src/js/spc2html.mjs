@@ -2,7 +2,7 @@ import isestr from 'wsemi/src/isestr.mjs'
 import replace from 'wsemi/src/replace.mjs'
 
 
-function unit2html(c) {
+function spc2html(c) {
     if (!isestr(c)) {
         return ''
     }
@@ -22,4 +22,4 @@ function unit2html(c) {
 }
 
 
-export default unit2html
+export default spc2html

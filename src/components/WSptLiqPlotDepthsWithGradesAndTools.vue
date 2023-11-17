@@ -6,26 +6,50 @@
 
         <div :style="``">
 
-            <div
-                style="padding:0px 30px 10px 0px; display:inline-block; vertical-align:top;"
-                :key="'kp'+kp"
-                v-for="(p,kp) in piss"
-            >
-
-                <div style="padding-bottom:5px; font-size:0.7rem; color:#999;">
-                    {{p.title}}
+            <div style="padding-bottom:20px;">
+                <div style="padding:0px 6px 3px 4px; display:inline-block; border-bottom:1px solid #999;">
+                    <div style="display:flex; align-items:center;">
+                        <div style="padding-top:2px;">
+                            <WIcon
+                                :icon="mdiClipboardCheckOutline"
+                                :size="24"
+                            ></WIcon>
+                        </div>
+                        <div style="padding-left:7px; font-size:0.85rem; color:#666;">
+                            {{textParams}}
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div style="padding-bottom:20px; padding-left:20px;">
 
                 <div
-                    :key="'kpi-'+kpi"
-                    v-for="(pi,kpi) in p.pis"
+                    style="padding:0px 30px 10px 0px; display:inline-block; vertical-align:top;"
+                    :key="'kp'+kp"
+                    v-for="(p,kp) in piss"
                 >
-                    <WCheckbox
-                        style="white-space:nowrap;"
-                        :text="pi.text"
-                        :value="getParamCheck(pi)"
-                        @input="(v)=>{modifyParamCheck(pi,v)}"
-                    ></WCheckbox>
+
+                    <div style="padding-bottom:5px; font-size:0.7rem; color:#999;">
+                        {{p.title}}
+                    </div>
+
+                    <div
+                        :key="'kpi-'+kpi"
+                        v-for="(pi,kpi) in p.pis"
+                    >
+                        <WCheckbox
+                            style="white-space:nowrap;"
+                            :text="pi.text"
+                            :value="getParamCheck(pi)"
+                            @input="(v)=>{modifyParamCheck(pi,v)}"
+                        >
+                            <template v-slot:text="props">
+                                <span v-html="props.text"></span>
+                            </template>
+                        </WCheckbox>
+                    </div>
+
                 </div>
 
             </div>
@@ -34,113 +58,155 @@
 
         <div :style="``">
 
-            <div style="padding-bottom:5px; font-size:0.7rem; color:#999;">
-                Tools
-            </div>
-
-            <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
-                <div style="height:30px;">
-
-                    <div style="padding-top:3px;"></div>
-
-                    <WButtonChip
-                        :paddingStyle="{v:1,h:8}"
-                        :text="useTextDownloadPic"
-                        :icon="mdiDownloadCircleOutline"
-                        :borderRadius="4"
-                        :editable="!downloadPicProcessing"
-                        @click="donwloadPic"
-                    ></WButtonChip>
-
-                </div>
-            </div>
-
-            <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
-                <div style="display:flex; align-items:center; height:30px;">
-
-                    <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textGeocolMergeSameLayers}}:
+            <div style="padding-bottom:20px;">
+                <div style="padding:0px 6px 3px 4px; display:inline-block; border-bottom:1px solid #999;">
+                    <div style="display:flex; align-items:center;">
+                        <div style="padding-top:2px;">
+                            <WIcon
+                                :icon="mdiTools"
+                                :size="24"
+                            ></WIcon>
+                        </div>
+                        <div style="padding-left:7px; font-size:0.85rem; color:#666;">
+                            {{textTools}}
+                        </div>
                     </div>
-
-                    <WSwitch
-                        v-model="geocolMergeSameLayers"
-                        @input="modifyGeocolMergeSameLayers"
-                    ></WSwitch>
-
                 </div>
             </div>
 
-            <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
-                <div style="display:flex; align-items:center; height:30px;">
+            <div style="padding-bottom:40px; padding-left:20px;">
 
-                    <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textPlotWithLine}}:
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="height:30px;">
+
+                        <div style="padding-top:3px;"></div>
+
+                        <WButtonChip
+                            :paddingStyle="{v:1,h:8}"
+                            :text="useTextDownloadPic"
+                            :icon="mdiDownloadCircleOutline"
+                            :borderRadius="4"
+                            :editable="!downloadPicProcessing"
+                            @click="donwloadPic"
+                        ></WButtonChip>
+
                     </div>
-
-                    <WSwitch
-                        v-model="plotWithLine"
-                        @input="modifyPlotWithLine"
-                    ></WSwitch>
-
                 </div>
-            </div>
 
-            <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
-                <div style="display:flex; align-items:center; height:30px;">
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
 
-                    <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textPlotWidth}}:
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textGeocolMergeSameLayers}}:
+                        </div>
+
+                        <WSwitch
+                            v-model="geocolMergeSameLayers"
+                            @input="modifyGeocolMergeSameLayers"
+                        ></WSwitch>
+
                     </div>
-
-                    <WSlider
-                        style="width:160px;"
-                        :valueMin="240"
-                        :valueMax="340"
-                        :valueStep="10"
-                        :value="plotWidth"
-                        @input="modifyPlotWidth"
-                    ></WSlider>
-
                 </div>
-            </div>
 
-            <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
-                <div style="display:flex; align-items:center; height:30px;">
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
 
-                    <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                        {{textPlotHeight}}:
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textPlotWithLine}}:
+                        </div>
+
+                        <WSwitch
+                            v-model="plotWithLine"
+                            @input="modifyPlotWithLine"
+                        ></WSwitch>
+
                     </div>
-
-                    <WSlider
-                        style="width:160px;"
-                        :valueMin="400"
-                        :valueMax="1200"
-                        :valueStep="50"
-                        :value="plotHeight"
-                        @input="modifyPlotHeight"
-                    ></WSlider>
-
                 </div>
+
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
+
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textPlotWidth}}:
+                        </div>
+
+                        <WSlider
+                            style="width:160px;"
+                            :valueMin="240"
+                            :valueMax="340"
+                            :valueStep="10"
+                            :value="plotWidth"
+                            @input="modifyPlotWidth"
+                        ></WSlider>
+
+                    </div>
+                </div>
+
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
+
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textPlotHeight}}:
+                        </div>
+
+                        <WSlider
+                            style="width:160px;"
+                            :valueMin="400"
+                            :valueMax="1200"
+                            :valueStep="50"
+                            :value="plotHeight"
+                            @input="modifyPlotHeight"
+                        ></WSlider>
+
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-        <div
-            ref="rpl"
-            style="background:#fff;"
-        >
+        <div :style="``">
 
-            <div style="position:relative;">
-                <div style="position:absolute; top:0px; left:0px;">
-                    <slot></slot>
+            <div style="padding-bottom:10px;">
+                <div style="padding:0px 6px 3px 4px; display:inline-block; border-bottom:1px solid #999;">
+                    <div style="display:flex; align-items:center;">
+                        <div style="padding-top:2px;">
+                            <WIcon
+                                :icon="mdiChartScatterPlot"
+                                :size="24"
+                            ></WIcon>
+                        </div>
+                        <div style="padding-left:7px; font-size:0.85rem; color:#666;">
+                            {{textPlots}}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 不提供slot, 調整設定時若有提供slot會造成強制渲染, 進而導致其內組件一直重繪出現效能問題 -->
-            <WSptLiqPlotDepthsWithGrades
-                :sts="useSts"
-                :optionsExt="useOptionsExt"
-            ></WSptLiqPlotDepthsWithGrades>
+            <div :style="`width:100%; overflow-x:auto;`">
+
+                <div
+                    ref="rpl"
+                    style="background:#fff;"
+                >
+
+                    <div style="position:relative;">
+                        <div style="position:absolute; top:0px; left:0px;">
+                            <slot
+                                name="zone-top-geolayer"
+                            ></slot>
+                        </div>
+                    </div>
+
+                    <!-- 不提供slot, 調整設定時若有提供slot會造成強制渲染, 進而導致其內組件一直重繪出現效能問題 -->
+                    <WSptLiqPlotDepthsWithGrades
+                        :sts="useSts"
+                        :optionsExt="useOptionsExt"
+                    ></WSptLiqPlotDepthsWithGrades>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -148,17 +214,20 @@
 </template>
 
 <script>
-import { mdiDownloadCircleOutline } from '@mdi/js'
+import { mdiDownloadCircleOutline, mdiClipboardCheckOutline, mdiTools, mdiChartScatterPlot } from '@mdi/js'
 import get from 'lodash/get'
 import each from 'lodash/each'
 import map from 'lodash/map'
+import size from 'lodash/size'
 import isNumber from 'lodash/isNumber'
 import pull from 'lodash/pull'
 import cloneDeep from 'lodash/cloneDeep'
-import isobj from 'wsemi/src/isobj.mjs'
+import isearr from 'wsemi/src/isearr.mjs'
+import isestr from 'wsemi/src/isestr.mjs'
 import debounce from 'wsemi/src/debounce.mjs'
 import domConvertToPicDyn from 'wsemi/src/domConvertToPicDyn.mjs'
 import downloadFileFromB64 from 'wsemi/src/downloadFileFromB64.mjs'
+import WIcon from 'w-component-vue/src/components/WIcon.vue'
 import WCheckbox from 'w-component-vue/src/components/WCheckbox.vue'
 import WButtonChip from 'w-component-vue/src/components/WButtonChip.vue'
 import WSwitch from 'w-component-vue/src/components/WSwitch.vue'
@@ -171,6 +240,7 @@ import WSptLiqPlotDepthsWithGrades from './WSptLiqPlotDepthsWithGrades.vue'
  */
 export default {
     components: {
+        WIcon,
         WCheckbox,
         WButtonChip,
         WSwitch,
@@ -185,6 +255,18 @@ export default {
         optionsExt: {
             type: Object,
             default: () => {},
+        },
+        textParams: {
+            type: String,
+            default: 'Parameters', //參數
+        },
+        textTools: {
+            type: String,
+            default: 'Tools', //工具
+        },
+        textPlots: {
+            type: String,
+            default: 'Plots', //繪圖
         },
         textGeocolMergeSameLayers: {
             type: String,
@@ -204,22 +286,22 @@ export default {
         },
         textDownloadPic: {
             type: String,
-            default: 'Download', //下載成為圖片
+            default: 'Download image', //下載成為圖片
         },
         textDownloadPicProcessing: {
             type: String,
             default: 'Downloading...', //下載中...
         },
-        groupChecks: {
+        groupParams: {
             type: Array,
             default: () => {
                 return [
                     {
-                        title: 'Layers',
+                        title: 'Layer',
                         flts: [
                             {
-                                key: 'Geolayer',
-                                text: 'Geo-Layers',
+                                keyFull: 'Geolayer',
+                                text: '{key}',
                             },
                         ],
                     },
@@ -227,12 +309,118 @@ export default {
                         title: 'Basic',
                         flts: [
                             {
-                                key: 'N60',
-                                text: 'N60',
+                                keyFull: 'N60',
+                                text: '{key}',
                             },
                             {
-                                key: 'FC(%)',
-                                text: 'FC(%)',
+                                keyFull: 'SPTN',
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: 'N160cs', //因部份判斷得要於N160之前執行
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: 'N160',
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: 'N172cs', //因部份判斷得要於N172之前執行
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: 'N172',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'GS',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'e',
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: 'γ',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'WC(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'S(%)',
+                                text: '{key}',
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Plastic',
+                        flts: [
+                            {
+                                keyFull: 'LL(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'PL(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'PI(%)',
+                                text: '{key}',
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Particle size',
+                        flts: [
+                            {
+                                keyFull: 'D10(mm)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'D30(mm)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'D50(mm)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'D60(mm)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'ctGravel(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'ctSand(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'ctSilt(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'ctClay(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'ctFine(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'FC(%)',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'code',
+                                text: '{key}',
+                            },
+                            {
+                                keyFull: 'legendCode',
+                                text: '{key}',
                             },
                         ],
                     },
@@ -240,38 +428,24 @@ export default {
                         title: 'Stress',
                         flts: [
                             {
-                                key: 'Vertical stress(MPa)',
-                                text: 'Vertical stress(MPa)',
+                                keyPart: 'stress',
+                                text: '{key}',
                             },
                             {
-                                key: 'Effective vertical stress(MPa)',
-                                text: 'Effective vertical stress(MPa)',
-                            },
-                        ],
-                    },
-                    {
-                        title: 'PL',
-                        flts: [
-                            {
-                                key: '-PL',
+                                keyPart: 'σ',
                                 text: '{key}',
                             },
                         ],
                     },
                     {
-                        title: 'Vol. strain',
+                        title: 'CRR & CSR',
                         flts: [
                             {
-                                key: '-vstr',
+                                keyPart: '-CRR',
                                 text: '{key}',
                             },
-                        ],
-                    },
-                    {
-                        title: 'Settlement',
-                        flts: [
                             {
-                                key: '-stl',
+                                keyPart: '-CSR',
                                 text: '{key}',
                             },
                         ],
@@ -280,20 +454,73 @@ export default {
                         title: 'FS',
                         flts: [
                             {
-                                key: '-FS',
+                                keyPart: '-FS',
+                                text: '{key}',
+                            },
+                            {
+                                keyPart: '-cmpFS',
+                                text: 'Compare-FS',
+                            },
+                        ],
+                    },
+                    {
+                        title: 'PL',
+                        flts: [
+                            {
+                                keyPart: '-PL',
                                 text: '{key}',
                             },
                         ],
                     },
                     {
-                        title: 'Compare FS',
+                        title: 'Vol. strain',
                         flts: [
                             {
-                                key: '-cmpFS',
-                                text: 'Compare-FS',
+                                keyPart: '-vstr',
+                                text: '{key}',
                             },
                         ],
                     },
+                    {
+                        title: 'Settlement',
+                        flts: [
+                            {
+                                keyPart: '-stl',
+                                text: '{key}',
+                            },
+                        ],
+                    },
+                ]
+            },
+        },
+        keyParamSelects: {
+            type: Array,
+            default: () => {
+                return [
+                    // {
+                    //     keyFull: 'Geolayer',
+                    // },
+                    // {
+                    //     keyPart: 'N60',
+                    // },
+                    // {
+                    //     keyPart: 'γ',
+                    // },
+                    // {
+                    //     keyPart: '-vstr',
+                    // },
+                    // {
+                    //     keyPart: '-PL',
+                    // },
+                    // {
+                    //     keyPart: '-stl',
+                    // },
+                    // {
+                    //     keyPart: '-FS',
+                    // },
+                    // {
+                    //     keyPart: '-cmpFS',
+                    // },
                 ]
             },
         },
@@ -301,6 +528,9 @@ export default {
     data: function() {
         return {
             mdiDownloadCircleOutline,
+            mdiClipboardCheckOutline,
+            mdiTools,
+            mdiChartScatterPlot,
 
             dbc: debounce(),
 
@@ -315,7 +545,7 @@ export default {
             downloadPicProcessing: false,
 
             piss: [],
-            kpPis: null,
+            kpPis: {},
 
         }
     },
@@ -326,11 +556,43 @@ export default {
 
             //ks
             let ks = map(vo.sts, 'key')
+            // console.log('sts ks', ks)
 
-            //piss, pisAll
+            //kpPis
+            let kpPis = {}
+            each(vo.sts, (v) => {
+                let b = get(v, 'checkDef', false)
+                if (b) {
+                    kpPis[v.key] = true
+                }
+            })
+            if (isearr(vo.keyParamSelects)) {
+                each(vo.sts, (v) => {
+                    let k = v.key
+                    each(vo.keyParamSelects, (flt) => {
+
+                        //b
+                        let b = false
+                        if (isestr(flt.keyPart)) {
+                            b = k.indexOf(flt.keyPart) >= 0
+                        }
+                        else if (isestr(flt.keyFull)) {
+                            b = k === flt.keyFull
+                        }
+
+                        //check
+                        if (b) {
+                            kpPis[k] = true
+                        }
+
+                    })
+                })
+            }
+            // console.log('kpPis', kpPis)
+
+            //piss
             let piss = []
-            let pisAll = []
-            each(vo.groupChecks, (gc) => {
+            each(vo.groupParams, (gc) => {
 
                 //pis
                 let pis = []
@@ -339,7 +601,17 @@ export default {
                     //_pis
                     let _pis = []
                     each(ks, (k) => {
-                        let b = k.indexOf(flt.key) >= 0
+
+                        //b
+                        let b = false
+                        if (isestr(flt.keyPart)) {
+                            b = k.indexOf(flt.keyPart) >= 0
+                        }
+                        else if (isestr(flt.keyFull)) {
+                            b = k === flt.keyFull
+                        }
+
+                        //check
                         if (b) {
 
                             //text
@@ -356,9 +628,9 @@ export default {
 
                             //push
                             _pis.push(o)
-                            pisAll.push(o)
 
                         }
+
                     })
 
                     //pull
@@ -372,6 +644,11 @@ export default {
 
                 })
 
+                //check
+                if (size(pis) === 0) {
+                    return true //跳出換下一個
+                }
+
                 //push
                 piss.push({
                     title: gc.title,
@@ -379,21 +656,11 @@ export default {
                 })
 
             })
-
-            //kpPis
-            let kpPis = vo.kpPis
-            if (kpPis === null) {
-                kpPis = {}
-                each(pisAll, (v) => {
-                    kpPis[v.key] = true
-                })
-            }
+            // console.log('piss', piss)
 
             //save
             vo.piss = piss
             vo.kpPis = kpPis
-            // console.log('piss', piss)
-            // console.log('kpPis', kpPis)
 
             return ''
         },
@@ -563,11 +830,6 @@ export default {
             // console.log('methods modifyParamCheck', pi, b)
 
             let vo = this
-
-            //check
-            if (!isobj(vo.kpPis)) {
-                vo.kpPis = {}
-            }
 
             //kpPis
             let kpPis = cloneDeep(vo.kpPis)

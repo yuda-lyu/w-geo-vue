@@ -32,7 +32,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import isestr from 'wsemi/src/isestr.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import WPlot from './WPlot.vue'
-import unit2html from '../js/unit2html.mjs'
+import spc2html from '../js/spc2html.mjs'
 import getDefOpt from '../js/getDefOpt.mjs'
 import getDefChart from '../js/getDefChart.mjs'
 import getDefAxis from '../js/getDefAxis.mjs'
@@ -59,7 +59,7 @@ function genLine(name, data, plotType) {
     //ds
     let d = {
         type,
-        name: unit2html(name),
+        name: spc2html(name),
         data,
         color: '#69f',
         lineWidth: useLine ? 1 : 0,
@@ -93,7 +93,7 @@ function genHc(width, height, ytitle, xtitle, xmin, xmax, ds, optionsExt = {}) {
 
     //dax
     let dax = getDefAxis({ vDig: 1 }) //深度預設取小數點1位
-    dax.title.text = unit2html(xtitle)
+    dax.title.text = spc2html(xtitle)
     dax.min = xmin
     dax.max = xmax
     if (!isestr(xtitle)) {
@@ -106,7 +106,7 @@ function genHc(width, height, ytitle, xtitle, xmin, xmax, ds, optionsExt = {}) {
 
     //day
     let day = getDefAxis(optionsExt)
-    day.title.text = unit2html(ytitle)
+    day.title.text = spc2html(ytitle)
     day.min = 0 //從0開始
     day.opposite = false
     // console.log('day', day)

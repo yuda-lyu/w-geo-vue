@@ -80,7 +80,7 @@
     </script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.3/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.4/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -156,6 +156,7 @@
           st1: [
             {
               key: "Geolayer",
+              checkDef: true,
               width: 350,
               // height: 550,
               valueTitle: "geologic",
@@ -164,7 +165,7 @@
               depthMax: 20,
               waterLevel: 0,
               item: {
-                type: "geolayer",
+                type: "Geolayer",
                 name: "",
                 data: [
                   {
@@ -250,6 +251,7 @@
             },
             {
               key: "N60",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "N60",
@@ -278,6 +280,7 @@
             },
             {
               key: "FC(%)",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "FC(%)",
@@ -306,6 +309,7 @@
             },
             {
               key: "Vertical stress(MPa)",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Vertical stress(MPa)",
@@ -334,6 +338,7 @@
             },
             {
               key: "sptSeed-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -363,6 +368,7 @@
 
             {
               key: "sptSeed-PL",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "PL",
@@ -392,6 +398,7 @@
 
             {
               key: "sptSeed-vstrTS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Volumetric Strain(%)",
@@ -421,6 +428,7 @@
 
             {
               key: "sptSeed-stlTS",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "Settlement(m)",
@@ -450,6 +458,7 @@
 
             {
               key: "sptSeed-vstrIY",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Volumetric Strain(%)",
@@ -479,6 +488,7 @@
 
             {
               key: "sptSeed-stlIY",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "Settlement(m)",
@@ -508,6 +518,7 @@
 
             {
               key: "sptHBF2012-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -536,6 +547,7 @@
             },
             {
               key: "sptHBF2017-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -564,6 +576,7 @@
             },
             {
               key: "sptNCEER-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -592,6 +605,7 @@
             },
             {
               key: "sptJRA1996-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -620,6 +634,7 @@
             },
             {
               key: "sptJRA2017-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -648,6 +663,7 @@
             },
             {
               key: "sptTY-FS",
+              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -676,6 +692,7 @@
             },
             {
               key: "All-cmpFS",
+              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "FS",

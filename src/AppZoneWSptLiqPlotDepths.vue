@@ -54,7 +54,7 @@ export default {
                         depthMax: 20,
                         waterLevel: 0,
                         item: {
-                            type: 'geolayer',
+                            type: 'Geolayer',
                             name: '',
                             data: [
                                 {

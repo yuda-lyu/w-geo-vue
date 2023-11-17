@@ -11,9 +11,9 @@
             }"
         >
 
-            <template v-slot:zone-top-geologic-column="props">
+            <template v-slot:zone-top-geolayer="props">
                 <slot
-                    name="zone-top-geologic-column"
+                    name="zone-top-geolayer"
                     v-bind="props"
                 ></slot>
             </template>

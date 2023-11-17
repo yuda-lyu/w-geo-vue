@@ -6,10 +6,10 @@
             v-if="hasGeolayer"
         >
 
-            <div :style="`width:${st0.width}px; height:${zoneTopHeight}px; overflow:auto;`">
+            <div :style="`width:${stGl.width}px; height:${zoneTopHeight}px; overflow:auto;`">
                 <slot
-                    name="zone-top-geologic-column"
-                    :width="st0.width"
+                    name="zone-top-geolayer"
+                    :width="stGl.width"
                     :height="zoneTopHeight"
                 ></slot>
             </div>
@@ -17,8 +17,8 @@
             <!-- paddingStyle須配合getDefChart的margin值 -->
             <WSegmentsVertical
                 :items="geocolItems"
-                :width="st0.width"
-                :height="st0.height"
+                :width="stGl.width"
+                :height="stGl.height"
                 :paddingStyle="{
                     top: 25,
                     right: 0,
@@ -37,7 +37,7 @@
                 :keyText="geocolKeyText"
                 :alignEnd="'left'"
                 :textShift="80"
-                :title="st0.depthTitle"
+                :title="stGl.depthTitle"
                 :funFormatTickValue="getTickValue"
             >
                 <template v-slot:support-right="props">
@@ -77,10 +77,10 @@
                 </template>
             </WSegmentsVertical>
 
-            <div :style="`width:${st0.width}px; height:${zoneBottomHeight}px; overflow:auto;`">
+            <div :style="`width:${stGl.width}px; height:${zoneBottomHeight}px; overflow:auto;`">
                 <slot
-                    name="zone-bottom-geologic-column"
-                    :width="st0.width"
+                    name="zone-bottom-geolayer"
+                    :width="stGl.width"
                     :height="zoneBottomHeight"
                 ></slot>
             </div>
@@ -93,7 +93,7 @@
 
                 <div
                     :style="``"
-                    :key="kst"
+                    :key="'kst-'+kst"
                     v-for="(st,kst) in stOthers"
                 >
 
@@ -103,7 +103,7 @@
                     >
 
                         <template v-slot:top="props">
-                            <div :style="`width:${getWidth(props.opt)}px; height:${zoneTopHeight}px; overflow:auto;`">
+                            <div :style="`padding-left:${kst===0?dw:0}px; width:${getWidth(props.opt)-(kst===0?dw:0)}px; height:${zoneTopHeight}px; overflow:auto;`">
                                 <slot
                                     name="zone-top-pic"
                                     :width="getWidth(props.opt)"
@@ -167,42 +167,36 @@ export default {
     },
     data: function() {
         return {
+
+            //若位於最左側有開啟depth軸, slot區向平移使能對齊至圖框, 移動距離為highcharts設定marginLeft-保留間距ml/2
+            //marginLeft(60) - ml/2(3)
+            dw: 60 - 3,
+
         }
     },
     computed: {
 
-        // heightMax: function() {
-        //     let vo = this
-        //     let hm = 0
-        //     each(vo.sts, (v) => {
-        //         let h = get(v, 'height', 0)
-        //         hm = Math.max(hm, h)
-        //     })
-        //     return hm
-        // },
-
-        // zoneHeight: function() {
-        //     let vo = this
-        //     let h = vo.heightMax + vo.zoneTopHeight + vo.zoneBottomHeight
-        //     // console.log('zoneHeight', h)
-        //     return h
-        // },
-
-        st0: function() {
-            //console.log('computed st0')
+        stGl: function() {
+            //console.log('computed stGl')
 
             let vo = this
 
-            let st0 = get(vo.sts, 0, [])
-            // console.log('st0', r)
+            let stGl = get(vo, `sts.0`, {})
+            // console.log('stGl', stGl)
 
-            return st0
+            let key = get(stGl, 'key', '')
+
+            if (key === 'Geolayer') {
+                return stGl
+            }
+            return null
         },
 
         hasGeolayer: function() {
             let vo = this
-            let type = get(vo, 'st0.item.type', '')
-            return type === 'geolayer'
+            let b = iseobj(vo.stGl)
+            // console.log('vo.stGl', vo.stGl, b)
+            return b
         },
 
         waterLevel: function() {
@@ -210,7 +204,7 @@ export default {
 
             let vo = this
 
-            let wl = get(vo, 'st0.waterLevel', 0)
+            let wl = get(vo, 'stGl.waterLevel', 0)
             // console.log('waterLevel', wl)
 
             return wl
@@ -222,8 +216,8 @@ export default {
             let vo = this
 
             let stOthers = filter(vo.sts, (v) => {
-                let type = get(v, 'item.type', '')
-                return type !== 'geolayer'
+                let key = get(v, 'key', '')
+                return key !== 'Geolayer'
             })
             // console.log('stOthers', stOthers)
 
@@ -286,7 +280,7 @@ export default {
 
         geocolItems: function() {
             let vo = this
-            let items = get(vo, 'st0.item.data', [])
+            let items = get(vo, 'stGl.item.data', [])
             if (vo.geocolMergeSameLayers) {
                 items = vo.mergeSameLegendCodeAndText(items)
             }

@@ -40,6 +40,8 @@
 
             <AppZoneWSptLiqPlotDepthsWithGradesAndTools v-if="cmpPick==='WSptLiqPlotDepthsWithGradesAndTools'"></AppZoneWSptLiqPlotDepthsWithGradesAndTools>
 
+            <AppZoneWSptLiqAnalysis v-if="cmpPick==='WSptLiqAnalysis'"></AppZoneWSptLiqAnalysis>
+
         </div>
 
 
@@ -58,6 +60,7 @@ import AppZoneWSptLiqPlotDepth from './AppZoneWSptLiqPlotDepth.vue'
 import AppZoneWSptLiqPlotDepths from './AppZoneWSptLiqPlotDepths.vue'
 import AppZoneWSptLiqPlotDepthsWithGrades from './AppZoneWSptLiqPlotDepthsWithGrades.vue'
 import AppZoneWSptLiqPlotDepthsWithGradesAndTools from './AppZoneWSptLiqPlotDepthsWithGradesAndTools.vue'
+import AppZoneWSptLiqAnalysis from './AppZoneWSptLiqAnalysis.vue'
 
 
 export default {
@@ -68,6 +71,7 @@ export default {
         AppZoneWSptLiqPlotDepths,
         AppZoneWSptLiqPlotDepthsWithGrades,
         AppZoneWSptLiqPlotDepthsWithGradesAndTools,
+        AppZoneWSptLiqAnalysis,
     },
     data: function() {
         return {
@@ -83,6 +87,7 @@ export default {
                 'WSptLiqPlotDepths',
                 'WSptLiqPlotDepthsWithGrades',
                 'WSptLiqPlotDepthsWithGradesAndTools',
+                'WSptLiqAnalysis',
             ],
 
             cmpPick: 'WPlot',

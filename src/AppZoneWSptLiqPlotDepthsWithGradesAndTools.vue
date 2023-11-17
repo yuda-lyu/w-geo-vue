@@ -46,6 +46,7 @@ export default {
                 'st1': [
                     {
                         key: 'Geolayer',
+                        checkDef: true,
                         width: 350,
                         // height: 550,
                         valueTitle: 'geologic',
@@ -54,7 +55,7 @@ export default {
                         depthMax: 20,
                         waterLevel: 0,
                         item: {
-                            type: 'geolayer',
+                            type: 'Geolayer',
                             name: '',
                             data: [
                                 {
@@ -140,6 +141,7 @@ export default {
                     },
                     {
                         key: 'N60',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'N60',
@@ -168,6 +170,7 @@ export default {
                     },
                     {
                         key: 'FC(%)',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FC(%)',
@@ -196,6 +199,7 @@ export default {
                     },
                     {
                         key: 'Vertical stress(MPa)',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'Vertical stress(MPa)',
@@ -224,6 +228,7 @@ export default {
                     },
                     {
                         key: 'sptSeed-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -253,6 +258,7 @@ export default {
 
                     {
                         key: 'sptSeed-PL',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'PL',
@@ -282,6 +288,7 @@ export default {
 
                     {
                         key: 'sptSeed-vstrTS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'Volumetric Strain(%)',
@@ -311,6 +318,7 @@ export default {
 
                     {
                         key: 'sptSeed-stlTS',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'Settlement(m)',
@@ -340,6 +348,7 @@ export default {
 
                     {
                         key: 'sptSeed-vstrIY',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'Volumetric Strain(%)',
@@ -369,6 +378,7 @@ export default {
 
                     {
                         key: 'sptSeed-stlIY',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'Settlement(m)',
@@ -398,6 +408,7 @@ export default {
 
                     {
                         key: 'sptHBF2012-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -426,6 +437,7 @@ export default {
                     },
                     {
                         key: 'sptHBF2017-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -454,6 +466,7 @@ export default {
                     },
                     {
                         key: 'sptNCEER-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -482,6 +495,7 @@ export default {
                     },
                     {
                         key: 'sptJRA1996-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -510,6 +524,7 @@ export default {
                     },
                     {
                         key: 'sptJRA2017-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -538,6 +553,7 @@ export default {
                     },
                     {
                         key: 'sptTY-FS',
+                        checkDef: false,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
@@ -566,6 +582,7 @@ export default {
                     },
                     {
                         key: 'All-cmpFS',
+                        checkDef: true,
                         // width: 260,
                         // height: 550,
                         valueTitle: 'FS',
