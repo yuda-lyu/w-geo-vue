@@ -962,7 +962,7 @@ export default {
 
             //anaSptLiq
             let r = anaSptLiq(rowsIn, opt)
-            console.log('r', r)
+            //console.log('r', r)
 
             //save
             vo.optTable = r.optTable
