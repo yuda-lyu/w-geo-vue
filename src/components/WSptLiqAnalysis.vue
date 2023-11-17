@@ -218,9 +218,22 @@ function cvRowsToStsParam(key, title, depthMin, depthMax, depths, params) {
     //data
     let data = []
     each(depths, (depth, k) => {
+
+        //v
         let v = get(params, k, null)
+        if (isnum(v)) {
+            v = cdbl(v)
+        }
+        else {
+            v = null //非數字則使用null, 使highcharts能略過繪圖點
+        }
+
+        //d
         let d = [depth, v]
+
+        //push
         data.push(d)
+
     })
     // console.log('data', data)
 
@@ -264,10 +277,25 @@ function cvRowsToStsCmpFS(rows, depthMin, depthMax, depths) {
         //data
         let data = []
         each(depths, (depth, k) => {
+
+            //row
             let row = get(rows, k, null)
+
+            //v
             let v = get(row, key, null)
+            if (isnum(v)) {
+                v = cdbl(v)
+            }
+            else {
+                v = null //非數字則使用null, 使highcharts能略過繪圖點
+            }
+
+            //d
             let d = [depth, v]
+
+            //push
             data.push(d)
+
         })
         // console.log('data', data)
 
@@ -388,7 +416,7 @@ function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
                     p = cdbl(p)
                 }
                 else {
-                    p = null //非數字則使用null
+                    p = null //非數字則使用null, 使highcharts能略過繪圖點
                 }
                 return p
             })
@@ -934,7 +962,7 @@ export default {
 
             //anaSptLiq
             let r = anaSptLiq(rowsIn, opt)
-            // console.log('r', r)
+            console.log('r', r)
 
             //save
             vo.optTable = r.optTable
