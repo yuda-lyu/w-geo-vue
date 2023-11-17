@@ -44,43 +44,29 @@
 
     <!-- data -->
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataAAPL.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataAAPL.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataUSD2EUR.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataUSD2EUR.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataTemperature.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataTemperature.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataHousePriceArea.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataHousePriceArea.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataFlare.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataFlare.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataRain.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataRain.js"
     ></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataRainClip.js"
+        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataRainClip.js"
     ></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/w-demores@1.0.22/res/data/dataCivilSoilCodeIcon.js"
-    ></script>
-    <script>
-  //save in window
-  window.dataAAPL = dataAAPL;
-  window.dataUSD2EUR = dataUSD2EUR;
-  window.dataTemperature = dataTemperature;
-  window.dataHousePriceArea = dataHousePriceArea;
-  window.dataFlare = dataFlare;
-  window.dataRain = dataRain;
-  window.dataRainClip = dataRainClip;
-  window.dataCivilSoilCodeIcon = dataCivilSoilCodeIcon;
-    </script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.4/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.5/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -132,13 +118,11 @@
         <div class="bk" style="margin:0px; padding:0px;">
             <div class="item">lang</div>
 
-            <div
-                style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;"
-            >
+            <div style="width:calc( 100vw - 60px );">
                 <w-spt-liq-analysis
                     :rows="WSptLiqAnalysis.rows3"
                     :geolayer-width="320"
-                    :options-grades-ext="{
+                    :options-tool-plot="{
                             textParams:'參數',
                             textTools:'工具',
                             textPlots:'繪圖',
@@ -149,93 +133,91 @@
                             textDownloadPic:'下載成為圖片',
                             textDownloadPicProcessing:'下載中...',
                         }"
-                    :options-method-and-data-ext="{
+                    :options-method-data="{
                             textMethods:'液化分析方法',
                             textTable:'數據表格',
                         }"
                 >
                     <template v-slot:zone-top-geolayer="props">
-                        <div style>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td style="padding-right:20px;">
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >計畫編號:</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#f26;"
-                                            >{{props.row0.projectNumber}}</span>
-                                        </td>
-                                        <td>
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >孔號:</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#62f;"
-                                            >{{props.row0.holeId}}</span>
-                                        </td>
-                                    </tr>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="padding-right:20px;">
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >計畫編號:</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#f26;"
+                                        >{{props.row0.projectNumber}}</span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >孔號:</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#62f;"
+                                        >{{props.row0.holeId}}</span>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td style="padding-right:20px;">
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >PGA(g):</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.row0.PGA}}</span>
-                                        </td>
-                                        <td>
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >孔深(m):</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.rown.depthEnd}}</span>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td style="padding-right:20px;">
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >PGA(g):</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.row0.PGA}}</span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >孔深(m):</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.rown.depthEnd}}</span>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td style="padding-right:20px;">
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >芮式規模:</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.row0.Ml}}</span>
-                                        </td>
-                                        <td>
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >常時地下水位(m):</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.row0.waterLevelUsual}}</span>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td style="padding-right:20px;">
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >芮式規模:</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.row0.Ml}}</span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >常時地下水位(m):</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.row0.waterLevelUsual}}</span>
+                                    </td>
+                                </tr>
 
-                                    <tr>
-                                        <td style="padding-right:20px;">
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >地震矩規模:</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.row0.Mw}}</span>
-                                        </td>
-                                        <td>
-                                            <span
-                                                style="font-size:0.75rem; color:#777;"
-                                            >設計地下水位(m):</span>
-                                            <span
-                                                style="font-size:0.8rem; color:#444;"
-                                            >{{props.row0.waterLevelDesign}}</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                <tr>
+                                    <td style="padding-right:20px;">
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >地震矩規模:</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.row0.Mw}}</span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            style="font-size:0.75rem; color:#777;"
+                                        >設計地下水位(m):</span>
+                                        <span
+                                            style="font-size:0.8rem; color:#444;"
+                                        >{{props.row0.waterLevelDesign}}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </template>
                 </w-spt-liq-analysis>
             </div>
