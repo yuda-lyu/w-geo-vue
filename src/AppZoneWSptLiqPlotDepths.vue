@@ -8,7 +8,7 @@
         <div style="padding:0px;">
 
 
-            <div class="bk" style="margin:0px;">
+            <div class="bk" style="margin:0px; padding:0px;">
                 <demolink
                     :kbname="'w-spt-liq-plot-depths'"
                     :casename="'default'"

@@ -8,13 +8,13 @@
         <div style="padding:0px;">
 
 
-            <div class="bk" style="margin:0px;">
+            <div class="bk" style="margin:0px; padding:0px;">
                 <demolink
                     :kbname="'w-spt-liq-plot-depths-with-grades-and-tools'"
                     :casename="'default'"
                 ></demolink>
 
-                <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
+                <div style="width:calc( 100vw - 60px );">
                     <w-spt-liq-plot-depths-with-grades-and-tools
                         :sts="WSptLiqPlotDepthsWithGradesAndTools.st1"
                     ></w-spt-liq-plot-depths-with-grades-and-tools>
