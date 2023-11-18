@@ -66,7 +66,7 @@
     ></script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.7/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.8/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -122,7 +122,7 @@
                 style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;"
             >
                 <w-spt-liq-plot-depths-with-grades
-                    :sts="WSptLiqPlotDepthsWithGrades.st1"
+                    :sts="WSptLiqPlotDepthsWithGrades.sts1"
                 ></w-spt-liq-plot-depths-with-grades>
             </div>
         </div>
@@ -139,7 +139,7 @@
     data: function() {
       return {
         WSptLiqPlotDepthsWithGrades: {
-          st1: [
+          sts1: [
             {
               key: "Geolayer",
               width: 350,

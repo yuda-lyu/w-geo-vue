@@ -66,7 +66,7 @@
     ></script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.7/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.8/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -121,7 +121,7 @@
             <div
                 style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;"
             >
-                <w-spt-liq-plot-depths :sts="WSptLiqPlotDepths.st1"></w-spt-liq-plot-depths>
+                <w-spt-liq-plot-depths :sts="WSptLiqPlotDepths.sts1"></w-spt-liq-plot-depths>
             </div>
         </div>
     </v-app>
@@ -137,7 +137,7 @@
     data: function() {
       return {
         WSptLiqPlotDepths: {
-          st1: [
+          sts1: [
             {
               key: "Geolayer",
               width: 350,

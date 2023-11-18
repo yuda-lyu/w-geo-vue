@@ -66,7 +66,7 @@
     ></script>
 
     <!-- w-geo-vue -->
-    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.7/dist/w-geo-vue.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.8/dist/w-geo-vue.umd.js"></script>
 
     <style>
   .v-application--wrap {
@@ -120,7 +120,9 @@
 
             <div style="width:calc( 100vw - 60px );">
                 <w-spt-liq-plot-depths-with-grades-and-tools
-                    :sts="WSptLiqPlotDepthsWithGradesAndTools.st1"
+                    :sts="WSptLiqPlotDepthsWithGradesAndTools.sts1"
+                    :key-sts-selects.sync="WSptLiqPlotDepthsWithGradesAndTools.keyStsSelects1"
+                    @update:key-sts-selects="modifyKeyStsSelects"
                 ></w-spt-liq-plot-depths-with-grades-and-tools>
             </div>
         </div>
@@ -137,10 +139,9 @@
     data: function() {
       return {
         WSptLiqPlotDepthsWithGradesAndTools: {
-          st1: [
+          sts1: [
             {
               key: "Geolayer",
-              checkDef: true,
               width: 350,
               // height: 550,
               valueTitle: "geologic",
@@ -235,7 +236,6 @@
             },
             {
               key: "N60",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "N60",
@@ -264,7 +264,6 @@
             },
             {
               key: "FC(%)",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "FC(%)",
@@ -293,7 +292,6 @@
             },
             {
               key: "Vertical stress(MPa)",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Vertical stress(MPa)",
@@ -322,7 +320,6 @@
             },
             {
               key: "sptSeed-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -352,7 +349,6 @@
 
             {
               key: "sptSeed-PL",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "PL",
@@ -382,7 +378,6 @@
 
             {
               key: "sptSeed-vstrTS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Volumetric Strain(%)",
@@ -412,7 +407,6 @@
 
             {
               key: "sptSeed-stlTS",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "Settlement(m)",
@@ -442,7 +436,6 @@
 
             {
               key: "sptSeed-vstrIY",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "Volumetric Strain(%)",
@@ -472,7 +465,6 @@
 
             {
               key: "sptSeed-stlIY",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "Settlement(m)",
@@ -502,7 +494,6 @@
 
             {
               key: "sptHBF2012-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -531,7 +522,6 @@
             },
             {
               key: "sptHBF2017-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -560,7 +550,6 @@
             },
             {
               key: "sptNCEER-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -589,7 +578,6 @@
             },
             {
               key: "sptJRA1996-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -618,7 +606,6 @@
             },
             {
               key: "sptJRA2017-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -647,7 +634,6 @@
             },
             {
               key: "sptTY-FS",
-              checkDef: false,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -676,7 +662,6 @@
             },
             {
               key: "All-cmpFS",
-              checkDef: true,
               // width: 260,
               // height: 550,
               valueTitle: "FS",
@@ -816,6 +801,22 @@
               },
               plotType: "line+marker"
             }
+          ],
+          keyStsSelects1: [
+            "Geolayer",
+            "N60",
+            "FC(%)",
+            "sptSeed-FS",
+            "sptSeed-PL",
+            "sptSeed-stlTS",
+            "sptSeed-stlIY",
+            "sptHBF2012-FS",
+            "sptHBF2017-FS",
+            "sptNCEER-FS",
+            "sptJRA1996-FS",
+            "sptJRA2017-FS",
+            "sptTY-FS",
+            "All-cmpFS"
           ]
         }
       };
@@ -824,7 +825,11 @@
       return {};
     },
     computed: {},
-    methods: {}
+    methods: {
+      modifyKeyStsSelects: function(keyStsSelects) {
+        console.log("modifyKeyStsSelects", keyStsSelects);
+      }
+    }
   });
     </script>
 </body>
