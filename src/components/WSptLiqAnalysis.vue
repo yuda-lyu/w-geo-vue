@@ -4,6 +4,7 @@
         :changeRows="changeRows"
         :changeRowsTrans="changeRowsTrans"
         :changeSptMethodsSelects="changeSptMethodsSelects"
+        :changeStsAndKeyParamSelects="changeStsAndKeyParamSelects"
     >
 
         <div :style="``">
@@ -66,13 +67,14 @@
             </div>
 
             <div style="padding-bottom:40px;">
+                <!-- 關閉編輯功能, 待日後開發 -->
                 <WTableDyn
                     :style="`width:100%; height:${heightTable}px;`"
                     :enableInfor="false"
-                    :name="'abc'"
-                    :description="'def'"
+                    :name="''"
+                    :description="''"
                     :opt="optTable"
-                    :editable="true"
+                    :editable="false"
                     @success="evSuccess"
                     @error="evError"
                     v-bind="optionsTable"
@@ -90,7 +92,7 @@
                 :sts="sts"
                 :optionsPic="optionsPic"
                 v-bind="optionsToolPlot"
-                :keyParamSelects="keyParamSelects"
+                :keyStsSelects.sync="keyStsSelects"
             >
                 <template v-slot:zone-top-geolayer>
                     <slot
@@ -120,6 +122,7 @@ import pull from 'lodash/pull'
 import cloneDeep from 'lodash/cloneDeep'
 import isnum from 'wsemi/src/isnum.mjs'
 import isestr from 'wsemi/src/isestr.mjs'
+import isearr from 'wsemi/src/isearr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import haskey from 'wsemi/src/haskey.mjs'
 import strleft from 'wsemi/src/strleft.mjs'
@@ -192,7 +195,6 @@ function cvRowsToStsGeolayer(rows, width) {
     //st
     let st = {
         key: 'Geolayer',
-        checkDef: false,
         width,
         // height: 550,
         valueTitle: 'geologic',
@@ -240,7 +242,6 @@ function cvRowsToStsParam(key, title, depthMin, depthMax, depths, params) {
     //st
     let st = {
         key,
-        checkDef: false,
         // width: 260,
         // height: 550,
         valueTitle: title,
@@ -314,7 +315,6 @@ function cvRowsToStsCmpFS(rows, depthMin, depthMax, depths) {
     //st
     let st = {
         key: 'All-cmpFS',
-        checkDef: false,
         // width: 260,
         // height: 550,
         valueTitle: 'FS',
@@ -509,7 +509,7 @@ function anaSptLiq(rowsIn, opt = {}) {
             keys: ks,
             rows: rowsOut,
             defHeadSortMethod: 'auto',
-            defCellEditable: false,
+            defCellEditable: false, //關閉編輯功能, 待日後開發
             defCellAlighH: 'left',
             kpHead,
             kpHeadRender,
@@ -795,6 +795,7 @@ export default {
             optTable: {},
 
             sts: [],
+            keyStsSelects: [],
 
         }
     },
@@ -833,6 +834,55 @@ export default {
             //save
             vo.sptMethodsSelectsTrans = vo.sptMethodsSelects
             vo.kpMehtodSelect = kpMehtodSelect
+
+            return ''
+        },
+
+        changeStsAndKeyParamSelects: function() {
+            let vo = this
+
+            //check, 若已經有預選或使用者已切換選則, 則不再變更
+            if (isearr(vo.keyStsSelects)) {
+                return ''
+            }
+
+            //kpPis
+            let kpPis = {}
+            if (isearr(vo.keyParamSelects)) {
+                each(vo.sts, (v) => {
+                    let k = v.key
+                    each(vo.keyParamSelects, (flt) => {
+
+                        //b
+                        let b = false
+                        if (isestr(flt.keyPart)) {
+                            b = k.indexOf(flt.keyPart) >= 0
+                        }
+                        else if (isestr(flt.keyFull)) {
+                            b = k === flt.keyFull
+                        }
+
+                        //check
+                        if (b) {
+                            kpPis[k] = true
+                        }
+
+                    })
+                })
+            }
+            // console.log('kpPis', kpPis)
+
+            //keyStsSelects
+            let keyStsSelects = []
+            each(kpPis, (b, k) => {
+                if (b) {
+                    keyStsSelects.push(k)
+                }
+            })
+            // console.log('keyStsSelects', keyStsSelects)
+
+            //update
+            vo.keyStsSelects = keyStsSelects
 
             return ''
         },

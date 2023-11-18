@@ -1,7 +1,8 @@
 <template>
     <div
         :style="``"
-        :changeParam="changeParam"
+        :changeGroupParams="changeGroupParams"
+        :changeKeyStsSelects="changeKeyStsSelects"
     >
 
         <div :style="``">
@@ -222,7 +223,6 @@ import size from 'lodash/size'
 import isNumber from 'lodash/isNumber'
 import pull from 'lodash/pull'
 import cloneDeep from 'lodash/cloneDeep'
-import isearr from 'wsemi/src/isearr.mjs'
 import isestr from 'wsemi/src/isestr.mjs'
 import debounce from 'wsemi/src/debounce.mjs'
 import domConvertToPicDyn from 'wsemi/src/domConvertToPicDyn.mjs'
@@ -249,6 +249,10 @@ export default {
     },
     props: {
         sts: {
+            type: Array,
+            default: () => [],
+        },
+        keyStsSelects: {
             type: Array,
             default: () => [],
         },
@@ -493,37 +497,40 @@ export default {
                 ]
             },
         },
-        keyParamSelects: {
-            type: Array,
-            default: () => {
-                return [
-                    // {
-                    //     keyFull: 'Geolayer',
-                    // },
-                    // {
-                    //     keyPart: 'N60',
-                    // },
-                    // {
-                    //     keyPart: 'γ',
-                    // },
-                    // {
-                    //     keyPart: '-vstr',
-                    // },
-                    // {
-                    //     keyPart: '-PL',
-                    // },
-                    // {
-                    //     keyPart: '-stl',
-                    // },
-                    // {
-                    //     keyPart: '-FS',
-                    // },
-                    // {
-                    //     keyPart: '-cmpFS',
-                    // },
-                ]
-            },
-        },
+        // keyParamSelects: {
+        //     type: Array,
+        //     default: () => {
+        //         return [
+        //             {
+        //                 keyFull: 'Geolayer',
+        //             },
+        //             {
+        //                 keyFull: 'N60',
+        //             },
+        //             {
+        //                 keyFull: 'FC(%)',
+        //             },
+        //             // {
+        //             //     keyPart: 'γ',
+        //             // },
+        //             // {
+        //             //     keyPart: '-vstr',
+        //             // },
+        //             {
+        //                 keyPart: '-PL',
+        //             },
+        //             {
+        //                 keyPart: '-stl',
+        //             },
+        //             {
+        //                 keyPart: '-FS',
+        //             },
+        //             {
+        //                 keyPart: '-cmpFS',
+        //             },
+        //         ]
+        //     },
+        // },
     },
     data: function() {
         return {
@@ -545,50 +552,20 @@ export default {
             downloadPicProcessing: false,
 
             piss: [],
+
+            keyStsSelectsTrans: [],
             kpPis: {},
 
         }
     },
     computed: {
 
-        changeParam: function() {
+        changeGroupParams: function() {
             let vo = this
 
             //ks
             let ks = map(vo.sts, 'key')
             // console.log('sts ks', ks)
-
-            //kpPis
-            let kpPis = {}
-            each(vo.sts, (v) => {
-                let b = get(v, 'checkDef', false)
-                if (b) {
-                    kpPis[v.key] = true
-                }
-            })
-            if (isearr(vo.keyParamSelects)) {
-                each(vo.sts, (v) => {
-                    let k = v.key
-                    each(vo.keyParamSelects, (flt) => {
-
-                        //b
-                        let b = false
-                        if (isestr(flt.keyPart)) {
-                            b = k.indexOf(flt.keyPart) >= 0
-                        }
-                        else if (isestr(flt.keyFull)) {
-                            b = k === flt.keyFull
-                        }
-
-                        //check
-                        if (b) {
-                            kpPis[k] = true
-                        }
-
-                    })
-                })
-            }
-            // console.log('kpPis', kpPis)
 
             //piss
             let piss = []
@@ -660,6 +637,55 @@ export default {
 
             //save
             vo.piss = piss
+
+            return ''
+        },
+
+        changeKeyStsSelects: function() {
+            let vo = this
+
+            //keyStsSelects
+            let keyStsSelectsTrans = vo.keyStsSelects
+
+            //kpPis
+            let kpPis = {}
+            // if (isearr(vo.keyParamSelects)) {
+            //     each(vo.sts, (v) => {
+            //         let k = v.key
+            //         each(vo.keyParamSelects, (flt) => {
+
+            //             //b
+            //             let b = false
+            //             if (isestr(flt.keyPart)) {
+            //                 b = k.indexOf(flt.keyPart) >= 0
+            //             }
+            //             else if (isestr(flt.keyFull)) {
+            //                 b = k === flt.keyFull
+            //             }
+
+            //             //check
+            //             if (b) {
+            //                 kpPis[k] = true
+            //             }
+
+            //         })
+            //     })
+            // }
+            each(vo.sts, (v) => {
+                let k = v.key
+                let b = false
+                each(vo.keyStsSelects, (_k) => {
+                    if (k === _k) {
+                        b = true
+                        return false //跳出
+                    }
+                })
+                kpPis[k] = b
+            })
+            // console.log('kpPis', kpPis)
+
+            //save
+            vo.keyStsSelectsTrans = keyStsSelectsTrans
             vo.kpPis = kpPis
 
             return ''
@@ -831,14 +857,28 @@ export default {
 
             let vo = this
 
-            //kpPis
+            //cloneDeep
             let kpPis = cloneDeep(vo.kpPis)
 
-            //modify
+            //kpPis
             kpPis[pi.key] = b
+            // console.log('kpPis', kpPis)
+
+            //keyStsSelectsTrans
+            let keyStsSelectsTrans = []
+            each(kpPis, (b, k) => {
+                if (b) {
+                    keyStsSelectsTrans.push(k)
+                }
+            })
+            // console.log('keyStsSelectsTrans', keyStsSelectsTrans)
 
             //update
+            vo.keyStsSelectsTrans = keyStsSelectsTrans
             vo.kpPis = kpPis
+
+            //emit
+            vo.$emit('update:keyStsSelects', keyStsSelectsTrans)
 
         },
 

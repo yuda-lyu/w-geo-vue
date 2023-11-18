@@ -16,7 +16,7 @@
 
                 <div style="width:calc( 100vw - 60px ); overflow-y:hidden; overflow-x:auto;">
                     <w-spt-liq-plot-depths
-                        :sts="WSptLiqPlotDepths.st1"
+                        :sts="WSptLiqPlotDepths.sts1"
                     ></w-spt-liq-plot-depths>
                 </div>
 
@@ -43,7 +43,7 @@ export default {
     data: function() {
         return {
             'WSptLiqPlotDepths': {
-                'st1': [
+                'sts1': [
                     {
                         key: 'Geolayer',
                         width: 350,
