@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import get from 'lodash/get'
+import get from 'lodash-es/get'
 import isnum from 'wsemi/src/isnum.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import WHighchartsVueDyn from 'w-component-vue/src/components/WHighchartsVueDyn.vue'

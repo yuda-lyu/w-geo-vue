@@ -67,10 +67,10 @@
 </template>
 
 <script>
-import get from 'lodash/get'
-import size from 'lodash/size'
-import each from 'lodash/each'
-import reverse from 'lodash/reverse'
+import get from 'lodash-es/get'
+import size from 'lodash-es/size'
+import each from 'lodash-es/each'
+import reverse from 'lodash-es/reverse'
 import ispint from 'wsemi/src/ispint.mjs'
 import isnum from 'wsemi/src/isnum.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'

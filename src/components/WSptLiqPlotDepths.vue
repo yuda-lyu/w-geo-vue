@@ -135,12 +135,12 @@
 </template>
 
 <script>
-import get from 'lodash/get'
-import each from 'lodash/each'
-import map from 'lodash/map'
-import trim from 'lodash/trim'
-import filter from 'lodash/filter'
-import cloneDeep from 'lodash/cloneDeep'
+import get from 'lodash-es/get'
+import each from 'lodash-es/each'
+import map from 'lodash-es/map'
+import trim from 'lodash-es/trim'
+import filter from 'lodash-es/filter'
+import cloneDeep from 'lodash-es/cloneDeep'
 import dig from 'wsemi/src/dig.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import importResources from 'wsemi/src/importResources.mjs'
