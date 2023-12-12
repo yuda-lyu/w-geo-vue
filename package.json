@@ -7,7 +7,6 @@
     "lodash-es": "^4.17.21",
     "w-component-vue": "^2.3.61",
     "w-geo": "^1.1.10",
-    "w-highcharts": "^1.0.2",
     "wsemi": "^1.7.40"
   },
   "devDependencies": {
