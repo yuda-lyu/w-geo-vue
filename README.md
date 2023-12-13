@@ -19,7 +19,7 @@ To view some examples for more understanding, visit examples:
 
 ## Installation
 ### Using npm(ES6 module):
-> **Note:** w-geo-vue is mainly dependent on `w-geo` and `wsemi`.
+> **Note:** w-geo-vue is mainly dependent on `w-component-vue`, `w-geo` and `wsemi`.
 
 ```alias
 npm i w-geo-vue
