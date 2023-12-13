@@ -1,11 +1,11 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
     "@mdi/js": "^7.2.96",
     "lodash-es": "^4.17.21",
-    "w-component-vue": "^2.3.61",
+    "w-component-vue": "^2.3.63",
     "w-geo": "^1.1.10",
     "wsemi": "^1.7.40"
   },
