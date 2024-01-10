@@ -27,7 +27,7 @@
                 >
                     <template v-slot:item="props">
                         <div style="">
-                            {{kebabCase(props.item.name)}}
+                            {{kebabCaseFix(props.item.name)}}
                         </div>
                     </template>
                 </WListHorizontal>
@@ -49,7 +49,7 @@
                 >
                     <template v-slot:item="props">
                         <div style="">
-                            {{kebabCase(props.item.name)}}
+                            {{kebabCaseFix(props.item.name)}}
                         </div>
                     </template>
                 </WListHorizontal>
@@ -70,7 +70,7 @@
                 >
                     <template v-slot:item="props">
                         <div style="">
-                            {{kebabCase(props.item.name)}}
+                            {{kebabCaseFix(props.item.name)}}
                         </div>
                     </template>
                 </WListHorizontal>
@@ -80,9 +80,9 @@
         </div>
 
 
-        <div style="padding:20px;">
+        <div>
 
-            <AppZoneWPlot v-if="cmpPick==='WPlot'"></AppZoneWPlot>
+            <AppZoneWPlot2d v-if="cmpPick==='WPlot2d'"></AppZoneWPlot2d>
 
             <AppZoneWSptLiqPlotDepth v-if="cmpPick==='WSptLiqPlotDepth'"></AppZoneWSptLiqPlotDepth>
 
@@ -93,6 +93,8 @@
             <AppZoneWSptLiqPlotDepthsWithGradesAndTools v-if="cmpPick==='WSptLiqPlotDepthsWithGradesAndTools'"></AppZoneWSptLiqPlotDepthsWithGradesAndTools>
 
             <AppZoneWSptLiqAnalysis v-if="cmpPick==='WSptLiqAnalysis'"></AppZoneWSptLiqAnalysis>
+
+            <AppZoneWPlot3d v-if="cmpPick==='WPlot3d'"></AppZoneWPlot3d>
 
         </div>
 
@@ -105,37 +107,64 @@ import get from 'lodash-es/get'
 import kebabCase from 'lodash-es/kebabCase'
 import each from 'lodash-es/each'
 // import cloneDeep from 'lodash-es/cloneDeep'
+import strright from 'wsemi/src/strright.mjs'
+import strdelright from 'wsemi/src/strdelright.mjs'
 import urlParse from 'wsemi/src/urlParse.mjs'
 import WListHorizontal from 'w-component-vue/src/components/WListHorizontal.vue'
-import AppZoneWPlot from './AppZoneWPlot.vue'
+import AppZoneWPlot2d from './AppZoneWPlot2d.vue'
 import AppZoneWSptLiqPlotDepth from './AppZoneWSptLiqPlotDepth.vue'
 import AppZoneWSptLiqPlotDepths from './AppZoneWSptLiqPlotDepths.vue'
 import AppZoneWSptLiqPlotDepthsWithGrades from './AppZoneWSptLiqPlotDepthsWithGrades.vue'
 import AppZoneWSptLiqPlotDepthsWithGradesAndTools from './AppZoneWSptLiqPlotDepthsWithGradesAndTools.vue'
 import AppZoneWSptLiqAnalysis from './AppZoneWSptLiqAnalysis.vue'
+import AppZoneWPlot3d from './AppZoneWPlot3d.vue'
+
+
+let kebabCaseFix = (c) => {
+    let r = kebabCase(c)
+    if (strright(r, 3) === '2-d') {
+        r = strdelright(r, 3) + '2d'
+    }
+    else if (strright(r, 3) === '3-d') {
+        r = strdelright(r, 3) + '3d'
+    }
+    return r
+}
 
 
 export default {
     components: {
         WListHorizontal,
-        AppZoneWPlot,
+        AppZoneWPlot2d,
         AppZoneWSptLiqPlotDepth,
         AppZoneWSptLiqPlotDepths,
         AppZoneWSptLiqPlotDepthsWithGrades,
         AppZoneWSptLiqPlotDepthsWithGradesAndTools,
         AppZoneWSptLiqAnalysis,
+        AppZoneWPlot3d,
     },
     data: function() {
         let cmps = [
-            { name: 'WPlot', },
-            { name: 'WSptLiqPlotDepth', },
-            { name: 'WSptLiqPlotDepths', },
-            { name: 'WSptLiqPlotDepthsWithGrades', },
-            { name: 'WSptLiqPlotDepthsWithGradesAndTools', },
-            { name: 'WSptLiqAnalysis', },
+            {
+                name: '2d',
+                cmps: [
+                    { name: 'WPlot2d', },
+                    { name: 'WSptLiqPlotDepth', },
+                    { name: 'WSptLiqPlotDepths', },
+                    { name: 'WSptLiqPlotDepthsWithGrades', },
+                    { name: 'WSptLiqPlotDepthsWithGradesAndTools', },
+                    { name: 'WSptLiqAnalysis', },
+                ],
+            },
+            {
+                name: '3d',
+                cmps: [
+                    { name: 'WPlot3d', },
+                ],
+            },
         ]
         return {
-            kebabCase,
+            kebabCaseFix,
 
             cmpsL1: cmps,
             indP1: null,
@@ -255,7 +284,7 @@ export default {
 
         viewPick: function(cmpPick) {
             let vo = this
-            let _cmpPick = kebabCase(cmpPick)
+            let _cmpPick = kebabCaseFix(cmpPick)
             let r = ''
             let rs = []
             let ls = []
@@ -265,7 +294,7 @@ export default {
 
                     //name, _name
                     let name = get(v, `name`, '')
-                    let _name = kebabCase(name)
+                    let _name = kebabCaseFix(name)
 
                     //cmps
                     let cmps = get(v, `cmps`, [])
@@ -306,18 +335,31 @@ export default {
 
 <style>
 .head1 {
-    margin: 0px;
-    padding: 0px 0px 10px 0px;
+    padding: 0px 0px 20px 0px;
     font-size: 2.5rem;
 }
-.bk {
-    vertical-align: top;
-    padding: 10px 0px 60px 0px;
+.bkh { /* 寬 */
+    padding:20px;
 }
-@media screen and (min-width:1000px){ /* 寬版 */
+@media screen and (max-width:800px){ /* 中 */
+    .bkh {
+        padding:10px;
+    }
+}
+@media screen and (max-width:400px){ /* 窄 */
+    .bkh {
+        padding:5px;
+    }
+}
+.bk { /* 寬 */
+    display: inline-block;
+    vertical-align: top;
+    padding: 0px 80px 60px 0px;
+}
+@media screen and (max-width:1000px){ /* 中窄 */
     .bk {
-        display: inline-block;
-        margin: 0px 80px 0px 0px;
+        display: block;
+        padding: 0px 0px 50px 0px;
     }
 }
 </style>

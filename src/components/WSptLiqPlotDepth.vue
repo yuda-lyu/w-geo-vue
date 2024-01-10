@@ -11,9 +11,9 @@
             ></slot>
         </div>
 
-        <WPlot
+        <WPlot2d
             :options="opt"
-        ></WPlot>
+        ></WPlot2d>
 
         <div :style="`width:${getWidth}px; max-width:${getWidth}px;`">
             <slot
@@ -31,7 +31,7 @@ import map from 'lodash-es/map'
 // import cloneDeep from 'lodash-es/cloneDeep'
 import isestr from 'wsemi/src/isestr.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
-import WPlot from './WPlot.vue'
+import WPlot2d from './WPlot2d.vue'
 import spc2html from '../js/spc2html.mjs'
 import getDefOpt from '../js/getDefOpt.mjs'
 import getDefChart from '../js/getDefChart.mjs'
@@ -235,7 +235,7 @@ function genOpt(st = {}, optionsPic = {}) {
  */
 export default {
     components: {
-        WPlot,
+        WPlot2d,
     },
     props: {
         st: {

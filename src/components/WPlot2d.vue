@@ -52,7 +52,7 @@ export default {
 
             //w
             let w = vo.width
-            let wOpt = get(vo, 'options.chart.width', '')
+            let wOpt = get(vo, 'options.chart.width', '') //優先使用options內寬度
             if (isnum(wOpt)) {
                 w = cdbl(wOpt)
             }
@@ -67,7 +67,7 @@ export default {
 
             //h
             let h = vo.height
-            let hOpt = get(vo, 'options.chart.height', '')
+            let hOpt = get(vo, 'options.chart.height', '') //優先使用options內高度
             if (isnum(hOpt)) {
                 h = cdbl(hOpt)
             }
