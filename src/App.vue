@@ -156,12 +156,12 @@ export default {
                     { name: 'WSptLiqAnalysis', },
                 ],
             },
-            {
-                name: '3d',
-                cmps: [
-                    { name: 'WPlot3d', },
-                ],
-            },
+            // { //bbb
+            //     name: '3d',
+            //     cmps: [
+            //         { name: 'WPlot3d', },
+            //     ],
+            // },
         ]
         return {
             kebabCaseFix,

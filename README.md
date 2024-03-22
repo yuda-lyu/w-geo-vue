@@ -7,6 +7,7 @@ A geo component for vue(vue2).
 [![license](https://img.shields.io/npm/l/w-geo-vue.svg?style=flat)](https://npmjs.org/package/w-geo-vue) 
 [![gzip file size](http://img.badgesize.io/yuda-lyu/w-geo-vue/master/dist/w-geo-vue.umd.js.svg?compression=gzip)](https://github.com/yuda-lyu/w-geo-vue)
 [![npm download](https://img.shields.io/npm/dt/w-geo-vue.svg)](https://npmjs.org/package/w-geo-vue) 
+[![npm download](https://img.shields.io/npm/dm/w-geo-vue.svg)](https://npmjs.org/package/w-geo-vue) 
 [![jsdelivr download](https://img.shields.io/jsdelivr/npm/hm/w-geo-vue.svg)](https://www.jsdelivr.com/package/npm/w-geo-vue)
 
 ## Documentation
@@ -65,7 +66,7 @@ export default {
 
 [Necessary] Add script for w-geo-vue.
 ```alias
-<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.13/dist/w-geo-vue.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.14/dist/w-geo-vue.umd.js"></script>
 ```
 Directly use:
 ```alias

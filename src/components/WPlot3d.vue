@@ -9,6 +9,7 @@
             :style="`position:relative; width:${widthInp}px; height:${heightInp}px;`"
         >
             bbb
+            待確認是否需要
         </div>
 
     </div>
