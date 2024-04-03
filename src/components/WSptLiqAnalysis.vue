@@ -134,7 +134,7 @@ import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAn
 import spc2html from '../js/spc2html.mjs'
 
 
-function cvRowsToStsGeolayer(rows, width) {
+function cvRowsToStsGeolayer(rows, depthTitle, width, waterLevel) {
 
     //cvUscsToCode
     let cvUscsToCode = (USCS) => {
@@ -198,10 +198,10 @@ function cvRowsToStsGeolayer(rows, width) {
         width,
         // height: 550,
         valueTitle: 'geologic',
-        depthTitle: 'Depth(m)',
-        depthMin: 0,
-        depthMax: 20,
-        waterLevel: 0,
+        depthTitle,
+        // depthMin: 0, //不須使用
+        // depthMax: 20, //不須使用
+        waterLevel,
         item: {
             type: 'Geolayer',
             name: '',
@@ -215,7 +215,7 @@ function cvRowsToStsGeolayer(rows, width) {
 }
 
 
-function cvRowsToStsParam(key, title, depthMin, depthMax, depths, params) {
+function cvRowsToStsParam(key, valueTitle, depthTitle, depthMin, depthMax, depths, params) {
 
     //data
     let data = []
@@ -244,8 +244,8 @@ function cvRowsToStsParam(key, title, depthMin, depthMax, depths, params) {
         key,
         // width: 260,
         // height: 550,
-        valueTitle: title,
-        depthTitle: 'Depth(m)',
+        valueTitle,
+        depthTitle,
         depthMin,
         depthMax,
         item: {
@@ -260,7 +260,7 @@ function cvRowsToStsParam(key, title, depthMin, depthMax, depths, params) {
 }
 
 
-function cvRowsToStsCmpFS(rows, depthMin, depthMax, depths) {
+function cvRowsToStsCmpFS(rows, depthTitle, depthMin, depthMax, depths) {
 
     //row0
     let row0 = get(rows, 0, {})
@@ -318,7 +318,7 @@ function cvRowsToStsCmpFS(rows, depthMin, depthMax, depths) {
         // width: 260,
         // height: 550,
         valueTitle: 'FS',
-        depthTitle: 'Depth(m)',
+        depthTitle,
         depthMin,
         depthMax,
         item: {
@@ -333,7 +333,7 @@ function cvRowsToStsCmpFS(rows, depthMin, depthMax, depths) {
 }
 
 
-function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
+function cvRowsToSts(rows, kpCvKey, depthTitle, geolayerWidth, geolayerWaterLevel) {
 
     //row0
     let row0 = get(rows, 0, {})
@@ -382,31 +382,31 @@ function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
                 key = k
             }
 
-            //title
-            let title = ''
-            if (!isestr(title) && haskey(kpCvKey, k)) {
-                title = get(kpCvKey, k, '')
+            //valueTitle
+            let valueTitle = ''
+            if (!isestr(valueTitle) && haskey(kpCvKey, k)) {
+                valueTitle = get(kpCvKey, k, '')
             }
-            if (!isestr(title) && k.indexOf('-CRR') >= 0) {
-                title = 'CRR'
+            if (!isestr(valueTitle) && k.indexOf('-CRR') >= 0) {
+                valueTitle = 'CRR'
             }
-            if (!isestr(title) && k.indexOf('-CSR') >= 0) {
-                title = 'CSR'
+            if (!isestr(valueTitle) && k.indexOf('-CSR') >= 0) {
+                valueTitle = 'CSR'
             }
-            if (!isestr(title) && k.indexOf('-FS') >= 0) {
-                title = 'FS'
+            if (!isestr(valueTitle) && k.indexOf('-FS') >= 0) {
+                valueTitle = 'FS'
             }
-            if (!isestr(title) && k.indexOf('-PL') >= 0) {
-                title = 'PL'
+            if (!isestr(valueTitle) && k.indexOf('-PL') >= 0) {
+                valueTitle = 'PL'
             }
-            if (!isestr(title) && k.indexOf('-stl') >= 0) {
-                title = 'Settlement(m)'
+            if (!isestr(valueTitle) && k.indexOf('-stl') >= 0) {
+                valueTitle = 'Settlement(m)'
             }
-            if (!isestr(title) && k.indexOf('-vstr') >= 0) {
-                title = 'Vol. strain(%)'
+            if (!isestr(valueTitle) && k.indexOf('-vstr') >= 0) {
+                valueTitle = 'Vol. strain(%)'
             }
-            if (!isestr(title)) {
-                title = k
+            if (!isestr(valueTitle)) {
+                valueTitle = k
             }
 
             //params
@@ -435,7 +435,7 @@ function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
             }
 
             //cvRowsToStsParam
-            let st = cvRowsToStsParam(key, title, depthMin, depthMax, depths, params)
+            let st = cvRowsToStsParam(key, valueTitle, depthTitle, depthMin, depthMax, depths, params)
             // console.log(k, 'st', st)
 
             //push
@@ -448,7 +448,7 @@ function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
     if (true) {
 
         //cvRowsToStsCmpFS
-        let st = cvRowsToStsCmpFS(rows, depthMin, depthMax, depths)
+        let st = cvRowsToStsCmpFS(rows, depthTitle, depthMin, depthMax, depths)
         // console.log('st', st)
 
         //push
@@ -460,7 +460,7 @@ function cvRowsToSts(rows, kpCvKey, geolayerWidth) {
     if (true) {
 
         //cvRowsToStsGeolayer
-        let st = cvRowsToStsGeolayer(rows, geolayerWidth)
+        let st = cvRowsToStsGeolayer(rows, depthTitle, geolayerWidth, geolayerWaterLevel)
         // console.log('st', st)
 
         //插入最前面
@@ -480,8 +480,14 @@ function anaSptLiq(rowsIn, opt = {}) {
     //kpHead
     let kpHead = get(opt, 'kpHead', {})
 
+    //depthTitle
+    let depthTitle = get(opt, 'depthTitle', 'Depth(m)')
+
     //geolayerWidth
     let geolayerWidth = get(opt, 'geolayerWidth', 240)
+
+    //geolayerWaterLevel
+    let geolayerWaterLevel = get(opt, 'geolayerWaterLevel', 0)
 
     //rowsOut
     let rowsOut = calcLiquefaction.calc('SPT', rowsIn, opt)
@@ -623,7 +629,7 @@ function anaSptLiq(rowsIn, opt = {}) {
         // console.log('rowsTemp', rowsTemp)
 
         //cvRowsToSts
-        sts = cvRowsToSts(rowsTemp, kpHead, geolayerWidth)
+        sts = cvRowsToSts(rowsTemp, kpHead, depthTitle, geolayerWidth, geolayerWaterLevel)
         // console.log('sts', sts)
 
     }
@@ -756,6 +762,10 @@ export default {
                     },
                 ]
             },
+        },
+        depthTitle: {
+            type: String,
+            default: 'Depth(m)',
         },
         geolayerWidth: {
             type: Number,
@@ -964,6 +974,24 @@ export default {
             })
             // console.log('rowsIn(kpTransRowKey)', cloneDeep(rowsIn))
 
+            //waterLevel
+            let waterLevel = 0
+            if (true) {
+                let wl
+                wl = get(rowsIn, '0.waterLevel', '')
+                if (isnum(wl)) {
+                    waterLevel = cdbl(wl)
+                }
+                wl = get(rowsIn, '0.waterLevelUsual', '')
+                if (isnum(wl)) {
+                    waterLevel = cdbl(wl)
+                }
+                wl = get(rowsIn, '0.waterLevelDesign', '')
+                if (isnum(wl)) {
+                    waterLevel = cdbl(wl)
+                }
+            }
+
             // //add params
             // rowsIn = map(rowsIn, (row) => {
 
@@ -1007,7 +1035,9 @@ export default {
                 unitSvSvp: vo.unitSvSvp,
                 methods: vo.sptMethodsSelectsTrans,
                 kpHead: vo.useKpHead,
+                depthTitle: vo.depthTitle,
                 geolayerWidth: vo.geolayerWidth,
+                geolayerWaterLevel: waterLevel, //由rows[0]取得
             }
 
             //anaSptLiq

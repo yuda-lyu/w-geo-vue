@@ -50,9 +50,9 @@ export default {
                         height: 550,
                         valueTitle: 'geologic',
                         depthTitle: 'Depth(m)',
-                        depthMin: 0,
-                        depthMax: 20,
-                        waterLevel: 0,
+                        // depthMin: 0, //由數據自動計算, 不使用
+                        // depthMax: 15, //由數據自動計算, 不使用
+                        waterLevel: 0.5,
                         item: {
                             type: 'Geolayer',
                             name: '',

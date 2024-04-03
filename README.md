@@ -66,7 +66,7 @@ export default {
 
 [Necessary] Add script for w-geo-vue.
 ```alias
-<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.15/dist/w-geo-vue.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.16/dist/w-geo-vue.umd.js"></script>
 ```
 Directly use:
 ```alias
