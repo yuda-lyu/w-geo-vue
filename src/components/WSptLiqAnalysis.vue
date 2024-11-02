@@ -124,6 +124,7 @@ import isnum from 'wsemi/src/isnum.mjs'
 import isestr from 'wsemi/src/isestr.mjs'
 import isearr from 'wsemi/src/isearr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
+import cstr from 'wsemi/src/cstr.mjs'
 import haskey from 'wsemi/src/haskey.mjs'
 import strleft from 'wsemi/src/strleft.mjs'
 import calcLiquefaction from 'w-geo/src/calcLiquefaction.mjs'
@@ -475,6 +476,20 @@ function cvRowsToSts(rows, kpCvKey, depthTitle, geolayerWidth, geolayerWaterLeve
 }
 
 
+function escapeHTML(c) {
+    c = cstr(c)
+    if (isestr(c)) {
+        c = c
+            // .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            // .replace(/"/g, '&quot;')
+            // .replace(/'/g, '&#39;')
+    }
+    return c
+}
+
+
 function anaSptLiq(rowsIn, opt = {}) {
 
     //kpHead
@@ -493,6 +508,23 @@ function anaSptLiq(rowsIn, opt = {}) {
     let rowsOut = calcLiquefaction.calc('SPT', rowsIn, opt)
     // console.log('rowsOut', cloneDeep(rowsOut))
 
+    //escapeHTML, 因-err與-stateFS會含有<>符號, ag-grid會無法正常顯示, 得先取代成html專用顯示符號
+    rowsOut = map(rowsOut, (r) => {
+        let rr = {}
+        each(r, (v, k) => {
+            if (
+                k.indexOf('-err') >= 0 ||
+                k.indexOf('-stateFS') >= 0 ||
+                false
+            ) {
+                v = escapeHTML(v)
+            }
+            rr[k] = v
+        })
+        return rr
+    })
+    // console.log('rowsOut(escapeHTML)', cloneDeep(rowsOut))
+
     //rowOut0
     let rowOut0 = get(rowsOut, 0, {})
 
@@ -508,6 +540,20 @@ function anaSptLiq(rowsIn, opt = {}) {
         }
     })
 
+    //kpCellTooltip, 因-err與-stateFS可能文字訊息過長, 故須開啟
+    let kpCellTooltip = {}
+    each(ks, (k) => {
+        if (
+            k.indexOf('-err') >= 0 ||
+            k.indexOf('-stateFS') >= 0 ||
+            false
+        ) {
+            kpCellTooltip[k] = (v) => {
+                return v
+            }
+        }
+    })
+
     //optTable
     let optTable = {}
     if (true) {
@@ -519,84 +565,7 @@ function anaSptLiq(rowsIn, opt = {}) {
             defCellAlighH: 'left',
             kpHead,
             kpHeadRender,
-            // kpHeadHide: {
-            //     id: true,
-            //     mappingId: true,
-            //     isActive: true,
-            // },
-            // kpCellAlighH: {
-            //     id: 'left',
-            // },
-            // kpHeadWidth: {
-            //     depthStart: 110,
-            //     depthEnd: 110,
-            //     depth: 110,
-            // },
-            // kpHeadFixLeft: {
-            //     depthStart: true,
-            //     depthEnd: true,
-            //     //depth: true,
-            // },
-            // kpCellEditable: {
-            //     depth: false,
-            //     FC: false,
-            //     rd: false,
-            //     rsat: false,
-            //     sv: false,
-            //     svp: false,
-            //     svpUsual: false,
-            //     svpDesign: false,
-            //     // ...ksNotEdit,
-            // },
-            // kpCellTooltip: {
-            //     ...genObj(keys(ksNotEdit), (v) => {
-            //         return (v) => {
-            //             return v
-            //         }
-            //     }),
-            // },
-            kpColStyle: {},
-            // kpCellRender: getParamRender(),
-            // cellChange: (key, row) => {
-            //     console.log('cellChange', key, row[key], row)
-
-            //     //clear sv, svp, svpUsual, svpDesign, 因現在calcLiquefaction會有沿用垂直應力與有效應力之機制, 故得先清除才分析
-            //     vo.opt.rows = fillRows(vo.opt.rows, 'sv', '')
-            //     vo.opt.rows = fillRows(vo.opt.rows, 'svp', '')
-            //     vo.opt.rows = fillRows(vo.opt.rows, 'svpUsual', '')
-            //     vo.opt.rows = fillRows(vo.opt.rows, 'svpDesign', '')
-
-            //     //fill waterLevel, waterLevelUsual, waterLevelDesign
-            //     if (key === 'waterLevel') {
-            //         let waterLevel = row[key]
-            //         vo.opt.rows = fillRows(vo.opt.rows, 'waterLevel', waterLevel)
-            //         vo.opt.rows = fillRows(vo.opt.rows, 'waterLevelUsual', waterLevel)
-            //         vo.opt.rows = fillRows(vo.opt.rows, 'waterLevelDesign', waterLevel)
-            //     }
-
-            //     //fill Ml
-            //     if (key === 'Ml') {
-            //         let Ml = row[key]
-            //         if (!isnum(Ml)) {
-            //             Ml = 0
-            //         }
-            //         Ml = cdbl(Ml)
-            //         let Mw = MlToMw(Ml) //由芮式規模推估
-            //         vo.opt.rows = fillRows(vo.opt.rows, 'Ml', Ml)
-            //         vo.opt.rows = fillRows(vo.opt.rows, 'Mw', Mw)
-            //     }
-
-            //     //fill Mw, PGA, vibrationType
-            //     if (arrHas(key, ['Mw', 'PGA', 'vibrationType'])) {
-            //         vo.opt.rows = fillRows(vo.opt.rows, key, row[key])
-            //     }
-
-            //     //calcLiquefaction
-            //     console.log('cellChange: calcLiquefaction before', cloneDeep(vo.opt.rows))
-            //     vo.opt.rows = calcLiquefaction.calc(vo.kind, vo.opt.rows)
-            //     console.log('cellChange: calcLiquefaction after', cloneDeep(vo.opt.rows))
-
-            // },
+            kpCellTooltip,
         }
     }
 
@@ -751,6 +720,9 @@ export default {
                     {
                         keyPart: '-FS',
                     },
+                    // {
+                    //     keyPart: '-stateFS', //儲存文字無法繪圖
+                    // },
                     {
                         keyPart: '-cmpFS',
                     },
@@ -775,11 +747,11 @@ export default {
             type: Object,
             default: () => {},
         },
-        optionsTable: {
+        optionsTable: { //提供組件WTableDyn額外參數
             type: Object,
             default: () => {},
         },
-        optionsToolPlot: {
+        optionsToolPlot: { //提供組件WSptLiqPlotDepthsWithGradesAndTools額外參數
             type: Object,
             default: () => {},
         },

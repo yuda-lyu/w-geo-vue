@@ -497,40 +497,6 @@ export default {
                 ]
             },
         },
-        // keyParamSelects: {
-        //     type: Array,
-        //     default: () => {
-        //         return [
-        //             {
-        //                 keyFull: 'Geolayer',
-        //             },
-        //             {
-        //                 keyFull: 'N60',
-        //             },
-        //             {
-        //                 keyFull: 'FC(%)',
-        //             },
-        //             // {
-        //             //     keyPart: 'γ',
-        //             // },
-        //             // {
-        //             //     keyPart: '-vstr',
-        //             // },
-        //             {
-        //                 keyPart: '-PL',
-        //             },
-        //             {
-        //                 keyPart: '-stl',
-        //             },
-        //             {
-        //                 keyPart: '-FS',
-        //             },
-        //             {
-        //                 keyPart: '-cmpFS',
-        //             },
-        //         ]
-        //     },
-        // },
     },
     data: function() {
         return {
@@ -574,6 +540,7 @@ export default {
                 //pis
                 let pis = []
                 each(gc.flts, (flt) => {
+                    // console.log('flt', JSON.stringify(flt))
 
                     //_pis
                     let _pis = []
@@ -609,9 +576,11 @@ export default {
                         }
 
                     })
+                    // console.log('_pis', cloneDeep(_pis))
 
                     //pull
                     pull(ks, map(_pis, 'key'))
+                    // console.log('ks', cloneDeep(ks))
 
                     //merge
                     pis = [
@@ -649,28 +618,6 @@ export default {
 
             //kpPis
             let kpPis = {}
-            // if (isearr(vo.keyParamSelects)) {
-            //     each(vo.sts, (v) => {
-            //         let k = v.key
-            //         each(vo.keyParamSelects, (flt) => {
-
-            //             //b
-            //             let b = false
-            //             if (isestr(flt.keyPart)) {
-            //                 b = k.indexOf(flt.keyPart) >= 0
-            //             }
-            //             else if (isestr(flt.keyFull)) {
-            //                 b = k === flt.keyFull
-            //             }
-
-            //             //check
-            //             if (b) {
-            //                 kpPis[k] = true
-            //             }
-
-            //         })
-            //     })
-            // }
             each(vo.sts, (v) => {
                 let k = v.key
                 let b = false
