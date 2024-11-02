@@ -163,9 +163,9 @@ function addLineFs(opt) {
     //     },
     // ]
 
-    //FS上下限[0,2]
+    //FS上下限
     opt.yAxis.min = 0
-    opt.yAxis.max = 2
+    opt.yAxis.max = 3
 
     return opt
 }

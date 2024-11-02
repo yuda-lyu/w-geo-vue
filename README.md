@@ -5,7 +5,6 @@ A geo component for vue(vue2).
 [![language](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://github.com/vuejs/vue) 
 [![npm version](http://img.shields.io/npm/v/w-geo-vue.svg?style=flat)](https://npmjs.org/package/w-geo-vue) 
 [![license](https://img.shields.io/npm/l/w-geo-vue.svg?style=flat)](https://npmjs.org/package/w-geo-vue) 
-[![gzip file size](http://img.badgesize.io/yuda-lyu/w-geo-vue/master/dist/w-geo-vue.umd.js.svg?compression=gzip)](https://github.com/yuda-lyu/w-geo-vue)
 [![npm download](https://img.shields.io/npm/dt/w-geo-vue.svg)](https://npmjs.org/package/w-geo-vue) 
 [![npm download](https://img.shields.io/npm/dm/w-geo-vue.svg)](https://npmjs.org/package/w-geo-vue) 
 [![jsdelivr download](https://img.shields.io/jsdelivr/npm/hm/w-geo-vue.svg)](https://www.jsdelivr.com/package/npm/w-geo-vue)
@@ -66,7 +65,7 @@ export default {
 
 [Necessary] Add script for w-geo-vue.
 ```alias
-<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.16/dist/w-geo-vue.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.17/dist/w-geo-vue.umd.js"></script>
 ```
 Directly use:
 ```alias

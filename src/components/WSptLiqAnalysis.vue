@@ -527,7 +527,7 @@ function anaSptLiq(rowsIn, opt = {}) {
             // kpCellAlighH: {
             //     id: 'left',
             // },
-            // kpCellWidth: {
+            // kpHeadWidth: {
             //     depthStart: 110,
             //     depthEnd: 110,
             //     depth: 110,
