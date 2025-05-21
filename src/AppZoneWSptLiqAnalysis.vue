@@ -31,34 +31,12 @@
             <div class="bk" style="margin:0px; padding:0px;">
                 <demolink
                     :kbname="'w-spt-liq-analysis'"
-                    :casename="'geolayerWidth'"
-                ></demolink>
-
-                <div style="width:calc( 100vw - 60px );">
-                    <w-spt-liq-analysis
-                        :rows="WSptLiqAnalysis.rows2"
-                        :geolayerWidth="320"
-                    ></w-spt-liq-analysis>
-                </div>
-
-            </div>
-
-
-            <div style="padding:70px 0px 50px 0px;">
-                <div style="border-top:1px solid #ddd;"></div>
-            </div>
-
-
-            <div class="bk" style="margin:0px; padding:0px;">
-                <demolink
-                    :kbname="'w-spt-liq-analysis'"
                     :casename="'slot'"
                 ></demolink>
 
                 <div style="width:calc( 100vw - 60px );">
                     <w-spt-liq-analysis
                         :rows="WSptLiqAnalysis.rows2"
-                        :geolayerWidth="320"
                     >
                         <template v-slot:zone-top-geolayer="props">
 
@@ -134,7 +112,6 @@
                 <div style="width:calc( 100vw - 60px );">
                     <w-spt-liq-analysis
                         :rows="WSptLiqAnalysis.rows3"
-                        :geolayerWidth="320"
                         :optionsToolPlot="{
                             textParams:'參數',
                             textTools:'工具',

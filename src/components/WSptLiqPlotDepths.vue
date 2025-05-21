@@ -2,8 +2,8 @@
     <div :style="`display:flex;`">
 
         <div
-            :style="``"
-            v-if="hasGeolayer && hasKpGlIcon"
+            :style="`padding-right:${stOthers.length>0?spaceGeolayer:0}px;`"
+            v-if="hasGeolayer"
         >
 
             <div :style="`width:${stGl.width}px; height:${zoneTopHeight}px; overflow:auto;`">
@@ -92,7 +92,7 @@
             <div style="display:flex; align-items:flex-start;">
 
                 <div
-                    :style="``"
+                    :style="`padding-left:${kst>0?spacePlot:0}px;`"
                     :key="'kst-'+kst"
                     v-for="(st,kst) in stOthers"
                 >
@@ -143,6 +143,8 @@ import filter from 'lodash-es/filter.js'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 import dig from 'wsemi/src/dig.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
+import isnum from 'wsemi/src/isnum.mjs'
+import cdbl from 'wsemi/src/cdbl.mjs'
 import importResources from 'wsemi/src/importResources.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
@@ -180,7 +182,7 @@ export default {
     mounted: function() {
         let vo = this
 
-        importResources('https://cdn.jsdelivr.net/npm/w-demores@1.0.23/res/data/dataCivilSoilCodeIcon.js')
+        importResources('https://cdn.jsdelivr.net/npm/w-demores@1.0.27/res/data/dataCivilSoilCodeIcon.js')
             .then((res) => {
                 // console.log(res)
                 // console.log('window.dataCivilSoilCodeIcon', window.dataCivilSoilCodeIcon)
@@ -206,16 +208,17 @@ export default {
             return null
         },
 
-        hasGeolayer: function() {
-            let vo = this
-            let b = iseobj(vo.stGl)
-            // console.log('vo.stGl', vo.stGl, b)
-            return b
-        },
-
         hasKpGlIcon: function() {
             let vo = this
             let b = iseobj(vo.kpGlIcon)
+            return b
+        },
+
+        hasGeolayer: function() {
+            let vo = this
+            let b1 = iseobj(vo.stGl)
+            let b2 = vo.hasKpGlIcon
+            let b = b1 && b2
             return b
         },
 
@@ -259,12 +262,14 @@ export default {
         zoneTopHeight: function() {
             let vo = this
             let h = get(vo, 'optionsPic.zoneTopHeight', 0)
+            // console.log('zoneTopHeight', h)
             return h
         },
 
         zoneBottomHeight: function() {
             let vo = this
             let h = get(vo, 'optionsPic.zoneBottomHeight', 0)
+            // console.log('zoneBottomHeight', h)
             return h
         },
 
@@ -305,6 +310,28 @@ export default {
                 items = vo.mergeSameLegendCodeAndText(items)
             }
             return items
+        },
+
+        spaceGeolayer: function() {
+            let vo = this
+            let r = get(vo, 'optionsPic.spaceGeolayer', null)
+            if (!isnum(r)) {
+                r = 10 //預設10px
+            }
+            r = cdbl(r)
+            // console.log('spaceGeolayer', r)
+            return r
+        },
+
+        spacePlot: function() {
+            let vo = this
+            let r = get(vo, 'optionsPic.spacePlot', null)
+            if (!isnum(r)) {
+                r = 0
+            }
+            r = cdbl(r)
+            // console.log('spacePlot', r)
+            return r
         },
 
     },

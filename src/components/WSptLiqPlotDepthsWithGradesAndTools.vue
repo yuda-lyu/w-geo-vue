@@ -128,6 +128,40 @@
                     <div style="display:flex; align-items:center; height:30px;">
 
                         <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textPlotWithGrade}}:
+                        </div>
+
+                        <WSwitch
+                            v-model="plotWithGrade"
+                            @input="modifyPlotWithGrade"
+                        ></WSwitch>
+
+                    </div>
+                </div>
+
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
+
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
+                            {{textGeocolPlotWidth}}:
+                        </div>
+
+                        <WSlider
+                            style="width:160px;"
+                            :valueMin="250"
+                            :valueMax="1000"
+                            :valueStep="10"
+                            :value="geocolPlotWidth"
+                            @input="modifyGeocolPlotWidth"
+                        ></WSlider>
+
+                    </div>
+                </div>
+
+                <div style="padding:0px 30px 5px 0px; display:inline-block; vertical-align:middle;">
+                    <div style="display:flex; align-items:center; height:30px;">
+
+                        <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
                             {{textPlotWidth}}:
                         </div>
 
@@ -202,6 +236,7 @@
                     <!-- 不提供slot, 調整設定時若有提供slot會造成強制渲染, 進而導致其內組件一直重繪出現效能問題 -->
                     <WSptLiqPlotDepthsWithGrades
                         :sts="useSts"
+                        :withGrade="plotWithGrade"
                         :optionsPic="useOptionsExt"
                     ></WSptLiqPlotDepthsWithGrades>
 
@@ -280,13 +315,21 @@ export default {
             type: String,
             default: 'With line', //繪製折線
         },
+        textPlotWithGrade: {
+            type: String,
+            default: 'With grade', //顯示液化潛勢等級
+        },
+        textGeocolPlotWidth: {
+            type: String,
+            default: 'Layers plot width(px)', //圖寬(px)
+        },
         textPlotWidth: {
             type: String,
-            default: 'Width(px)', //圖寬(px)
+            default: 'Plot width(px)', //圖寬(px)
         },
         textPlotHeight: {
             type: String,
-            default: 'Height(px)', //圖高(px)
+            default: 'Plot height(px)', //圖高(px)
         },
         textDownloadPic: {
             type: String,
@@ -510,9 +553,10 @@ export default {
             plotWithLine: true,
             plotWidth: 260,
             plotHeight: 550,
+            plotWithGrade: true,
 
             geocolPlotWidth: 350,
-            // geocolPlotHeight = plotHeight
+            // geocolPlotHeight
             geocolMergeSameLayers: true,
 
             downloadPicProcessing: false,
@@ -654,12 +698,16 @@ export default {
                 if (!b) {
                     return true //跳出換下一個
                 }
+                // console.log(v.key, v)
 
                 //width
                 let _width = get(v, 'width', '')
                 let width = vo.plotWidth
                 if (isNumber(_width)) {
                     width = _width
+                }
+                if (v.key === 'Geolayer') {
+                    width = vo.geocolPlotWidth
                 }
 
                 //height
@@ -722,6 +770,24 @@ export default {
         modifyPlotWithLine: function() {
             //console.log('methods modifyPlotWithLine')
             // let vo = this
+        },
+
+        modifyPlotWithGrade: function() {
+            //console.log('methods modifyPlotWithGrade')
+            // let vo = this
+        },
+
+        modifyGeocolPlotWidth: function(geocolPlotWidth) {
+            // console.log('methods modifyGeocolPlotWidth', geocolPlotWidth)
+
+            let vo = this
+
+            //dbc
+            vo.dbc(() => {
+                vo.geocolPlotWidth = geocolPlotWidth
+                // console.log('dbc geocolPlotWidth', geocolPlotWidth)
+            })
+
         },
 
         modifyPlotWidth: function(plotWidth) {

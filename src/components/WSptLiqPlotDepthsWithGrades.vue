@@ -4,24 +4,22 @@
         <!-- 預設給予zoneTopHeight與zoneBottomHeight, 若外部有另外給予可覆蓋 -->
         <WSptLiqPlotDepths
             :sts="sts"
-            :optionsPic="{
-                zoneTopHeight:115,
-                zoneBottomHeight:0,
-                ...optionsPic,
-            }"
+            :optionsPic="useOptionsPic"
         >
 
             <template v-slot:zone-top-geolayer="props">
-                <slot
-                    name="zone-top-geolayer"
-                    v-bind="props"
-                ></slot>
+                <div v-if="withGrade">
+                    <slot
+                        name="zone-top-geolayer"
+                        v-bind="props"
+                    ></slot>
+                </div>
             </template>
 
             <template v-slot:zone-top-pic="props">
                 <div
                     style="padding:6px 0px 0px 6px;"
-                    v-if="iseobj(parseSt(props.st))"
+                    v-if="withGrade && iseobj(parseSt(props.st))"
                 >
 
                     <div :style="`height:26px; font-size:0.8rem;`">
@@ -148,6 +146,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        withGrade: {
+            type: Boolean,
+            default: true,
+        },
         optionsPic: {
             type: Object,
             default: () => {},
@@ -227,6 +229,20 @@ export default {
             }
             // console.log('kpGrade', r)
             return r
+        },
+
+        useOptionsPic: function() {
+            let vo = this
+
+            //optionsPic
+            let optionsPic = {
+                zoneTopHeight: vo.withGrade ? 115 : 0,
+                zoneBottomHeight: 0,
+                ...vo.optionsPic,
+            }
+            // console.log('useOptionsPic', optionsPic)
+
+            return optionsPic
         },
 
     },

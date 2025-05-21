@@ -125,6 +125,7 @@ import isestr from 'wsemi/src/isestr.mjs'
 import isearr from 'wsemi/src/isearr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import cstr from 'wsemi/src/cstr.mjs'
+import dig from 'wsemi/src/dig.mjs'
 import haskey from 'wsemi/src/haskey.mjs'
 import strleft from 'wsemi/src/strleft.mjs'
 import calcLiquefaction from 'w-geo/src/calcLiquefaction.mjs'
@@ -495,6 +496,9 @@ function anaSptLiq(rowsIn, opt = {}) {
     //kpHead
     let kpHead = get(opt, 'kpHead', {})
 
+    //kpDig
+    let kpDig = get(opt, 'kpDig', {})
+
     //depthTitle
     let depthTitle = get(opt, 'depthTitle', 'Depth(m)')
 
@@ -554,6 +558,18 @@ function anaSptLiq(rowsIn, opt = {}) {
         }
     })
 
+    //kpCellRender
+    let kpCellRender = {}
+    each(kpDig, (idig, k) => {
+        kpCellRender[k] = (v) => {
+            if (isnum(v)) {
+                v = dig(v, idig)
+            }
+            return v
+        }
+    })
+    // console.log('kpCellRender', kpCellRender)
+
     //optTable
     let optTable = {}
     if (true) {
@@ -566,6 +582,7 @@ function anaSptLiq(rowsIn, opt = {}) {
             kpHead,
             kpHeadRender,
             kpCellTooltip,
+            kpCellRender,
         }
     }
 
@@ -698,6 +715,39 @@ export default {
                 }
             },
         },
+        kpDig: {
+            type: Object,
+            default: () => {
+                return {
+                    'depth': 3,
+                    'depthStart': 3,
+                    'depthEnd': 3,
+                    'waterLevelUsual': 1,
+                    'waterLevelDesign': 1,
+                    'N60': 1,
+                    'WC': 1,
+                    'PI': 1,
+                    'PL': 1,
+                    'LL': 1,
+                    'S': 2,
+                    'rd': 2,
+                    'rsat': 2,
+                    'sv': 4,
+                    'svp': 4,
+                    'svpUsual': 4,
+                    'svpDesign': 4,
+                    'D10': 5,
+                    'D30': 5,
+                    'D50': 5,
+                    'D60': 5,
+                    'ctGravel': 1,
+                    'ctSand': 1,
+                    'ctSilt': 1,
+                    'ctClay': 1,
+                    'FC': 1,
+                }
+            },
+        },
         keyParamSelects: {
             type: Array,
             default: () => {
@@ -738,10 +788,6 @@ export default {
         depthTitle: {
             type: String,
             default: 'Depth(m)',
-        },
-        geolayerWidth: {
-            type: Number,
-            default: 240,
         },
         optionsPic: {
             type: Object,
@@ -1007,10 +1053,11 @@ export default {
                 unitSvSvp: vo.unitSvSvp,
                 methods: vo.sptMethodsSelectsTrans,
                 kpHead: vo.useKpHead,
+                kpDig: vo.kpDig,
                 depthTitle: vo.depthTitle,
-                geolayerWidth: vo.geolayerWidth,
                 geolayerWaterLevel: waterLevel, //由rows[0]取得
             }
+            // console.log('opt', opt)
 
             //anaSptLiq
             let r = anaSptLiq(rowsIn, opt)
