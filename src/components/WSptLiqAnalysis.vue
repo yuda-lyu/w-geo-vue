@@ -94,9 +94,9 @@
                 v-bind="optionsToolPlot"
                 :keyStsSelects.sync="keyStsSelects"
             >
-                <template v-slot:zone-top-geolayer>
+                <template v-slot:zone-top>
                     <slot
-                        name="zone-top-geolayer"
+                        name="zone-top"
                         :row0="row0Result"
                         :rown="rowNResult"
                         :rows="rowsResult"

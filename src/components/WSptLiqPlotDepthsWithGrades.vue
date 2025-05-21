@@ -8,12 +8,10 @@
         >
 
             <template v-slot:zone-top-geolayer="props">
-                <div v-if="withGrade">
-                    <slot
-                        name="zone-top-geolayer"
-                        v-bind="props"
-                    ></slot>
-                </div>
+                <slot
+                    name="zone-top-geolayer"
+                    v-bind="props"
+                ></slot>
             </template>
 
             <template v-slot:zone-top-pic="props">

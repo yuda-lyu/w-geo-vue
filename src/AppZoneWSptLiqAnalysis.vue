@@ -38,7 +38,7 @@
                     <w-spt-liq-analysis
                         :rows="WSptLiqAnalysis.rows2"
                     >
-                        <template v-slot:zone-top-geolayer="props">
+                        <template v-slot:zone-top="props">
 
                             <table>
                                 <tbody>
@@ -117,9 +117,11 @@
                             textTools:'工具',
                             textPlots:'繪圖',
                             textGeocolMergeSameLayers:'土柱合併重複',
+                            textPlotWithInfor:'鑽孔與潛勢資訊',
                             textPlotWithLine:'繪製折線',
-                            textPlotWidth:'圖寬(px)',
-                            textPlotHeight:'圖高(px)',
+                            textGeocolPlotWidth:'土柱圖寬(px)',
+                            textPlotWidth:'數據圖寬(px)',
+                            textPlotHeight:'數據圖高(px)',
                             textDownloadPic:'下載成為圖片',
                             textDownloadPicProcessing:'下載中...',
                         }"
@@ -128,7 +130,7 @@
                             textTable:'數據表格',
                         }"
                     >
-                        <template v-slot:zone-top-geolayer="props">
+                        <template v-slot:zone-top="props">
 
                             <table>
                                 <tbody>

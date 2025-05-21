@@ -113,12 +113,12 @@
                     <div style="display:flex; align-items:center; height:30px;">
 
                         <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                            {{textPlotWithLine}}:
+                            {{textPlotWithInfor}}:
                         </div>
 
                         <WSwitch
-                            v-model="plotWithLine"
-                            @input="modifyPlotWithLine"
+                            v-model="plotWithGrade"
+                            @input="modifyPlotWithGrade"
                         ></WSwitch>
 
                     </div>
@@ -128,12 +128,12 @@
                     <div style="display:flex; align-items:center; height:30px;">
 
                         <div style="padding-right:10px; font-size:0.85rem; white-space:nowrap; color:#666;">
-                            {{textPlotWithGrade}}:
+                            {{textPlotWithLine}}:
                         </div>
 
                         <WSwitch
-                            v-model="plotWithGrade"
-                            @input="modifyPlotWithGrade"
+                            v-model="plotWithLine"
+                            @input="modifyPlotWithLine"
                         ></WSwitch>
 
                     </div>
@@ -225,10 +225,14 @@
                     style="background:#fff;"
                 >
 
-                    <div style="position:relative;">
+                    <!-- slot上方資訊區 -->
+                    <div
+                        style="position:relative;"
+                        v-if="plotWithGrade"
+                    >
                         <div style="position:absolute; top:0px; left:0px;">
                             <slot
-                                name="zone-top-geolayer"
+                                name="zone-top"
                             ></slot>
                         </div>
                     </div>
@@ -311,13 +315,13 @@ export default {
             type: String,
             default: 'Merge same layers', //土柱合併重複
         },
+        textPlotWithInfor: {
+            type: String,
+            default: 'With information', //鑽孔與潛勢資訊
+        },
         textPlotWithLine: {
             type: String,
             default: 'With line', //繪製折線
-        },
-        textPlotWithGrade: {
-            type: String,
-            default: 'With grade', //顯示液化潛勢等級
         },
         textGeocolPlotWidth: {
             type: String,
