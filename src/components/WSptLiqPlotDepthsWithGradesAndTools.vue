@@ -321,15 +321,15 @@ export default {
         },
         textGeocolPlotWidth: {
             type: String,
-            default: 'Layers plot width(px)', //圖寬(px)
+            default: 'Layers plot width(px)', //土柱圖寬(px)
         },
         textPlotWidth: {
             type: String,
-            default: 'Plot width(px)', //圖寬(px)
+            default: 'Plot width(px)', //數據圖寬(px)
         },
         textPlotHeight: {
             type: String,
-            default: 'Plot height(px)', //圖高(px)
+            default: 'Plot height(px)', //數據圖高(px)
         },
         textDownloadPic: {
             type: String,
