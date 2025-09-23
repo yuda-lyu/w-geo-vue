@@ -1,19 +1,19 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
     "@mdi/js": "^7.4.47",
     "lodash-es": "^4.17.21",
-    "w-component-vue": "^2.4.17",
-    "w-geo": "^1.1.60",
-    "wsemi": "^1.7.90"
+    "w-component-vue": "^2.4.26",
+    "w-geo": "^1.1.61",
+    "wsemi": "^1.8.21"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/cli-service": "^5.0.8",
-    "cheerio": "^1.0.0",
+    "cheerio": "^1.1.2",
     "eslint": "^8.37.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-friendly-formatter": "^4.0.1",
