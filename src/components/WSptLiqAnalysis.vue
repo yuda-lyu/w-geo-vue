@@ -243,38 +243,8 @@ function anaSptLiq(rowsIn, opt = {}) {
     }
 
     //sts
-    let sts = []
-    if (true) {
-        let keysDel
-        let rowsTemp = cloneDeep(rowsOut)
-
-        keysDel = ['waterLevelUsual', 'waterLevelDesign', 'PGA', 'Ml', 'Mw', 'vibrationType']
-        rowsTemp = map(rowsTemp, (row) => {
-            each(keysDel, (k) => {
-                delete row[k]
-            })
-            return row
-        })
-        // console.log('rowsTemp', rowsTemp)
-
-        keysDel = ['-H1', '-rrd', '-N160', '-N160cs', '-N172', '-N172cs', '-cFC', '-Na', '-Rl', '-ks', '-cw', '-c1', '-c2', '-CN', '-RL', '-alpha', '-beta', '-dNf', '-CRR75']
-        rowsTemp = map(rowsTemp, (row) => {
-            each(row, (r, kr) => {
-                each(keysDel, (k) => {
-                    if (kr.indexOf(k) >= 0) {
-                        delete row[kr]
-                    }
-                })
-            })
-            return row
-        })
-        // console.log('rowsTemp', rowsTemp)
-
-        //getSts
-        sts = getSts(rowsTemp, kpHead, depthTitle, geolayerWidth, geolayerWaterLevel)
-        // console.log('sts', sts)
-
-    }
+    let sts = getSts(rowsOut, kpHead, depthTitle, geolayerWidth, geolayerWaterLevel)
+    // console.log('sts', sts)
 
     return {
         optTable,

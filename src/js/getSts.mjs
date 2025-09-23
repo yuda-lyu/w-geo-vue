@@ -4,6 +4,7 @@ import map from 'lodash-es/map.js'
 import keys from 'lodash-es/keys.js'
 import isNumber from 'lodash-es/isNumber.js'
 import pull from 'lodash-es/pull.js'
+import cloneDeep from 'lodash-es/cloneDeep.js'
 import isnum from 'wsemi/src/isnum.mjs'
 import isestr from 'wsemi/src/isestr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
@@ -24,6 +25,40 @@ function getSts(rows, kpCvKey, depthTitle, geolayerWidth, geolayerWaterLevel, op
     //optParam
     let optParam = {
         plotType: plotTypeForParam,
+    }
+
+    //clean
+    if (true) {
+        let keysDel
+
+        let rowsTemp = cloneDeep(rows)
+
+        keysDel = ['waterLevelUsual', 'waterLevelDesign', 'PGA', 'Ml', 'Mw', 'vibrationType']
+        rowsTemp = map(rowsTemp, (row) => {
+            each(keysDel, (k) => {
+                delete row[k]
+            })
+            return row
+        })
+        // console.log('rowsTemp', rowsTemp)
+
+        keysDel = ['-H1', '-rrd', '-N160', '-N160cs', '-N172', '-N172cs', '-cFC', '-Na', '-Rl', '-ks', '-cw', '-c1', '-c2', '-CN', '-RL', '-alpha', '-beta', '-dNf', '-CRR75']
+        rowsTemp = map(rowsTemp, (row) => {
+            each(row, (r, kr) => {
+                each(keysDel, (k) => {
+                    if (kr.indexOf(k) >= 0) {
+                        delete row[kr]
+                    }
+                })
+            })
+            return row
+        })
+
+        //update
+        // console.log('rows(ori)', cloneDeep(rows))
+        rows = rowsTemp
+        // console.log('rows(clean)', cloneDeep(rows))
+
     }
 
     //row0
