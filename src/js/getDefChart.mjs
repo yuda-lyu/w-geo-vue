@@ -17,10 +17,10 @@ function getDefChart(opt = {}) {
         animation: false, //關閉動畫
         plotBorderColor,
         plotBorderWidth: 1,
-        marginLeft: sp + 60,
+        marginLeft: sp + 70,
         marginRight: sp,
         marginTop: sp + 20, //考慮土柱圖上方地下水位為0時之最小marginTop
-        marginBottom: sp + 50,
+        marginBottom: sp + 60,
         spacingLeft: 0,
         spacingRight: 0,
         spacingTop: 0,
