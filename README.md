@@ -18,6 +18,7 @@ To view some examples for more understanding, visit examples:
 > **all components:** [web](//yuda-lyu.github.io/w-geo-vue/examples/app.html) [[source code](https://github.com/yuda-lyu/w-geo-vue/blob/master/docs/examples/app.html)]
 
 ## Installation
+
 ### Using npm(ES6 module):
 ```alias
 npm i w-geo-vue
@@ -59,10 +60,12 @@ export default {
 ```
 
 ### In a browser(UMD module):
-[Necessary] Add script for w-geo-vue.
+
+Add script for w-geo-vue.
 ```alias
 <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.29/dist/w-geo-vue.umd.js"></script>
 ```
+
 Directly use:
 ```alias
 //app and component
