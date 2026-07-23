@@ -182,7 +182,7 @@ export default {
     mounted: function() {
         let vo = this
 
-        importResources('https://cdn.jsdelivr.net/npm/w-demores@1.0.27/res/data/dataCivilSoilCodeIcon.js')
+        importResources('https://cdn.jsdelivr.net/npm/w-demores/res/data/dataCivilSoilCodeIcon.js')
             .then((res) => {
                 // console.log(res)
                 // console.log('window.dataCivilSoilCodeIcon', window.dataCivilSoilCodeIcon)
