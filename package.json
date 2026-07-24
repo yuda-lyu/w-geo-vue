@@ -1,6 +1,6 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
     "@mdi/js": "^7.4.47",
@@ -20,7 +20,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.10.0",
-    "vue": "^2.6.14",
+    "vue": "^2.7.16",
     "w-package-tools": "^1.1.12",
     "eslint-plugin-n": "^16.6.2"
   },
