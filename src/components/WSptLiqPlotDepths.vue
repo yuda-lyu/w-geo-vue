@@ -19,14 +19,9 @@
                 :items="geocolItems"
                 :width="stGl.width"
                 :height="stGl.height"
-                :paddingStyle="{
-                    top: 25,
-                    right: 0,
-                    bottom: 55,
-                    left: 85,
-                }"
+                :paddingStyle="paddingStyleGeolayer"
                 :tickSize="30"
-                :segmentSize="50"
+                :segmentSize="25"
                 :segmentBackgroundType="'image'"
                 :funSegmentBackgroundImage="getSegmentBackgroundIcon"
                 :segmentBorderColor="{v:'transparent',h:'#444'}"
@@ -148,6 +143,7 @@ import cdbl from 'wsemi/src/cdbl.mjs'
 import importResources from 'wsemi/src/importResources.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
+import getDefChart from '../js/getDefChart.mjs'
 
 
 /**
@@ -191,6 +187,19 @@ export default {
 
     },
     computed: {
+
+        paddingStyleGeolayer: function() {
+
+            //dct, 上下須取用getDefChart之margin值, 土柱圖繪圖區才能與highcharts繪圖區上下對齊
+            let dct = getDefChart()
+
+            return {
+                top: get(dct, 'marginTop', 0),
+                right: 0,
+                bottom: get(dct, 'marginBottom', 0),
+                left: 85, //左側為土柱圖自身深度軸之標題與刻度文字空間, 與highcharts無關
+            }
+        },
 
         stGl: function() {
             //console.log('computed stGl')
