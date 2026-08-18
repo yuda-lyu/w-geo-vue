@@ -1,12 +1,12 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
     "@mdi/js": "^7.4.47",
-    "w-component-vue": "^2.4.81",
-    "w-geo": "^1.1.66",
-    "wsemi": "^1.8.70"
+    "w-component-vue": "^2.4.82",
+    "w-geo": "^1.1.68",
+    "wsemi": "^1.8.75"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",

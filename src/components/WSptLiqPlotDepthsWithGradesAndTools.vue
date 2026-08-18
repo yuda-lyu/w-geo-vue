@@ -264,7 +264,7 @@ import pull from 'lodash-es/pull.js'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 import isestr from 'wsemi/src/isestr.mjs'
 import debounce from 'wsemi/src/debounce.mjs'
-import domConvertToPicDyn from 'wsemi/src/domConvertToPicDyn.mjs'
+import domConvertToPic from 'wsemi/src/domConvertToPic.mjs'
 import downloadFileFromB64 from 'wsemi/src/downloadFileFromB64.mjs'
 import WIcon from 'w-component-vue/src/components/WIcon.vue'
 import WCheckbox from 'w-component-vue/src/components/WCheckbox.vue'
@@ -837,7 +837,7 @@ export default {
                 }
 
                 //b64
-                let b64 = await domConvertToPicDyn(ele, { scale: 3 })
+                let b64 = await domConvertToPic(ele, { scale: 3 })
 
                 //downloadFileFromB64
                 downloadFileFromB64('plot.png', b64)
