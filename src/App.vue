@@ -94,8 +94,6 @@
 
             <AppZoneWSptLiqAnalysis v-if="cmpPick==='WSptLiqAnalysis'"></AppZoneWSptLiqAnalysis>
 
-            <AppZoneWPlot3d v-if="cmpPick==='WPlot3d'"></AppZoneWPlot3d>
-
         </div>
 
 
@@ -117,16 +115,12 @@ import AppZoneWSptLiqPlotDepths from './AppZoneWSptLiqPlotDepths.vue'
 import AppZoneWSptLiqPlotDepthsWithGrades from './AppZoneWSptLiqPlotDepthsWithGrades.vue'
 import AppZoneWSptLiqPlotDepthsWithGradesAndTools from './AppZoneWSptLiqPlotDepthsWithGradesAndTools.vue'
 import AppZoneWSptLiqAnalysis from './AppZoneWSptLiqAnalysis.vue'
-import AppZoneWPlot3d from './AppZoneWPlot3d.vue'
 
 
 let kebabCaseFix = (c) => {
     let r = kebabCase(c)
     if (strright(r, 3) === '2-d') {
         r = strdelright(r, 3) + '2d'
-    }
-    else if (strright(r, 3) === '3-d') {
-        r = strdelright(r, 3) + '3d'
     }
     return r
 }
@@ -141,27 +135,15 @@ export default {
         AppZoneWSptLiqPlotDepthsWithGrades,
         AppZoneWSptLiqPlotDepthsWithGradesAndTools,
         AppZoneWSptLiqAnalysis,
-        AppZoneWPlot3d,
     },
     data: function() {
         let cmps = [
-            {
-                name: '2d',
-                cmps: [
-                    { name: 'WPlot2d', },
-                    { name: 'WSptLiqPlotDepth', },
-                    { name: 'WSptLiqPlotDepths', },
-                    { name: 'WSptLiqPlotDepthsWithGrades', },
-                    { name: 'WSptLiqPlotDepthsWithGradesAndTools', },
-                    { name: 'WSptLiqAnalysis', },
-                ],
-            },
-            // { //bbb
-            //     name: '3d',
-            //     cmps: [
-            //         { name: 'WPlot3d', },
-            //     ],
-            // },
+            { name: 'WPlot2d', },
+            { name: 'WSptLiqPlotDepth', },
+            { name: 'WSptLiqPlotDepths', },
+            { name: 'WSptLiqPlotDepthsWithGrades', },
+            { name: 'WSptLiqPlotDepthsWithGradesAndTools', },
+            { name: 'WSptLiqAnalysis', },
         ]
         return {
             kebabCaseFix,
