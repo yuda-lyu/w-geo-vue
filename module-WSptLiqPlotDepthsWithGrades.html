@@ -58,7 +58,9 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"></p></div></div> 
+                <div class="description usertext"><p>於WSptLiqPlotDepths各參數圖上方添加分級評估結果，取用各參數圖數據最深處之值，並依kpGrade之分級門檻繪製等級條與顯示數值</p>
+<p>分級僅套用於key含有kpGrade各鍵之參數圖(預設為'-PL'、'-stlTS'、'-stlIY')，其餘參數圖不顯示分級。開啟分級時會自動給予optionsPic之zoneTopHeight為115，可由外部optionsPic覆蓋</p>
+<p>具名插槽(slot)：'zone-top-geolayer'為土柱圖上方區塊，提供作用域參數width與height</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -73,17 +75,115 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]</td>
+    </tr><tr>
+        <td><code>withGrade</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入是否顯示分級評估結果布林值，預設true</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepths之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數關鍵字對應分級設定物件，key為參數關鍵字(如'-PL'、'-stlTS'、'-stlIY')，值為分級設定物件，未給予時使用內建預設分級</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.title</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級標題字串，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.valueDig</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級數值取用小數點位數數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.unit</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級數值單位字串，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.n</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級門檻數量數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.tv0</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0個分級門檻值數字，其餘門檻值依序為tv1、tv2、tv3，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.c0</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0級顏色字串，其餘顏色依序為c1、c2、c3，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.l0</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0級標記文字字串，其餘標記文字依序為l1、l2、l3，預設無</td>
     </tr></tbody>
 </table>
 
 
 
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpGradeDef</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存內建預設之參數關鍵字對應分級設定物件</td>
+    </tr></tbody>
+</table>
 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpGrade</code></td>
+        <td>Object</td>
+        <td>回傳實際使用之參數關鍵字對應分級設定物件</td>
+    </tr><tr>
+        <td><code>useOptionsPic</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSptLiqPlotDepths之繪圖設定物件</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -102,7 +202,9 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li></p></div></div> 
+    <dd class="tag-description"><ul class="dummy"><li><p>於WSptLiqPlotDepths各參數圖上方添加分級評估結果，取用各參數圖數據最深處之值，並依kpGrade之分級門檻繪製等級條與顯示數值</p>
+<p>分級僅套用於key含有kpGrade各鍵之參數圖(預設為'-PL'、'-stlTS'、'-stlIY')，其餘參數圖不顯示分級。開啟分級時會自動給予optionsPic之zoneTopHeight為115，可由外部optionsPic覆蓋</p>
+<p>具名插槽(slot)：'zone-top-geolayer'為土柱圖上方區塊，提供作用域參數width與height</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -117,17 +219,115 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]</td>
+    </tr><tr>
+        <td><code>withGrade</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入是否顯示分級評估結果布林值，預設true</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepths之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數關鍵字對應分級設定物件，key為參數關鍵字(如'-PL'、'-stlTS'、'-stlIY')，值為分級設定物件，未給予時使用內建預設分級</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.title</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級標題字串，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.valueDig</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級數值取用小數點位數數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.unit</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級數值單位字串，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.n</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分級門檻數量數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.tv0</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0個分級門檻值數字，其餘門檻值依序為tv1、tv2、tv3，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.c0</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0級顏色字串，其餘顏色依序為c1、c2、c3，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.kpGrade.l0</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入第0級標記文字字串，其餘標記文字依序為l1、l2、l3，預設無</td>
     </tr></tbody>
 </table>
 
 
 
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpGradeDef</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存內建預設之參數關鍵字對應分級設定物件</td>
+    </tr></tbody>
+</table>
 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpGrade</code></td>
+        <td>Object</td>
+        <td>回傳實際使用之參數關鍵字對應分級設定物件</td>
+    </tr><tr>
+        <td><code>useOptionsPic</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSptLiqPlotDepths之繪圖設定物件</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -237,7 +437,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 17:22:43 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 19:39:00 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

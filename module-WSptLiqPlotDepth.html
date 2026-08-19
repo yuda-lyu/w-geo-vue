@@ -58,7 +58,8 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"></p></div></div> 
+                <div class="description usertext"><p>繪製單一參數之深度剖線圖，深度為縱軸(由上而下)、參數值為橫軸，當參數名稱含有'-FS'或'-cmpFS'時，會自動添加FS=1之基準線並將值軸範圍鎖定為0至3</p>
+<p>具名插槽(slot)：'top'為繪圖上方區塊、'bottom'為繪圖下方區塊，各插槽皆提供作用域參數opt，代表該圖之Highcharts設定物件</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -73,17 +74,205 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>st</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入單一繪圖狀態物件，可由getSts產生，預設{}</td>
+    </tr><tr>
+        <td><code>st.key</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖識別key字串，預設無</td>
+    </tr><tr>
+        <td><code>st.valueTitle</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸標題字串，可使用底線與上下標語法，預設無</td>
+    </tr><tr>
+        <td><code>st.depthTitle</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸標題字串，給予空字串時會自動隱藏深度軸標題與刻度文字並縮減左側邊界，預設無</td>
+    </tr><tr>
+        <td><code>st.depthMin</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸最小值數字，預設無</td>
+    </tr><tr>
+        <td><code>st.depthMax</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸最大值數字，預設無</td>
+    </tr><tr>
+        <td><code>st.width</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖寬度數字，單位px，預設無</td>
+    </tr><tr>
+        <td><code>st.height</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖高度數字，單位px，預設無</td>
+    </tr><tr>
+        <td><code>st.plotType</code></td>
+        <td>String</td>
+        <td><code>'line+marker'</code></td>
+        <td>No</td>
+        <td>輸入繪圖型態字串，可選'line+marker'、'line'、'marker'，預設'line+marker'</td>
+    </tr><tr>
+        <td><code>st.item</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖數據物件，預設無</td>
+    </tr><tr>
+        <td><code>st.item.name</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入線名稱字串，預設無</td>
+    </tr><tr>
+        <td><code>st.item.data</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖數據陣列，單線時給予[[深度,參數值],...]，多線時給予[{name,data},...]，參數值非數字時需給予null以跳過繪點，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入繪圖設定物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.useTooltip</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入是否顯示提示框布林值，預設true</td>
+    </tr><tr>
+        <td><code>optionsPic.plotBorderColor</code></td>
+        <td>String</td>
+        <td><code>'#666'</code></td>
+        <td>No</td>
+        <td>輸入繪圖框線顏色字串，預設'#666'</td>
+    </tr><tr>
+        <td><code>optionsPic.softMax</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸軟性最大值數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.vDig</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸刻度文字取用小數點位數數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.titleFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入軸標題字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.titleFontSize</code></td>
+        <td>String</td>
+        <td><code>'12pt'</code></td>
+        <td>No</td>
+        <td>輸入軸標題字體大小字串，預設'12pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.titleColor</code></td>
+        <td>String</td>
+        <td><code>'#000000'</code></td>
+        <td>No</td>
+        <td>輸入軸標題顏色字串，預設'#000000'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelFontSize</code></td>
+        <td>String</td>
+        <td><code>'9pt'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字字體大小字串，預設'9pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelColor</code></td>
+        <td>String</td>
+        <td><code>'#222'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字顏色字串，預設'#222'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入圖例字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedFontSize</code></td>
+        <td>String</td>
+        <td><code>'9pt'</code></td>
+        <td>No</td>
+        <td>輸入圖例字體大小字串，預設'9pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedColor</code></td>
+        <td>String</td>
+        <td><code>'#222'</code></td>
+        <td>No</td>
+        <td>輸入圖例文字顏色字串，預設'#222'</td>
+    </tr><tr>
+        <td><code>optionsPic.legendBackgroundColor</code></td>
+        <td>String</td>
+        <td><code>'rgba(255,255,255,0.75)'</code></td>
+        <td>No</td>
+        <td>輸入圖例背景顏色字串，預設'rgba(255,255,255,0.75)'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedBorderColor</code></td>
+        <td>String</td>
+        <td><code>'#aaa'</code></td>
+        <td>No</td>
+        <td>輸入圖例框線顏色字串，預設'#aaa'</td>
+    </tr><tr>
+        <td><code>optionsPic.legendPosition</code></td>
+        <td>String</td>
+        <td><code>'bottomleft'</code></td>
+        <td>No</td>
+        <td>輸入圖例位置字串，可選'topleft'、'topright'、'bottomleft'、'bottomright'，預設'bottomleft'</td>
     </tr></tbody>
 </table>
 
 
 
 
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>hasOpt</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已產生有效Highcharts設定物件布林值</td>
+    </tr><tr>
+        <td><code>opt</code></td>
+        <td>Object</td>
+        <td>回傳供繪圖使用之Highcharts設定物件</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -102,7 +291,8 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li></p></div></div> 
+    <dd class="tag-description"><ul class="dummy"><li><p>繪製單一參數之深度剖線圖，深度為縱軸(由上而下)、參數值為橫軸，當參數名稱含有'-FS'或'-cmpFS'時，會自動添加FS=1之基準線並將值軸範圍鎖定為0至3</p>
+<p>具名插槽(slot)：'top'為繪圖上方區塊、'bottom'為繪圖下方區塊，各插槽皆提供作用域參數opt，代表該圖之Highcharts設定物件</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -117,17 +307,205 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>st</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入單一繪圖狀態物件，可由getSts產生，預設{}</td>
+    </tr><tr>
+        <td><code>st.key</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖識別key字串，預設無</td>
+    </tr><tr>
+        <td><code>st.valueTitle</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸標題字串，可使用底線與上下標語法，預設無</td>
+    </tr><tr>
+        <td><code>st.depthTitle</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸標題字串，給予空字串時會自動隱藏深度軸標題與刻度文字並縮減左側邊界，預設無</td>
+    </tr><tr>
+        <td><code>st.depthMin</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸最小值數字，預設無</td>
+    </tr><tr>
+        <td><code>st.depthMax</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入深度軸最大值數字，預設無</td>
+    </tr><tr>
+        <td><code>st.width</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖寬度數字，單位px，預設無</td>
+    </tr><tr>
+        <td><code>st.height</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖高度數字，單位px，預設無</td>
+    </tr><tr>
+        <td><code>st.plotType</code></td>
+        <td>String</td>
+        <td><code>'line+marker'</code></td>
+        <td>No</td>
+        <td>輸入繪圖型態字串，可選'line+marker'、'line'、'marker'，預設'line+marker'</td>
+    </tr><tr>
+        <td><code>st.item</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖數據物件，預設無</td>
+    </tr><tr>
+        <td><code>st.item.name</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入線名稱字串，預設無</td>
+    </tr><tr>
+        <td><code>st.item.data</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入繪圖數據陣列，單線時給予[[深度,參數值],...]，多線時給予[{name,data},...]，參數值非數字時需給予null以跳過繪點，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入繪圖設定物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.useTooltip</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入是否顯示提示框布林值，預設true</td>
+    </tr><tr>
+        <td><code>optionsPic.plotBorderColor</code></td>
+        <td>String</td>
+        <td><code>'#666'</code></td>
+        <td>No</td>
+        <td>輸入繪圖框線顏色字串，預設'#666'</td>
+    </tr><tr>
+        <td><code>optionsPic.softMax</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸軟性最大值數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.vDig</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數值軸刻度文字取用小數點位數數字，預設無</td>
+    </tr><tr>
+        <td><code>optionsPic.titleFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入軸標題字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.titleFontSize</code></td>
+        <td>String</td>
+        <td><code>'12pt'</code></td>
+        <td>No</td>
+        <td>輸入軸標題字體大小字串，預設'12pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.titleColor</code></td>
+        <td>String</td>
+        <td><code>'#000000'</code></td>
+        <td>No</td>
+        <td>輸入軸標題顏色字串，預設'#000000'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelFontSize</code></td>
+        <td>String</td>
+        <td><code>'9pt'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字字體大小字串，預設'9pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.labelColor</code></td>
+        <td>String</td>
+        <td><code>'#222'</code></td>
+        <td>No</td>
+        <td>輸入軸刻度文字顏色字串，預設'#222'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedFontFamily</code></td>
+        <td>String</td>
+        <td><code>'微軟正黑體'</code></td>
+        <td>No</td>
+        <td>輸入圖例字型字串，預設'微軟正黑體'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedFontSize</code></td>
+        <td>String</td>
+        <td><code>'9pt'</code></td>
+        <td>No</td>
+        <td>輸入圖例字體大小字串，預設'9pt'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedColor</code></td>
+        <td>String</td>
+        <td><code>'#222'</code></td>
+        <td>No</td>
+        <td>輸入圖例文字顏色字串，預設'#222'</td>
+    </tr><tr>
+        <td><code>optionsPic.legendBackgroundColor</code></td>
+        <td>String</td>
+        <td><code>'rgba(255,255,255,0.75)'</code></td>
+        <td>No</td>
+        <td>輸入圖例背景顏色字串，預設'rgba(255,255,255,0.75)'</td>
+    </tr><tr>
+        <td><code>optionsPic.legnedBorderColor</code></td>
+        <td>String</td>
+        <td><code>'#aaa'</code></td>
+        <td>No</td>
+        <td>輸入圖例框線顏色字串，預設'#aaa'</td>
+    </tr><tr>
+        <td><code>optionsPic.legendPosition</code></td>
+        <td>String</td>
+        <td><code>'bottomleft'</code></td>
+        <td>No</td>
+        <td>輸入圖例位置字串，可選'topleft'、'topright'、'bottomleft'、'bottomright'，預設'bottomleft'</td>
     </tr></tbody>
 </table>
 
 
 
 
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>hasOpt</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已產生有效Highcharts設定物件布林值</td>
+    </tr><tr>
+        <td><code>opt</code></td>
+        <td>Object</td>
+        <td>回傳供繪圖使用之Highcharts設定物件</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -237,7 +615,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 17:22:43 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 19:39:00 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
