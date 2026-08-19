@@ -275,7 +275,46 @@ import WSptLiqPlotDepthsWithGrades from './WSptLiqPlotDepthsWithGrades.vue'
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 於WSptLiqPlotDepthsWithGrades外，另提供參數勾選區與工具區之繪圖組件，可由使用者自行勾選欲繪製參數、切換土柱合併重複與鑽孔潛勢資訊、切換是否繪製折線、調整土柱圖寬與數據圖寬高，並可將繪圖區下載成為圖片
+ *
+ * 參數勾選區依groupParams分組並過濾sts產生，各參數僅會歸屬於最先匹配之群組。勾選結果會同步觸發update:keyStsSelects事件，故可由外部使用keyStsSelects.sync雙向綁定
+ *
+ * 具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，需開啟鑽孔與潛勢資訊才會顯示
+ *
+ * @vue-prop {Array} [sts=[]] 輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]
+ * @vue-prop {Array} [keyStsSelects=[]] 輸入欲繪製參數之key字串陣列，可使用.sync雙向綁定，預設[]
+ * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGrades之optionsPic並向下傳遞，其中geocolMergeSameLayers由工具區之土柱合併重複開關複寫，預設{}
+ * @vue-prop {String} [textParams='Parameters'] 輸入參數勾選區標題字串，預設'Parameters'
+ * @vue-prop {String} [textTools='Tools'] 輸入工具區標題字串，預設'Tools'
+ * @vue-prop {String} [textPlots='Plots'] 輸入繪圖區標題字串，預設'Plots'
+ * @vue-prop {String} [textGeocolMergeSameLayers='Merge same layers'] 輸入土柱合併重複開關文字字串，預設'Merge same layers'
+ * @vue-prop {String} [textPlotWithInfor='With information'] 輸入鑽孔與潛勢資訊開關文字字串，預設'With information'
+ * @vue-prop {String} [textPlotWithLine='With line'] 輸入繪製折線開關文字字串，預設'With line'
+ * @vue-prop {String} [textGeocolPlotWidth='Layers plot width(px)'] 輸入土柱圖寬滑桿文字字串，預設'Layers plot width(px)'
+ * @vue-prop {String} [textPlotWidth='Plot width(px)'] 輸入數據圖寬滑桿文字字串，預設'Plot width(px)'
+ * @vue-prop {String} [textPlotHeight='Plot height(px)'] 輸入數據圖高滑桿文字字串，預設'Plot height(px)'
+ * @vue-prop {String} [textDownloadPic='Download image'] 輸入下載圖片按鈕文字字串，預設'Download image'
+ * @vue-prop {String} [textDownloadPicProcessing='Downloading...'] 輸入下載圖片中之按鈕文字字串，預設'Downloading...'
+ * @vue-prop {Array} [groupParams] 輸入參數勾選區之分組設定物件陣列，預設已提供Layer、Basic、Plastic、Particle size等分組
+ * @vue-prop {String} [groupParams.title] 輸入分組標題字串，預設無
+ * @vue-prop {Array} [groupParams.flts] 輸入分組內參數過濾設定物件陣列，預設無
+ * @vue-prop {String} [groupParams.flts.keyFull] 輸入需完全相同之參數key字串，預設無
+ * @vue-prop {String} [groupParams.flts.keyPart] 輸入需部份含有之參數key字串，與keyFull擇一給予且優先使用，預設無
+ * @vue-prop {String} [groupParams.flts.text] 輸入參數顯示文字字串，給予'{key}'代表直接顯示參數key，預設無
+ * @vue-data {Boolean} plotWithLine 儲存是否繪製折線布林值，關閉時各參數圖改以散點繪製
+ * @vue-data {Number} plotWidth 儲存數據圖寬度數字，單位px
+ * @vue-data {Number} plotHeight 儲存數據圖高度數字，單位px
+ * @vue-data {Boolean} plotWithGrade 儲存是否顯示鑽孔與潛勢資訊(含分級評估與zone-top插槽)布林值
+ * @vue-data {Number} geocolPlotWidth 儲存土柱圖寬度數字，單位px
+ * @vue-data {Boolean} geocolMergeSameLayers 儲存土柱圖是否合併相鄰重複土層布林值
+ * @vue-data {Boolean} downloadPicProcessing 儲存是否正在下載圖片布林值
+ * @vue-data {Array} piss 儲存參數勾選區之各分組與其參數項目陣列
+ * @vue-data {Array} keyStsSelectsTrans 儲存內部使用之已勾選參數key字串陣列
+ * @vue-data {Object} kpPis 儲存參數key對應是否勾選物件
+ * @vue-computed {Array} useSts 回傳實際供繪圖使用之繪圖狀態物件陣列，已過濾未勾選參數並套用圖寬圖高與繪圖型態
+ * @vue-computed {Object} useOptionsExt 回傳實際向下傳遞至WSptLiqPlotDepthsWithGrades之繪圖設定物件
+ * @vue-computed {String} useTextDownloadPic 回傳下載圖片按鈕之顯示文字字串
+ * @vue-event {Array} update:keyStsSelects 當使用者勾選或取消參數時，回傳已勾選參數之key字串陣列
  */
 export default {
     components: {

@@ -4,7 +4,7 @@
         v-if="hasOpt"
     >
 
-        <div :style="`width:${getWidth}px; max-width:${getWidth}px;`">
+        <div :style="`width:${getWidth(opt)}px; max-width:${getWidth(opt)}px; overflow-x:auto;`">
             <slot
                 name="top"
                 :opt="opt"
@@ -15,7 +15,7 @@
             :options="opt"
         ></WPlot2d>
 
-        <div :style="`width:${getWidth}px; max-width:${getWidth}px;`">
+        <div :style="`width:${getWidth(opt)}px; max-width:${getWidth(opt)}px; overflow-x:auto;`">
             <slot
                 name="bottom"
                 :opt="opt"
@@ -31,6 +31,8 @@ import map from 'lodash-es/map.js'
 // import cloneDeep from 'lodash-es/cloneDeep.js'
 import isestr from 'wsemi/src/isestr.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
+import isnum from 'wsemi/src/isnum.mjs'
+import cdbl from 'wsemi/src/cdbl.mjs'
 import WPlot2d from './WPlot2d.vue'
 import spc2html from '../js/spc2html.mjs'
 import getDefOpt from '../js/getDefOpt.mjs'
@@ -231,7 +233,41 @@ function genOpt(st = {}, optionsPic = {}) {
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 繪製單一參數之深度剖線圖，深度為縱軸(由上而下)、參數值為橫軸，當參數名稱含有'-FS'或'-cmpFS'時，會自動添加FS=1之基準線並將值軸範圍鎖定為0至3
+ *
+ * 具名插槽(slot)：'top'為繪圖上方區塊、'bottom'為繪圖下方區塊，各插槽皆提供作用域參數opt，代表該圖之Highcharts設定物件
+ *
+ * @vue-prop {Object} [st={}] 輸入單一繪圖狀態物件，可由getSts產生，預設{}
+ * @vue-prop {String} [st.key] 輸入繪圖識別key字串，預設無
+ * @vue-prop {String} [st.valueTitle] 輸入參數值軸標題字串，可使用底線與上下標語法，預設無
+ * @vue-prop {String} [st.depthTitle] 輸入深度軸標題字串，給予空字串時會自動隱藏深度軸標題與刻度文字並縮減左側邊界，預設無
+ * @vue-prop {Number} [st.depthMin] 輸入深度軸最小值數字，預設無
+ * @vue-prop {Number} [st.depthMax] 輸入深度軸最大值數字，預設無
+ * @vue-prop {Number} [st.width] 輸入繪圖寬度數字，單位px，預設無
+ * @vue-prop {Number} [st.height] 輸入繪圖高度數字，單位px，預設無
+ * @vue-prop {String} [st.plotType='line+marker'] 輸入繪圖型態字串，可選'line+marker'、'line'、'marker'，預設'line+marker'
+ * @vue-prop {Object} [st.item] 輸入繪圖數據物件，預設無
+ * @vue-prop {String} [st.item.name] 輸入線名稱字串，預設無
+ * @vue-prop {Array} [st.item.data] 輸入繪圖數據陣列，單線時給予[[深度,參數值],...]，多線時給予[{name,data},...]，參數值非數字時需給予null以跳過繪點，預設無
+ * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，預設{}
+ * @vue-prop {Boolean} [optionsPic.useTooltip=true] 輸入是否顯示提示框布林值，預設true
+ * @vue-prop {String} [optionsPic.plotBorderColor='#666'] 輸入繪圖框線顏色字串，預設'#666'
+ * @vue-prop {Number} [optionsPic.softMax] 輸入參數值軸軟性最大值數字，預設無
+ * @vue-prop {Number} [optionsPic.vDig] 輸入參數值軸刻度文字取用小數點位數數字，預設無
+ * @vue-prop {String} [optionsPic.titleFontFamily='微軟正黑體'] 輸入軸標題字型字串，預設'微軟正黑體'
+ * @vue-prop {String} [optionsPic.titleFontSize='12pt'] 輸入軸標題字體大小字串，預設'12pt'
+ * @vue-prop {String} [optionsPic.titleColor='#000000'] 輸入軸標題顏色字串，預設'#000000'
+ * @vue-prop {String} [optionsPic.labelFontFamily='微軟正黑體'] 輸入軸刻度文字字型字串，預設'微軟正黑體'
+ * @vue-prop {String} [optionsPic.labelFontSize='9pt'] 輸入軸刻度文字字體大小字串，預設'9pt'
+ * @vue-prop {String} [optionsPic.labelColor='#222'] 輸入軸刻度文字顏色字串，預設'#222'
+ * @vue-prop {String} [optionsPic.legnedFontFamily='微軟正黑體'] 輸入圖例字型字串，預設'微軟正黑體'
+ * @vue-prop {String} [optionsPic.legnedFontSize='9pt'] 輸入圖例字體大小字串，預設'9pt'
+ * @vue-prop {String} [optionsPic.legnedColor='#222'] 輸入圖例文字顏色字串，預設'#222'
+ * @vue-prop {String} [optionsPic.legendBackgroundColor='rgba(255,255,255,0.75)'] 輸入圖例背景顏色字串，預設'rgba(255,255,255,0.75)'
+ * @vue-prop {String} [optionsPic.legnedBorderColor='#aaa'] 輸入圖例框線顏色字串，預設'#aaa'
+ * @vue-prop {String} [optionsPic.legendPosition='bottomleft'] 輸入圖例位置字串，可選'topleft'、'topright'、'bottomleft'、'bottomright'，預設'bottomleft'
+ * @vue-computed {Boolean} hasOpt 回傳是否已產生有效Highcharts設定物件布林值
+ * @vue-computed {Object} opt 回傳供繪圖使用之Highcharts設定物件
  */
 export default {
     components: {
@@ -283,9 +319,12 @@ export default {
     },
     methods: {
 
-        getWidth: function() {
-            let vo = this
-            let w = get(vo, 'opt.chart.width', 0)
+        getWidth: function(opt) {
+            let w = get(opt, 'chart.width', null)
+            if (!isnum(w)) {
+                w = 400
+            }
+            w = cdbl(w)
             return w
         },
 

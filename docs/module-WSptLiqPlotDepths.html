@@ -58,7 +58,9 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"></p></div></div> 
+                <div class="description usertext"><p>並排繪製多個參數之深度剖線圖，當sts第1筆之key為'Geolayer'時，會於最左側改以土柱圖繪製地層並標註地下水位，其餘參數則各自呼叫WSptLiqPlotDepth繪圖，且僅最左側參數圖保留深度軸標題與刻度文字</p>
+<p>具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制</p>
+<p>土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -73,17 +75,156 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，各物件格式同WSptLiqPlotDepth之st，其中key為'Geolayer'者代表土柱圖，預設[]</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepth之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.zoneTopHeight</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入繪圖上方插槽區塊高度數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.zoneBottomHeight</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入繪圖下方插槽區塊高度數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.spaceGeolayer</code></td>
+        <td>Number</td>
+        <td><code>10</code></td>
+        <td>No</td>
+        <td>輸入土柱圖與參數圖之間距數字，單位px，預設10</td>
+    </tr><tr>
+        <td><code>optionsPic.spacePlot</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入各參數圖之間距數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyValueStart</code></td>
+        <td>String</td>
+        <td><code>'depthStart'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層起始深度之欄位key字串，預設'depthStart'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyValueEnd</code></td>
+        <td>String</td>
+        <td><code>'depthEnd'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層結束深度之欄位key字串，預設'depthEnd'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyText</code></td>
+        <td>String</td>
+        <td><code>'description'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層說明文字之欄位key字串，預設'description'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyLegendCode</code></td>
+        <td>String</td>
+        <td><code>'legendCode'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層土壤圖例代碼之欄位key字串，供對應土壤圖示，預設'legendCode'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolMergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土柱圖是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false</td>
     </tr></tbody>
 </table>
 
 
 
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>dw</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框</td>
+    </tr><tr>
+        <td><code>kpGlIcon</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存土壤圖例代碼對應土壤圖示物件</td>
+    </tr></tbody>
+</table>
 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>paddingStyleGeolayer</code></td>
+        <td>Object</td>
+        <td>回傳土柱圖之內距物件，供上下對齊Highcharts繪圖區</td>
+    </tr><tr>
+        <td><code>stGl</code></td>
+        <td>Object</td>
+        <td>回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null</td>
+    </tr><tr>
+        <td><code>hasKpGlIcon</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已載入土壤圖示布林值</td>
+    </tr><tr>
+        <td><code>hasGeolayer</code></td>
+        <td>Boolean</td>
+        <td>回傳是否繪製土柱圖布林值</td>
+    </tr><tr>
+        <td><code>waterLevel</code></td>
+        <td>Number</td>
+        <td>回傳地下水位深度數字，單位m</td>
+    </tr><tr>
+        <td><code>stOthers</code></td>
+        <td>Array</td>
+        <td>回傳土柱圖以外之各參數繪圖狀態物件陣列，且非最左側者自動清除深度軸標題</td>
+    </tr><tr>
+        <td><code>zoneTopHeight</code></td>
+        <td>Number</td>
+        <td>回傳繪圖上方插槽區塊高度數字</td>
+    </tr><tr>
+        <td><code>zoneBottomHeight</code></td>
+        <td>Number</td>
+        <td>回傳繪圖下方插槽區塊高度數字</td>
+    </tr><tr>
+        <td><code>geocolItems</code></td>
+        <td>Array</td>
+        <td>回傳供土柱圖繪製之各土層數據陣列</td>
+    </tr><tr>
+        <td><code>spaceGeolayer</code></td>
+        <td>Number</td>
+        <td>回傳土柱圖與參數圖之間距數字</td>
+    </tr><tr>
+        <td><code>spacePlot</code></td>
+        <td>Number</td>
+        <td>回傳各參數圖之間距數字</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -102,7 +243,9 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li></p></div></div> 
+    <dd class="tag-description"><ul class="dummy"><li><p>並排繪製多個參數之深度剖線圖，當sts第1筆之key為'Geolayer'時，會於最左側改以土柱圖繪製地層並標註地下水位，其餘參數則各自呼叫WSptLiqPlotDepth繪圖，且僅最左側參數圖保留深度軸標題與刻度文字</p>
+<p>具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制</p>
+<p>土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -117,17 +260,156 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，各物件格式同WSptLiqPlotDepth之st，其中key為'Geolayer'者代表土柱圖，預設[]</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepth之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsPic.zoneTopHeight</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入繪圖上方插槽區塊高度數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.zoneBottomHeight</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入繪圖下方插槽區塊高度數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.spaceGeolayer</code></td>
+        <td>Number</td>
+        <td><code>10</code></td>
+        <td>No</td>
+        <td>輸入土柱圖與參數圖之間距數字，單位px，預設10</td>
+    </tr><tr>
+        <td><code>optionsPic.spacePlot</code></td>
+        <td>Number</td>
+        <td><code>0</code></td>
+        <td>No</td>
+        <td>輸入各參數圖之間距數字，單位px，預設0</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyValueStart</code></td>
+        <td>String</td>
+        <td><code>'depthStart'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層起始深度之欄位key字串，預設'depthStart'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyValueEnd</code></td>
+        <td>String</td>
+        <td><code>'depthEnd'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層結束深度之欄位key字串，預設'depthEnd'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyText</code></td>
+        <td>String</td>
+        <td><code>'description'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層說明文字之欄位key字串，預設'description'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolKeyLegendCode</code></td>
+        <td>String</td>
+        <td><code>'legendCode'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖各層土壤圖例代碼之欄位key字串，供對應土壤圖示，預設'legendCode'</td>
+    </tr><tr>
+        <td><code>optionsPic.geocolMergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土柱圖是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false</td>
     </tr></tbody>
 </table>
 
 
 
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>dw</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框</td>
+    </tr><tr>
+        <td><code>kpGlIcon</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存土壤圖例代碼對應土壤圖示物件</td>
+    </tr></tbody>
+</table>
 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>paddingStyleGeolayer</code></td>
+        <td>Object</td>
+        <td>回傳土柱圖之內距物件，供上下對齊Highcharts繪圖區</td>
+    </tr><tr>
+        <td><code>stGl</code></td>
+        <td>Object</td>
+        <td>回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null</td>
+    </tr><tr>
+        <td><code>hasKpGlIcon</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已載入土壤圖示布林值</td>
+    </tr><tr>
+        <td><code>hasGeolayer</code></td>
+        <td>Boolean</td>
+        <td>回傳是否繪製土柱圖布林值</td>
+    </tr><tr>
+        <td><code>waterLevel</code></td>
+        <td>Number</td>
+        <td>回傳地下水位深度數字，單位m</td>
+    </tr><tr>
+        <td><code>stOthers</code></td>
+        <td>Array</td>
+        <td>回傳土柱圖以外之各參數繪圖狀態物件陣列，且非最左側者自動清除深度軸標題</td>
+    </tr><tr>
+        <td><code>zoneTopHeight</code></td>
+        <td>Number</td>
+        <td>回傳繪圖上方插槽區塊高度數字</td>
+    </tr><tr>
+        <td><code>zoneBottomHeight</code></td>
+        <td>Number</td>
+        <td>回傳繪圖下方插槽區塊高度數字</td>
+    </tr><tr>
+        <td><code>geocolItems</code></td>
+        <td>Array</td>
+        <td>回傳供土柱圖繪製之各土層數據陣列</td>
+    </tr><tr>
+        <td><code>spaceGeolayer</code></td>
+        <td>Number</td>
+        <td>回傳土柱圖與參數圖之間距數字</td>
+    </tr><tr>
+        <td><code>spacePlot</code></td>
+        <td>Number</td>
+        <td>回傳各參數圖之間距數字</td>
+    </tr></tbody>
+</table>
 
 
 
@@ -237,7 +519,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 17:22:43 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 19:39:00 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

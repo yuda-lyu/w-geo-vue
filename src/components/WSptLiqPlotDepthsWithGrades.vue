@@ -132,7 +132,26 @@ function getLevelsAndValue(grade, v) {
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 於WSptLiqPlotDepths各參數圖上方添加分級評估結果，取用各參數圖數據最深處之值，並依kpGrade之分級門檻繪製等級條與顯示數值
+ *
+ * 分級僅套用於key含有kpGrade各鍵之參數圖(預設為'-PL'、'-stlTS'、'-stlIY')，其餘參數圖不顯示分級。開啟分級時會自動給予optionsPic之zoneTopHeight為115，可由外部optionsPic覆蓋
+ *
+ * 具名插槽(slot)：'zone-top-geolayer'為土柱圖上方區塊，提供作用域參數width與height
+ *
+ * @vue-prop {Array} [sts=[]] 輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]
+ * @vue-prop {Boolean} [withGrade=true] 輸入是否顯示分級評估結果布林值，預設true
+ * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepths之optionsPic並向下傳遞，預設{}
+ * @vue-prop {Object} [optionsPic.kpGrade] 輸入參數關鍵字對應分級設定物件，key為參數關鍵字(如'-PL'、'-stlTS'、'-stlIY')，值為分級設定物件，未給予時使用內建預設分級
+ * @vue-prop {String} [optionsPic.kpGrade.title] 輸入分級標題字串，預設無
+ * @vue-prop {Number} [optionsPic.kpGrade.valueDig] 輸入分級數值取用小數點位數數字，預設無
+ * @vue-prop {String} [optionsPic.kpGrade.unit] 輸入分級數值單位字串，預設無
+ * @vue-prop {Number} [optionsPic.kpGrade.n] 輸入分級門檻數量數字，預設無
+ * @vue-prop {Number} [optionsPic.kpGrade.tv0] 輸入第0個分級門檻值數字，其餘門檻值依序為tv1、tv2、tv3，預設無
+ * @vue-prop {String} [optionsPic.kpGrade.c0] 輸入第0級顏色字串，其餘顏色依序為c1、c2、c3，預設無
+ * @vue-prop {String} [optionsPic.kpGrade.l0] 輸入第0級標記文字字串，其餘標記文字依序為l1、l2、l3，預設無
+ * @vue-data {Object} kpGradeDef 儲存內建預設之參數關鍵字對應分級設定物件
+ * @vue-computed {Object} kpGrade 回傳實際使用之參數關鍵字對應分級設定物件
+ * @vue-computed {Object} useOptionsPic 回傳實際向下傳遞至WSptLiqPlotDepths之繪圖設定物件
  */
 export default {
     components: {

@@ -58,7 +58,10 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"></p></div></div> 
+                <div class="description usertext"><p>提供SPT液化分析之整合組件，含分析方法勾選區、分析結果數據表格(WTableEdit)，以及分析結果之深度剖線繪圖區(WSptLiqPlotDepthsWithGradesAndTools)</p>
+<p>內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)</p>
+<p>表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框</p>
+<p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -73,20 +76,212 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sptMethods</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入可供勾選之液化分析方法字串陣列，預設['sptSeed','sptHBF2012','sptHBF2017','sptNCEER','sptNJRA1996','sptNJRA2017','sptTY']</td>
+    </tr><tr>
+        <td><code>sptMethodsSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入已勾選之液化分析方法字串陣列，可使用.sync雙向綁定，預設['sptHBF2017','sptNJRA2017']</td>
+    </tr><tr>
+        <td><code>unitSvSvp</code></td>
+        <td>String</td>
+        <td><code>'MPa'</code></td>
+        <td>No</td>
+        <td>輸入應力單位字串，供取代kpHead內之'{unitSvSvp}'標記，預設'MPa'</td>
+    </tr><tr>
+        <td><code>rows</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入各深度之土層與試驗數據物件陣列，預設[]</td>
+    </tr><tr>
+        <td><code>kpTransRowKey</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入rows各欄位key之轉換對照物件，key為輸入資料欄位key，值為分析用欄位key，預設已提供SPTN、Gt_dry、Gt_sat、ctFine、code、USCS等對照</td>
+    </tr><tr>
+        <td><code>kpHead</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分析用欄位key對應表格標題與繪圖軸標題之物件，值可使用底線與上下標語法，並可使用'{unitSvSvp}'標記代表應力單位，預設已提供PGA、depth、waterLevel、WC、PI、FC、γ、σ等對照</td>
+    </tr><tr>
+        <td><code>kpDig</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分析用欄位key對應表格數值取用小數點位數之物件，預設已提供depth、N60、WC、γ、σ、D10等對照</td>
+    </tr><tr>
+        <td><code>keyParamSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
+    </tr><tr>
+        <td><code>depthTitle</code></td>
+        <td>String</td>
+        <td><code>'Depth(m)'</code></td>
+        <td>No</td>
+        <td>輸入繪圖深度軸標題字串，預設'Depth(m)'</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGradesAndTools之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsTable</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入提供組件WTableEdit之額外參數物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsToolPlot</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入提供組件WSptLiqPlotDepthsWithGradesAndTools之額外參數物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsMethodData</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入標題文字設定物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsMethodData.textMethods</code></td>
+        <td>String</td>
+        <td><code>'Methods'</code></td>
+        <td>No</td>
+        <td>輸入分析方法勾選區標題字串，預設'Methods'</td>
+    </tr><tr>
+        <td><code>optionsMethodData.textTable</code></td>
+        <td>String</td>
+        <td><code>'Table data'</code></td>
+        <td>No</td>
+        <td>輸入數據表格區標題字串，預設'Table data'</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>sptMethodsSelectsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之已勾選液化分析方法字串陣列</td>
+    </tr><tr>
+        <td><code>kpMehtodSelect</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存液化分析方法對應是否勾選物件</td>
+    </tr><tr>
+        <td><code>heightTable</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據表格高度數字，單位px</td>
+    </tr><tr>
+        <td><code>rowsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之輸入數據物件陣列</td>
+    </tr><tr>
+        <td><code>optTable</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存供WTableEdit使用之表格設定物件</td>
+    </tr><tr>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存分析結果各參數之繪圖狀態物件陣列</td>
+    </tr><tr>
+        <td><code>keyStsSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存已勾選繪製參數之key字串陣列</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>textMethods</code></td>
+        <td>String</td>
+        <td>回傳分析方法勾選區標題字串</td>
+    </tr><tr>
+        <td><code>textTable</code></td>
+        <td>String</td>
+        <td>回傳數據表格區標題字串</td>
+    </tr><tr>
+        <td><code>hasSelects</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已勾選液化分析方法布林值</td>
+    </tr><tr>
+        <td><code>hasSts</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已有繪圖狀態物件布林值</td>
+    </tr><tr>
+        <td><code>useKpHead</code></td>
+        <td>Object</td>
+        <td>回傳已取代應力單位與轉換上下標語法之欄位標題對照物件</td>
+    </tr><tr>
+        <td><code>rowsResult</code></td>
+        <td>Array</td>
+        <td>回傳液化分析結果之數據物件陣列</td>
+    </tr><tr>
+        <td><code>row0Result</code></td>
+        <td>Object</td>
+        <td>回傳液化分析結果第1筆數據物件</td>
+    </tr><tr>
+        <td><code>rowNResult</code></td>
+        <td>Object</td>
+        <td>回傳液化分析結果最末筆數據物件</td>
     </tr></tbody>
 </table>
 
 
 
 
-
-
-
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>update:sptMethodsSelects</code></td>
+        <td>Array</td>
+        <td>當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列</td>
+    </tr></tbody>
+</table>
 
 
 <div class="container-overview"><div><p> 
@@ -102,7 +297,10 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li></p></div></div> 
+    <dd class="tag-description"><ul class="dummy"><li><p>提供SPT液化分析之整合組件，含分析方法勾選區、分析結果數據表格(WTableEdit)，以及分析結果之深度剖線繪圖區(WSptLiqPlotDepthsWithGradesAndTools)</p>
+<p>內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)</p>
+<p>表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框</p>
+<p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -117,20 +315,212 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sptMethods</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入可供勾選之液化分析方法字串陣列，預設['sptSeed','sptHBF2012','sptHBF2017','sptNCEER','sptNJRA1996','sptNJRA2017','sptTY']</td>
+    </tr><tr>
+        <td><code>sptMethodsSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入已勾選之液化分析方法字串陣列，可使用.sync雙向綁定，預設['sptHBF2017','sptNJRA2017']</td>
+    </tr><tr>
+        <td><code>unitSvSvp</code></td>
+        <td>String</td>
+        <td><code>'MPa'</code></td>
+        <td>No</td>
+        <td>輸入應力單位字串，供取代kpHead內之'{unitSvSvp}'標記，預設'MPa'</td>
+    </tr><tr>
+        <td><code>rows</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入各深度之土層與試驗數據物件陣列，預設[]</td>
+    </tr><tr>
+        <td><code>kpTransRowKey</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入rows各欄位key之轉換對照物件，key為輸入資料欄位key，值為分析用欄位key，預設已提供SPTN、Gt_dry、Gt_sat、ctFine、code、USCS等對照</td>
+    </tr><tr>
+        <td><code>kpHead</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分析用欄位key對應表格標題與繪圖軸標題之物件，值可使用底線與上下標語法，並可使用'{unitSvSvp}'標記代表應力單位，預設已提供PGA、depth、waterLevel、WC、PI、FC、γ、σ等對照</td>
+    </tr><tr>
+        <td><code>kpDig</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分析用欄位key對應表格數值取用小數點位數之物件，預設已提供depth、N60、WC、γ、σ、D10等對照</td>
+    </tr><tr>
+        <td><code>keyParamSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
+    </tr><tr>
+        <td><code>depthTitle</code></td>
+        <td>String</td>
+        <td><code>'Depth(m)'</code></td>
+        <td>No</td>
+        <td>輸入繪圖深度軸標題字串，預設'Depth(m)'</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGradesAndTools之optionsPic並向下傳遞，預設{}</td>
+    </tr><tr>
+        <td><code>optionsTable</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入提供組件WTableEdit之額外參數物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsToolPlot</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入提供組件WSptLiqPlotDepthsWithGradesAndTools之額外參數物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsMethodData</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入標題文字設定物件，預設{}</td>
+    </tr><tr>
+        <td><code>optionsMethodData.textMethods</code></td>
+        <td>String</td>
+        <td><code>'Methods'</code></td>
+        <td>No</td>
+        <td>輸入分析方法勾選區標題字串，預設'Methods'</td>
+    </tr><tr>
+        <td><code>optionsMethodData.textTable</code></td>
+        <td>String</td>
+        <td><code>'Table data'</code></td>
+        <td>No</td>
+        <td>輸入數據表格區標題字串，預設'Table data'</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>sptMethodsSelectsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之已勾選液化分析方法字串陣列</td>
+    </tr><tr>
+        <td><code>kpMehtodSelect</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存液化分析方法對應是否勾選物件</td>
+    </tr><tr>
+        <td><code>heightTable</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據表格高度數字，單位px</td>
+    </tr><tr>
+        <td><code>rowsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之輸入數據物件陣列</td>
+    </tr><tr>
+        <td><code>optTable</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存供WTableEdit使用之表格設定物件</td>
+    </tr><tr>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存分析結果各參數之繪圖狀態物件陣列</td>
+    </tr><tr>
+        <td><code>keyStsSelects</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存已勾選繪製參數之key字串陣列</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>textMethods</code></td>
+        <td>String</td>
+        <td>回傳分析方法勾選區標題字串</td>
+    </tr><tr>
+        <td><code>textTable</code></td>
+        <td>String</td>
+        <td>回傳數據表格區標題字串</td>
+    </tr><tr>
+        <td><code>hasSelects</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已勾選液化分析方法布林值</td>
+    </tr><tr>
+        <td><code>hasSts</code></td>
+        <td>Boolean</td>
+        <td>回傳是否已有繪圖狀態物件布林值</td>
+    </tr><tr>
+        <td><code>useKpHead</code></td>
+        <td>Object</td>
+        <td>回傳已取代應力單位與轉換上下標語法之欄位標題對照物件</td>
+    </tr><tr>
+        <td><code>rowsResult</code></td>
+        <td>Array</td>
+        <td>回傳液化分析結果之數據物件陣列</td>
+    </tr><tr>
+        <td><code>row0Result</code></td>
+        <td>Object</td>
+        <td>回傳液化分析結果第1筆數據物件</td>
+    </tr><tr>
+        <td><code>rowNResult</code></td>
+        <td>Object</td>
+        <td>回傳液化分析結果最末筆數據物件</td>
     </tr></tbody>
 </table>
 
 
 
 
-
-
-
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>update:sptMethodsSelects</code></td>
+        <td>Array</td>
+        <td>當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列</td>
+    </tr></tbody>
+</table>
 
 
 <div class="container-overview"><div><p> 
@@ -237,7 +627,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 17:22:43 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 19:39:00 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

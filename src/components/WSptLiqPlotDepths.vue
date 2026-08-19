@@ -147,7 +147,36 @@ import getDefChart from '../js/getDefChart.mjs'
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 並排繪製多個參數之深度剖線圖，當sts第1筆之key為'Geolayer'時，會於最左側改以土柱圖繪製地層並標註地下水位，其餘參數則各自呼叫WSptLiqPlotDepth繪圖，且僅最左側參數圖保留深度軸標題與刻度文字
+ *
+ * 具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制
+ *
+ * 土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖
+ *
+ * @vue-prop {Array} [sts=[]] 輸入多個繪圖狀態物件陣列，可由getSts產生，各物件格式同WSptLiqPlotDepth之st，其中key為'Geolayer'者代表土柱圖，預設[]
+ * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepth之optionsPic並向下傳遞，預設{}
+ * @vue-prop {Number} [optionsPic.zoneTopHeight=0] 輸入繪圖上方插槽區塊高度數字，單位px，預設0
+ * @vue-prop {Number} [optionsPic.zoneBottomHeight=0] 輸入繪圖下方插槽區塊高度數字，單位px，預設0
+ * @vue-prop {Number} [optionsPic.spaceGeolayer=10] 輸入土柱圖與參數圖之間距數字，單位px，預設10
+ * @vue-prop {Number} [optionsPic.spacePlot=0] 輸入各參數圖之間距數字，單位px，預設0
+ * @vue-prop {String} [optionsPic.geocolKeyValueStart='depthStart'] 輸入土柱圖各層起始深度之欄位key字串，預設'depthStart'
+ * @vue-prop {String} [optionsPic.geocolKeyValueEnd='depthEnd'] 輸入土柱圖各層結束深度之欄位key字串，預設'depthEnd'
+ * @vue-prop {String} [optionsPic.geocolKeyText='description'] 輸入土柱圖各層說明文字之欄位key字串，預設'description'
+ * @vue-prop {String} [optionsPic.geocolKeyLegendCode='legendCode'] 輸入土柱圖各層土壤圖例代碼之欄位key字串，供對應土壤圖示，預設'legendCode'
+ * @vue-prop {Boolean} [optionsPic.geocolMergeSameLayers=false] 輸入土柱圖是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false
+ * @vue-data {Number} dw 儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框
+ * @vue-data {Object} kpGlIcon 儲存土壤圖例代碼對應土壤圖示物件
+ * @vue-computed {Object} paddingStyleGeolayer 回傳土柱圖之內距物件，供上下對齊Highcharts繪圖區
+ * @vue-computed {Object} stGl 回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null
+ * @vue-computed {Boolean} hasKpGlIcon 回傳是否已載入土壤圖示布林值
+ * @vue-computed {Boolean} hasGeolayer 回傳是否繪製土柱圖布林值
+ * @vue-computed {Number} waterLevel 回傳地下水位深度數字，單位m
+ * @vue-computed {Array} stOthers 回傳土柱圖以外之各參數繪圖狀態物件陣列，且非最左側者自動清除深度軸標題
+ * @vue-computed {Number} zoneTopHeight 回傳繪圖上方插槽區塊高度數字
+ * @vue-computed {Number} zoneBottomHeight 回傳繪圖下方插槽區塊高度數字
+ * @vue-computed {Array} geocolItems 回傳供土柱圖繪製之各土層數據陣列
+ * @vue-computed {Number} spaceGeolayer 回傳土柱圖與參數圖之間距數字
+ * @vue-computed {Number} spacePlot 回傳各參數圖之間距數字
  */
 export default {
     components: {
@@ -361,7 +390,11 @@ export default {
         },
 
         getWidth: function(opt) {
-            let w = get(opt, 'chart.width', 0)
+            let w = get(opt, 'chart.width', null)
+            if (!isnum(w)) {
+                w = 400
+            }
+            w = cdbl(w)
             return w
         },
 

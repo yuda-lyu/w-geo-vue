@@ -58,7 +58,9 @@
         <div class="container-overview">
         
             
-                <div class="description usertext"></p></div></div> 
+                <div class="description usertext"><p>於WSptLiqPlotDepthsWithGrades外，另提供參數勾選區與工具區之繪圖組件，可由使用者自行勾選欲繪製參數、切換土柱合併重複與鑽孔潛勢資訊、切換是否繪製折線、調整土柱圖寬與數據圖寬高，並可將繪圖區下載成為圖片</p>
+<p>參數勾選區依groupParams分組並過濾sts產生，各參數僅會歸屬於最先匹配之群組。勾選結果會同步觸發update:keyStsSelects事件，故可由外部使用keyStsSelects.sync雙向綁定</p>
+<p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，需開啟鑽孔與潛勢資訊才會顯示</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -73,20 +75,237 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]</td>
+    </tr><tr>
+        <td><code>keyStsSelects</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入欲繪製參數之key字串陣列，可使用.sync雙向綁定，預設[]</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGrades之optionsPic並向下傳遞，其中geocolMergeSameLayers由工具區之土柱合併重複開關複寫，預設{}</td>
+    </tr><tr>
+        <td><code>textParams</code></td>
+        <td>String</td>
+        <td><code>'Parameters'</code></td>
+        <td>No</td>
+        <td>輸入參數勾選區標題字串，預設'Parameters'</td>
+    </tr><tr>
+        <td><code>textTools</code></td>
+        <td>String</td>
+        <td><code>'Tools'</code></td>
+        <td>No</td>
+        <td>輸入工具區標題字串，預設'Tools'</td>
+    </tr><tr>
+        <td><code>textPlots</code></td>
+        <td>String</td>
+        <td><code>'Plots'</code></td>
+        <td>No</td>
+        <td>輸入繪圖區標題字串，預設'Plots'</td>
+    </tr><tr>
+        <td><code>textGeocolMergeSameLayers</code></td>
+        <td>String</td>
+        <td><code>'Merge same layers'</code></td>
+        <td>No</td>
+        <td>輸入土柱合併重複開關文字字串，預設'Merge same layers'</td>
+    </tr><tr>
+        <td><code>textPlotWithInfor</code></td>
+        <td>String</td>
+        <td><code>'With information'</code></td>
+        <td>No</td>
+        <td>輸入鑽孔與潛勢資訊開關文字字串，預設'With information'</td>
+    </tr><tr>
+        <td><code>textPlotWithLine</code></td>
+        <td>String</td>
+        <td><code>'With line'</code></td>
+        <td>No</td>
+        <td>輸入繪製折線開關文字字串，預設'With line'</td>
+    </tr><tr>
+        <td><code>textGeocolPlotWidth</code></td>
+        <td>String</td>
+        <td><code>'Layers plot width(px)'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖寬滑桿文字字串，預設'Layers plot width(px)'</td>
+    </tr><tr>
+        <td><code>textPlotWidth</code></td>
+        <td>String</td>
+        <td><code>'Plot width(px)'</code></td>
+        <td>No</td>
+        <td>輸入數據圖寬滑桿文字字串，預設'Plot width(px)'</td>
+    </tr><tr>
+        <td><code>textPlotHeight</code></td>
+        <td>String</td>
+        <td><code>'Plot height(px)'</code></td>
+        <td>No</td>
+        <td>輸入數據圖高滑桿文字字串，預設'Plot height(px)'</td>
+    </tr><tr>
+        <td><code>textDownloadPic</code></td>
+        <td>String</td>
+        <td><code>'Download image'</code></td>
+        <td>No</td>
+        <td>輸入下載圖片按鈕文字字串，預設'Download image'</td>
+    </tr><tr>
+        <td><code>textDownloadPicProcessing</code></td>
+        <td>String</td>
+        <td><code>'Downloading...'</code></td>
+        <td>No</td>
+        <td>輸入下載圖片中之按鈕文字字串，預設'Downloading...'</td>
+    </tr><tr>
+        <td><code>groupParams</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數勾選區之分組設定物件陣列，預設已提供Layer、Basic、Plastic、Particle size等分組</td>
+    </tr><tr>
+        <td><code>groupParams.title</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分組標題字串，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分組內參數過濾設定物件陣列，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.keyFull</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入需完全相同之參數key字串，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.keyPart</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入需部份含有之參數key字串，與keyFull擇一給予且優先使用，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.text</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數顯示文字字串，給予'{key}'代表直接顯示參數key，預設無</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>plotWithLine</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否繪製折線布林值，關閉時各參數圖改以散點繪製</td>
+    </tr><tr>
+        <td><code>plotWidth</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據圖寬度數字，單位px</td>
+    </tr><tr>
+        <td><code>plotHeight</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據圖高度數字，單位px</td>
+    </tr><tr>
+        <td><code>plotWithGrade</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否顯示鑽孔與潛勢資訊(含分級評估與zone-top插槽)布林值</td>
+    </tr><tr>
+        <td><code>geocolPlotWidth</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存土柱圖寬度數字，單位px</td>
+    </tr><tr>
+        <td><code>geocolMergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存土柱圖是否合併相鄰重複土層布林值</td>
+    </tr><tr>
+        <td><code>downloadPicProcessing</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否正在下載圖片布林值</td>
+    </tr><tr>
+        <td><code>piss</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存參數勾選區之各分組與其參數項目陣列</td>
+    </tr><tr>
+        <td><code>keyStsSelectsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之已勾選參數key字串陣列</td>
+    </tr><tr>
+        <td><code>kpPis</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存參數key對應是否勾選物件</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>useSts</code></td>
+        <td>Array</td>
+        <td>回傳實際供繪圖使用之繪圖狀態物件陣列，已過濾未勾選參數並套用圖寬圖高與繪圖型態</td>
+    </tr><tr>
+        <td><code>useOptionsExt</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSptLiqPlotDepthsWithGrades之繪圖設定物件</td>
+    </tr><tr>
+        <td><code>useTextDownloadPic</code></td>
+        <td>String</td>
+        <td>回傳下載圖片按鈕之顯示文字字串</td>
     </tr></tbody>
 </table>
 
 
 
 
-
-
-
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>update:keyStsSelects</code></td>
+        <td>Array</td>
+        <td>當使用者勾選或取消參數時，回傳已勾選參數之key字串陣列</td>
+    </tr></tbody>
+</table>
 
 
 <div class="container-overview"><div><p> 
@@ -102,7 +321,9 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li></p></div></div> 
+    <dd class="tag-description"><ul class="dummy"><li><p>於WSptLiqPlotDepthsWithGrades外，另提供參數勾選區與工具區之繪圖組件，可由使用者自行勾選欲繪製參數、切換土柱合併重複與鑽孔潛勢資訊、切換是否繪製折線、調整土柱圖寬與數據圖寬高，並可將繪圖區下載成為圖片</p>
+<p>參數勾選區依groupParams分組並過濾sts產生，各參數僅會歸屬於最先匹配之群組。勾選結果會同步觸發update:keyStsSelects事件，故可由外部使用keyStsSelects.sync雙向綁定</p>
+<p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，需開啟鑽孔與潛勢資訊才會顯示</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -117,20 +338,237 @@
     </tr>
     </thead>
     <tbody><tr>
-        <td><code>options</code></td>
+        <td><code>sts</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入多個繪圖狀態物件陣列，可由getSts產生，格式同WSptLiqPlotDepths之sts，預設[]</td>
+    </tr><tr>
+        <td><code>keyStsSelects</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入欲繪製參數之key字串陣列，可使用.sync雙向綁定，預設[]</td>
+    </tr><tr>
+        <td><code>optionsPic</code></td>
         <td>Object</td>
         <td><code>{}</code></td>
         <td>No</td>
-        <td>輸入設定物件，預設{}</td>
+        <td>輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGrades之optionsPic並向下傳遞，其中geocolMergeSameLayers由工具區之土柱合併重複開關複寫，預設{}</td>
+    </tr><tr>
+        <td><code>textParams</code></td>
+        <td>String</td>
+        <td><code>'Parameters'</code></td>
+        <td>No</td>
+        <td>輸入參數勾選區標題字串，預設'Parameters'</td>
+    </tr><tr>
+        <td><code>textTools</code></td>
+        <td>String</td>
+        <td><code>'Tools'</code></td>
+        <td>No</td>
+        <td>輸入工具區標題字串，預設'Tools'</td>
+    </tr><tr>
+        <td><code>textPlots</code></td>
+        <td>String</td>
+        <td><code>'Plots'</code></td>
+        <td>No</td>
+        <td>輸入繪圖區標題字串，預設'Plots'</td>
+    </tr><tr>
+        <td><code>textGeocolMergeSameLayers</code></td>
+        <td>String</td>
+        <td><code>'Merge same layers'</code></td>
+        <td>No</td>
+        <td>輸入土柱合併重複開關文字字串，預設'Merge same layers'</td>
+    </tr><tr>
+        <td><code>textPlotWithInfor</code></td>
+        <td>String</td>
+        <td><code>'With information'</code></td>
+        <td>No</td>
+        <td>輸入鑽孔與潛勢資訊開關文字字串，預設'With information'</td>
+    </tr><tr>
+        <td><code>textPlotWithLine</code></td>
+        <td>String</td>
+        <td><code>'With line'</code></td>
+        <td>No</td>
+        <td>輸入繪製折線開關文字字串，預設'With line'</td>
+    </tr><tr>
+        <td><code>textGeocolPlotWidth</code></td>
+        <td>String</td>
+        <td><code>'Layers plot width(px)'</code></td>
+        <td>No</td>
+        <td>輸入土柱圖寬滑桿文字字串，預設'Layers plot width(px)'</td>
+    </tr><tr>
+        <td><code>textPlotWidth</code></td>
+        <td>String</td>
+        <td><code>'Plot width(px)'</code></td>
+        <td>No</td>
+        <td>輸入數據圖寬滑桿文字字串，預設'Plot width(px)'</td>
+    </tr><tr>
+        <td><code>textPlotHeight</code></td>
+        <td>String</td>
+        <td><code>'Plot height(px)'</code></td>
+        <td>No</td>
+        <td>輸入數據圖高滑桿文字字串，預設'Plot height(px)'</td>
+    </tr><tr>
+        <td><code>textDownloadPic</code></td>
+        <td>String</td>
+        <td><code>'Download image'</code></td>
+        <td>No</td>
+        <td>輸入下載圖片按鈕文字字串，預設'Download image'</td>
+    </tr><tr>
+        <td><code>textDownloadPicProcessing</code></td>
+        <td>String</td>
+        <td><code>'Downloading...'</code></td>
+        <td>No</td>
+        <td>輸入下載圖片中之按鈕文字字串，預設'Downloading...'</td>
+    </tr><tr>
+        <td><code>groupParams</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數勾選區之分組設定物件陣列，預設已提供Layer、Basic、Plastic、Particle size等分組</td>
+    </tr><tr>
+        <td><code>groupParams.title</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分組標題字串，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入分組內參數過濾設定物件陣列，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.keyFull</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入需完全相同之參數key字串，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.keyPart</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入需部份含有之參數key字串，與keyFull擇一給予且優先使用，預設無</td>
+    </tr><tr>
+        <td><code>groupParams.flts.text</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>No</td>
+        <td>輸入參數顯示文字字串，給予'{key}'代表直接顯示參數key，預設無</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>plotWithLine</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否繪製折線布林值，關閉時各參數圖改以散點繪製</td>
+    </tr><tr>
+        <td><code>plotWidth</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據圖寬度數字，單位px</td>
+    </tr><tr>
+        <td><code>plotHeight</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存數據圖高度數字，單位px</td>
+    </tr><tr>
+        <td><code>plotWithGrade</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否顯示鑽孔與潛勢資訊(含分級評估與zone-top插槽)布林值</td>
+    </tr><tr>
+        <td><code>geocolPlotWidth</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>儲存土柱圖寬度數字，單位px</td>
+    </tr><tr>
+        <td><code>geocolMergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存土柱圖是否合併相鄰重複土層布林值</td>
+    </tr><tr>
+        <td><code>downloadPicProcessing</code></td>
+        <td>Boolean</td>
+        <td>-</td>
+        <td>儲存是否正在下載圖片布林值</td>
+    </tr><tr>
+        <td><code>piss</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存參數勾選區之各分組與其參數項目陣列</td>
+    </tr><tr>
+        <td><code>keyStsSelectsTrans</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存內部使用之已勾選參數key字串陣列</td>
+    </tr><tr>
+        <td><code>kpPis</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>儲存參數key對應是否勾選物件</td>
+    </tr></tbody>
+</table>
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>useSts</code></td>
+        <td>Array</td>
+        <td>回傳實際供繪圖使用之繪圖狀態物件陣列，已過濾未勾選參數並套用圖寬圖高與繪圖型態</td>
+    </tr><tr>
+        <td><code>useOptionsExt</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSptLiqPlotDepthsWithGrades之繪圖設定物件</td>
+    </tr><tr>
+        <td><code>useTextDownloadPic</code></td>
+        <td>String</td>
+        <td>回傳下載圖片按鈕之顯示文字字串</td>
     </tr></tbody>
 </table>
 
 
 
 
-
-
-
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>update:keyStsSelects</code></td>
+        <td>Array</td>
+        <td>當使用者勾選或取消參數時，回傳已勾選參數之key字串陣列</td>
+    </tr></tbody>
+</table>
 
 
 <div class="container-overview"><div><p> 
@@ -237,7 +675,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 17:22:43 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 19 2026 19:39:00 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

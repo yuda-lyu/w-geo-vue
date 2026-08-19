@@ -68,7 +68,7 @@
 
             <div style="padding-bottom:40px;">
                 <!-- 關閉編輯功能, 待日後開發 -->
-                <WTableDyn
+                <WTableEdit
                     :style="`width:100%; height:${heightTable}px;`"
                     :enableInfor="false"
                     :name="''"
@@ -78,7 +78,7 @@
                     @success="evSuccess"
                     @error="evError"
                     v-bind="optionsTable"
-                ></WTableDyn>
+                ></WTableEdit>
             </div>
 
         </div>
@@ -127,7 +127,7 @@ import haskey from 'wsemi/src/haskey.mjs'
 import calcLiquefaction from 'w-geo/src/calcLiquefaction.mjs'
 import WIcon from 'w-component-vue/src/components/WIcon.vue'
 import WCheckbox from 'w-component-vue/src/components/WCheckbox.vue'
-import WTableDyn from 'w-component-vue/src/components/WTableDyn.vue'
+import WTableEdit from 'w-table-vue/src/components/WTableEdit.vue'
 import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAndTools.vue'
 import getSts from '../js/getSts.mjs'
 import spc2html from '../js/spc2html.mjs'
@@ -254,13 +254,51 @@ function anaSptLiq(rowsIn, opt = {}) {
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 提供SPT液化分析之整合組件，含分析方法勾選區、分析結果數據表格(WTableEdit)，以及分析結果之深度剖線繪圖區(WSptLiqPlotDepthsWithGradesAndTools)
+ *
+ * 內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)
+ *
+ * 表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框
+ *
+ * 具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)
+ *
+ * @vue-prop {Array} [sptMethods] 輸入可供勾選之液化分析方法字串陣列，預設['sptSeed','sptHBF2012','sptHBF2017','sptNCEER','sptNJRA1996','sptNJRA2017','sptTY']
+ * @vue-prop {Array} [sptMethodsSelects] 輸入已勾選之液化分析方法字串陣列，可使用.sync雙向綁定，預設['sptHBF2017','sptNJRA2017']
+ * @vue-prop {String} [unitSvSvp='MPa'] 輸入應力單位字串，供取代kpHead內之'{unitSvSvp}'標記，預設'MPa'
+ * @vue-prop {Array} [rows=[]] 輸入各深度之土層與試驗數據物件陣列，預設[]
+ * @vue-prop {Object} [kpTransRowKey] 輸入rows各欄位key之轉換對照物件，key為輸入資料欄位key，值為分析用欄位key，預設已提供SPTN、Gt_dry、Gt_sat、ctFine、code、USCS等對照
+ * @vue-prop {Object} [kpHead] 輸入分析用欄位key對應表格標題與繪圖軸標題之物件，值可使用底線與上下標語法，並可使用'{unitSvSvp}'標記代表應力單位，預設已提供PGA、depth、waterLevel、WC、PI、FC、γ、σ等對照
+ * @vue-prop {Object} [kpDig] 輸入分析用欄位key對應表格數值取用小數點位數之物件，預設已提供depth、N60、WC、γ、σ、D10等對照
+ * @vue-prop {Array} [keyParamSelects] 輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾
+ * @vue-prop {String} [depthTitle='Depth(m)'] 輸入繪圖深度軸標題字串，預設'Depth(m)'
+ * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGradesAndTools之optionsPic並向下傳遞，預設{}
+ * @vue-prop {Object} [optionsTable={}] 輸入提供組件WTableEdit之額外參數物件，預設{}
+ * @vue-prop {Object} [optionsToolPlot={}] 輸入提供組件WSptLiqPlotDepthsWithGradesAndTools之額外參數物件，預設{}
+ * @vue-prop {Object} [optionsMethodData={}] 輸入標題文字設定物件，預設{}
+ * @vue-prop {String} [optionsMethodData.textMethods='Methods'] 輸入分析方法勾選區標題字串，預設'Methods'
+ * @vue-prop {String} [optionsMethodData.textTable='Table data'] 輸入數據表格區標題字串，預設'Table data'
+ * @vue-data {Array} sptMethodsSelectsTrans 儲存內部使用之已勾選液化分析方法字串陣列
+ * @vue-data {Object} kpMehtodSelect 儲存液化分析方法對應是否勾選物件
+ * @vue-data {Number} heightTable 儲存數據表格高度數字，單位px
+ * @vue-data {Array} rowsTrans 儲存內部使用之輸入數據物件陣列
+ * @vue-data {Object} optTable 儲存供WTableEdit使用之表格設定物件
+ * @vue-data {Array} sts 儲存分析結果各參數之繪圖狀態物件陣列
+ * @vue-data {Array} keyStsSelects 儲存已勾選繪製參數之key字串陣列
+ * @vue-computed {String} textMethods 回傳分析方法勾選區標題字串
+ * @vue-computed {String} textTable 回傳數據表格區標題字串
+ * @vue-computed {Boolean} hasSelects 回傳是否已勾選液化分析方法布林值
+ * @vue-computed {Boolean} hasSts 回傳是否已有繪圖狀態物件布林值
+ * @vue-computed {Object} useKpHead 回傳已取代應力單位與轉換上下標語法之欄位標題對照物件
+ * @vue-computed {Array} rowsResult 回傳液化分析結果之數據物件陣列
+ * @vue-computed {Object} row0Result 回傳液化分析結果第1筆數據物件
+ * @vue-computed {Object} rowNResult 回傳液化分析結果最末筆數據物件
+ * @vue-event {Array} update:sptMethodsSelects 當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列
  */
 export default {
     components: {
         WIcon,
         WCheckbox,
-        WTableDyn,
+        WTableEdit,
         WSptLiqPlotDepthsWithGradesAndTools,
     },
     props: {
@@ -419,7 +457,7 @@ export default {
             type: Object,
             default: () => {},
         },
-        optionsTable: { //提供組件WTableDyn額外參數
+        optionsTable: { //提供組件WTableEdit額外參數
             type: Object,
             default: () => {},
         },

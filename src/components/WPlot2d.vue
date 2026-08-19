@@ -19,7 +19,14 @@ import WHighchartsVue from 'w-highcharts-vue/src/components/WHighchartsVue.vue'
 
 
 /**
- * @vue-prop {Object} [options={}] 輸入設定物件，預設{}
+ * 由Highcharts設定物件繪製2D圖，繪圖寬度取用設定物件內之chart.width，若非數字則使用400；繪圖高度優先取用設定物件內之chart.height，若非數字則取用組件height
+ *
+ * @vue-prop {Object} [options={}] 輸入Highcharts繪圖設定物件，需有內容才會渲染繪圖，預設{}
+ * @vue-prop {Number} [options.chart.width] 輸入繪圖寬度數字，單位px，非數字時使用400，預設無
+ * @vue-prop {Number} [options.chart.height] 輸入繪圖高度數字，單位px，優先於組件height，預設無
+ * @vue-prop {Number} [height=400] 輸入繪圖高度數字，單位px，當options.chart.height為數字時則不使用，預設400
+ * @vue-computed {Number} widthInp 回傳實際使用之繪圖寬度數字
+ * @vue-computed {Number} heightInp 回傳實際使用之繪圖高度數字
  */
 export default {
     components: {
@@ -30,10 +37,10 @@ export default {
             type: Object,
             default: () => {},
         },
-        width: {
-            type: Number,
-            default: 400,
-        },
+        // width: {
+        //     type: Number,
+        //     default: 400,
+        // },
         height: {
             type: Number,
             default: 400,
@@ -51,11 +58,11 @@ export default {
             let vo = this
 
             //w
-            let w = vo.width
-            let wOpt = get(vo, 'options.chart.width', '') //優先使用options內寬度
-            if (isnum(wOpt)) {
-                w = cdbl(wOpt)
+            let w = get(vo, 'options.chart.width', '') //優先使用options內寬度
+            if (!isnum(w)) {
+                w = 400
             }
+            w = cdbl(w)
 
             return w
         },
