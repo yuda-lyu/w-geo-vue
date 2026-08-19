@@ -10,6 +10,7 @@
 
             <div class="bk" style="margin:0px; padding:0px;">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depths-with-grades-and-tools'"
                     :casename="'default'"
                 ></demolink>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-import demolink from './components/demolink.vue'
+import demolink from 'w-component-vue/src/components/demolink.vue'
 import WSptLiqPlotDepthsWithGradesAndTools from './components/WSptLiqPlotDepthsWithGradesAndTools.vue'
 
 export default {

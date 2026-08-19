@@ -10,6 +10,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line'"
                 ></demolink>
@@ -23,6 +24,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'multi line'"
                 ></demolink>
@@ -36,6 +38,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(topleft)'"
                 ></demolink>
@@ -52,6 +55,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(topright)'"
                 ></demolink>
@@ -68,6 +72,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(bottomleft)'"
                 ></demolink>
@@ -84,6 +89,7 @@
 
             <div class="bk">
                 <demolink
+                    :pkgname="'w-geo-vue'"
                     :kbname="'w-spt-liq-plot-depth'"
                     :casename="'one line & legendPosition(bottomright)'"
                 ></demolink>
@@ -105,7 +111,7 @@
 </template>
 
 <script>
-import demolink from './components/demolink.vue'
+import demolink from 'w-component-vue/src/components/demolink.vue'
 import WSptLiqPlotDepth from './components/WSptLiqPlotDepth.vue'
 
 export default {
