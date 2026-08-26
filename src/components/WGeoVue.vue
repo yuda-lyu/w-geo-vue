@@ -1,5 +1,7 @@
 <script>
 import WPlot2d from './WPlot2d.vue'
+import WSoilColumn from './WSoilColumn.vue'
+import WSoilColumnWithAnchors from './WSoilColumnWithAnchors.vue'
 import WSptLiqAnalysis from './WSptLiqAnalysis.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
 import WSptLiqPlotDepths from './WSptLiqPlotDepths.vue'
@@ -9,6 +11,8 @@ import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAn
 let WGeoVue = {
     install: function(Vue) {
         Vue.component('w-plot-2-d', WPlot2d)
+        Vue.component('w-soil-column', WSoilColumn)
+        Vue.component('w-soil-column-with-anchors', WSoilColumnWithAnchors)
         Vue.component('w-spt-liq-analysis', WSptLiqAnalysis)
         Vue.component('w-spt-liq-plot-depth', WSptLiqPlotDepth)
         Vue.component('w-spt-liq-plot-depths', WSptLiqPlotDepths)

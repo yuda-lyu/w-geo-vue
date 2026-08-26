@@ -117,12 +117,12 @@
                 style="cursor:pointer;"
                 title="open for copy link to view component"
                 onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
-            >w-plot-2d</span>
+            >w-soil-column</span>
         </div>
         <div class="bk">
             <div class="item">default</div>
 
-            <w-plot-2d :options="WPlot2d.option1"></w-plot-2d>
+            <w-soil-column :items="WSoilColumn.items1"></w-soil-column>
         </div>
     </div>
 
@@ -136,34 +136,75 @@
 
     data: function() {
       return {
-        WPlot2d: {
-          option1: {
-            title: {
-              text: "AAPL Stock Price"
+        WSoilColumn: {
+          items1: [
+            {
+              depthStart: 0,
+              depthEnd: 2.025,
+              legendCode: "207",
+              description: "Silty Gravel"
             },
-            xAxis: {
-              type: "datetime"
+            {
+              depthStart: 2.025,
+              depthEnd: 5.025,
+              legendCode: "227",
+              description: "Silty Fine Sand"
             },
-            yAxis: {
-              title: {
-                text: "Price"
-              }
+            {
+              depthStart: 5.025,
+              depthEnd: 6.525,
+              legendCode: "227",
+              description: "Silty Fine Sand"
             },
-            tooltip: {
-              headerFormat:
-                '<div style="font-size:8pt;">{point.x:%Y/%m/%d %H:%M}</div><br/>',
-              pointFormat: " Price: <b>{point.y}</b>"
+            {
+              depthStart: 6.525,
+              depthEnd: 8.025,
+              legendCode: "106",
+              description: "Low Plasticity Clay"
             },
-            series: [
-              {
-                name: "AAPL",
-                data: window.dataAAPL,
-                tooltip: {
-                  valueDecimals: 2
-                }
-              }
-            ]
-          }
+            {
+              depthStart: 8.025,
+              depthEnd: 9.525,
+              legendCode: "227",
+              description: "Silty Fine Sand"
+            },
+            {
+              depthStart: 9.525,
+              depthEnd: 11.025,
+              legendCode: "105",
+              description: "Low Plasticity Silt with Sand"
+            },
+            {
+              depthStart: 11.025,
+              depthEnd: 12.525,
+              legendCode: "105",
+              description: "Low Plasticity Silt"
+            },
+            {
+              depthStart: 12.525,
+              depthEnd: 14.025,
+              legendCode: "227",
+              description: "Silty Medium Fine Sand"
+            },
+            {
+              depthStart: 14.025,
+              depthEnd: 15.525,
+              legendCode: "227",
+              description: "Silty Coarse Medium Sand"
+            },
+            {
+              depthStart: 15.525,
+              depthEnd: 17.025,
+              legendCode: "105",
+              description: "Low Plasticity Silt with Sand"
+            },
+            {
+              depthStart: 17.025,
+              depthEnd: 20,
+              legendCode: "106",
+              description: "Low Plasticity Clay"
+            }
+          ]
         }
       };
     },

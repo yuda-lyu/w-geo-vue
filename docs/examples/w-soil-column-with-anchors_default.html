@@ -117,12 +117,22 @@
                 style="cursor:pointer;"
                 title="open for copy link to view component"
                 onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
-            >w-plot-2d</span>
+            >w-soil-column-with-anchors</span>
         </div>
         <div class="bk">
             <div class="item">default</div>
 
-            <w-plot-2d :options="WPlot2d.option1"></w-plot-2d>
+            <div style="width:420px;">
+                <w-soil-column-with-anchors
+                    :items="WSoilColumnWithAnchors.items1"
+                    :markers="WSoilColumnWithAnchors.markers1"
+                    @click-marker="clickMarker1"
+                ></w-soil-column-with-anchors>
+            </div>
+
+            <div
+                style="padding-top:10px; font-size:0.85rem; color:#666;"
+            >click-marker: {{WSoilColumnWithAnchors.msg1}}</div>
         </div>
     </div>
 
@@ -136,33 +146,20 @@
 
     data: function() {
       return {
-        WPlot2d: {
-          option1: {
-            title: {
-              text: "AAPL Stock Price"
-            },
-            xAxis: {
-              type: "datetime"
-            },
-            yAxis: {
-              title: {
-                text: "Price"
-              }
-            },
-            tooltip: {
-              headerFormat:
-                '<div style="font-size:8pt;">{point.x:%Y/%m/%d %H:%M}</div><br/>',
-              pointFormat: " Price: <b>{point.y}</b>"
-            },
-            series: [
-              {
-                name: "AAPL",
-                data: window.dataAAPL,
-                tooltip: {
-                  valueDecimals: 2
-                }
-              }
-            ]
+        WSoilColumnWithAnchors: {
+          items1,
+          markers1,
+          msg1: "",
+          markers2: map(markers1, m => {
+            return { ...m, state: "normal" };
+          }),
+          msg2: "",
+          optionsSegments2: {
+            segmentBackgroundType: "color",
+            segmentBackgroundColor: "#FFB74D",
+            segmentBorderColor: "#FB8C00",
+            axisColor: "#666",
+            tickColor: "#666"
           }
         }
       };
@@ -171,7 +168,25 @@
       return {};
     },
     computed: {},
-    methods: {}
+    methods: {
+      clickMarker1: function(msg) {
+        let vo = this;
+        vo.WSoilColumnWithAnchors.msg1 = get(msg, "item.key", "");
+      },
+
+      //點擊切換active狀態: 傳入新陣列即可更新各區塊樣式
+      clickMarker2: function(msg) {
+        let vo = this;
+        let key = get(msg, "item.key", "");
+        vo.WSoilColumnWithAnchors.msg2 = key;
+        vo.WSoilColumnWithAnchors.markers2 = map(
+          vo.WSoilColumnWithAnchors.markers2,
+          m => {
+            return { ...m, state: m.key === key ? "active" : "normal" };
+          }
+        );
+      }
+    }
   });
     </script>
 </body>

@@ -15,25 +15,20 @@
             </div>
 
             <!-- paddingStyle須配合getDefChart的margin值 -->
-            <WSegmentsVertical
+            <WSoilColumn
                 :items="geocolItems"
                 :width="stGl.width"
                 :height="stGl.height"
                 :paddingStyle="paddingStyleGeolayer"
                 :tickSize="30"
                 :segmentSize="25"
-                :segmentBackgroundType="'image'"
-                :funSegmentBackgroundImage="getSegmentBackgroundIcon"
-                :segmentBorderColor="{v:'transparent',h:'#444'}"
-                :axisColor="'transparent'"
-                :tickColor="'#444'"
-                :keyValueStart="geocolKeyValueStart"
-                :keyValueEnd="geocolKeyValueEnd"
+                :keyDepthStart="geocolKeyValueStart"
+                :keyDepthEnd="geocolKeyValueEnd"
                 :keyText="geocolKeyText"
-                :alignEnd="'left'"
-                :textShift="80"
+                :keyLegendCode="geocolKeyLegendCode"
+                :mergeSameLayers="geocolMergeSameLayers"
                 :title="stGl.depthTitle"
-                :funFormatTickValue="getTickValue"
+                :optionsSegments="{textShift:80}"
             >
                 <template v-slot:support-right="props">
                     <div :style="`padding-top:${props.convertValueToY(waterLevel)}px;`">
@@ -70,7 +65,7 @@
 
                     </div>
                 </template>
-            </WSegmentsVertical>
+            </WSoilColumn>
 
             <div :style="`width:${stGl.width}px; height:${zoneBottomHeight}px; overflow:auto;`">
                 <slot
@@ -131,17 +126,12 @@
 
 <script>
 import get from 'lodash-es/get.js'
-import each from 'lodash-es/each.js'
 import map from 'lodash-es/map.js'
-import trim from 'lodash-es/trim.js'
 import filter from 'lodash-es/filter.js'
-import cloneDeep from 'lodash-es/cloneDeep.js'
-import dig from 'wsemi/src/dig.mjs'
 import iseobj from 'wsemi/src/iseobj.mjs'
 import isnum from 'wsemi/src/isnum.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
-import importResources from 'wsemi/src/importResources.mjs'
-import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
+import WSoilColumn from './WSoilColumn.vue'
 import WSptLiqPlotDepth from './WSptLiqPlotDepth.vue'
 import getDefChart from '../js/getDefChart.mjs'
 
@@ -151,7 +141,7 @@ import getDefChart from '../js/getDefChart.mjs'
  *
  * 具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制
  *
- * 土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖
+ * 土柱圖由WSoilColumn繪製，土壤圖示為套件內建不依賴網路載入
  *
  * @vue-prop {Array} [sts=[]] 輸入多個繪圖狀態物件陣列，可由getSts產生，各物件格式同WSptLiqPlotDepth之st，其中key為'Geolayer'者代表土柱圖，預設[]
  * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，除下列鍵值外，其餘鍵值同WSptLiqPlotDepth之optionsPic並向下傳遞，預設{}
@@ -165,22 +155,20 @@ import getDefChart from '../js/getDefChart.mjs'
  * @vue-prop {String} [optionsPic.geocolKeyLegendCode='legendCode'] 輸入土柱圖各層土壤圖例代碼之欄位key字串，供對應土壤圖示，預設'legendCode'
  * @vue-prop {Boolean} [optionsPic.geocolMergeSameLayers=false] 輸入土柱圖是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false
  * @vue-data {Number} dw 儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框
- * @vue-data {Object} kpGlIcon 儲存土壤圖例代碼對應土壤圖示物件
  * @vue-computed {Object} paddingStyleGeolayer 回傳土柱圖之內距物件，供上下對齊Highcharts繪圖區
  * @vue-computed {Object} stGl 回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null
- * @vue-computed {Boolean} hasKpGlIcon 回傳是否已載入土壤圖示布林值
  * @vue-computed {Boolean} hasGeolayer 回傳是否繪製土柱圖布林值
  * @vue-computed {Number} waterLevel 回傳地下水位深度數字，單位m
  * @vue-computed {Array} stOthers 回傳土柱圖以外之各參數繪圖狀態物件陣列，且非最左側者自動清除深度軸標題
  * @vue-computed {Number} zoneTopHeight 回傳繪圖上方插槽區塊高度數字
  * @vue-computed {Number} zoneBottomHeight 回傳繪圖下方插槽區塊高度數字
- * @vue-computed {Array} geocolItems 回傳供土柱圖繪製之各土層數據陣列
+ * @vue-computed {Array} geocolItems 回傳供土柱圖繪製之各土層數據陣列，相鄰同層合併由WSoilColumn依geocolMergeSameLayers處理
  * @vue-computed {Number} spaceGeolayer 回傳土柱圖與參數圖之間距數字
  * @vue-computed {Number} spacePlot 回傳各參數圖之間距數字
  */
 export default {
     components: {
-        WSegmentsVertical,
+        WSoilColumn,
         WSptLiqPlotDepth,
     },
     props: {
@@ -200,20 +188,7 @@ export default {
             //marginLeft(60) - ml/2(3)
             dw: 60 - 3,
 
-            kpGlIcon: {},
-
         }
-    },
-    mounted: function() {
-        let vo = this
-
-        importResources('https://cdn.jsdelivr.net/npm/w-demores/res/data/dataCivilSoilCodeIcon.js')
-            .then((res) => {
-                // console.log(res)
-                // console.log('window.dataCivilSoilCodeIcon', window.dataCivilSoilCodeIcon)
-                vo.kpGlIcon = window.dataCivilSoilCodeIcon
-            })
-
     },
     computed: {
 
@@ -246,17 +221,9 @@ export default {
             return null
         },
 
-        hasKpGlIcon: function() {
-            let vo = this
-            let b = iseobj(vo.kpGlIcon)
-            return b
-        },
-
         hasGeolayer: function() {
             let vo = this
-            let b1 = iseobj(vo.stGl)
-            let b2 = vo.hasKpGlIcon
-            let b = b1 && b2
+            let b = iseobj(vo.stGl)
             return b
         },
 
@@ -344,9 +311,6 @@ export default {
         geocolItems: function() {
             let vo = this
             let items = get(vo, 'stGl.item.data', [])
-            if (vo.geocolMergeSameLayers) {
-                items = vo.mergeSameLegendCodeAndText(items)
-            }
             return items
         },
 
@@ -375,20 +339,6 @@ export default {
     },
     methods: {
 
-        getSegmentBackgroundIcon: function(item) {
-            // console.log('getSegmentBackgroundIcon', item)
-            let vo = this
-            let legendCode = get(item, vo.geocolKeyLegendCode, '')
-            // console.log('legendCode', legendCode)
-            let bgicon = get(vo.kpGlIcon, legendCode, '')
-            // console.log('bgicon', bgicon)
-            return bgicon
-        },
-
-        getTickValue: function(v) {
-            return dig(v, 1)
-        },
-
         getWidth: function(opt) {
             let w = get(opt, 'chart.width', null)
             if (!isnum(w)) {
@@ -396,29 +346,6 @@ export default {
             }
             w = cdbl(w)
             return w
-        },
-
-        mergeSameLegendCodeAndText: function(items) {
-            let vo = this
-            let itemsTemp = cloneDeep(items)
-            each(itemsTemp, (_v, k) => {
-                if (k === 0) {
-                    return true //跳出換下一個
-                }
-                let k0 = k - 1
-                let k1 = k
-                let v0 = get(itemsTemp, k0, {})
-                let v1 = get(itemsTemp, k1, {})
-                let b1 = v0[vo.geocolKeyLegendCode] === v1[vo.geocolKeyLegendCode]
-                let b2 = trim(v0[vo.geocolKeyText]) === trim(v1[vo.geocolKeyText]) //土壤描述也要相同才合併
-                let b = b1 && b2
-                if (b) {
-                    itemsTemp[k1][vo.geocolKeyValueStart] = v0[vo.geocolKeyValueStart] //使用前一層depthStart
-                    itemsTemp[k0] = null
-                }
-            })
-            itemsTemp = filter(itemsTemp, iseobj)
-            return itemsTemp
         },
 
     }

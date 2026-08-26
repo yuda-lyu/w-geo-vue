@@ -84,6 +84,10 @@
 
             <AppZoneWPlot2d v-if="cmpPick==='WPlot2d'"></AppZoneWPlot2d>
 
+            <AppZoneWSoilColumn v-if="cmpPick==='WSoilColumn'"></AppZoneWSoilColumn>
+
+            <AppZoneWSoilColumnWithAnchors v-if="cmpPick==='WSoilColumnWithAnchors'"></AppZoneWSoilColumnWithAnchors>
+
             <AppZoneWSptLiqPlotDepth v-if="cmpPick==='WSptLiqPlotDepth'"></AppZoneWSptLiqPlotDepth>
 
             <AppZoneWSptLiqPlotDepths v-if="cmpPick==='WSptLiqPlotDepths'"></AppZoneWSptLiqPlotDepths>
@@ -110,6 +114,8 @@ import strdelright from 'wsemi/src/strdelright.mjs'
 import urlParse from 'wsemi/src/urlParse.mjs'
 import WListHorizontal from 'w-component-vue/src/components/WListHorizontal.vue'
 import AppZoneWPlot2d from './AppZoneWPlot2d.vue'
+import AppZoneWSoilColumn from './AppZoneWSoilColumn.vue'
+import AppZoneWSoilColumnWithAnchors from './AppZoneWSoilColumnWithAnchors.vue'
 import AppZoneWSptLiqPlotDepth from './AppZoneWSptLiqPlotDepth.vue'
 import AppZoneWSptLiqPlotDepths from './AppZoneWSptLiqPlotDepths.vue'
 import AppZoneWSptLiqPlotDepthsWithGrades from './AppZoneWSptLiqPlotDepthsWithGrades.vue'
@@ -130,6 +136,8 @@ export default {
     components: {
         WListHorizontal,
         AppZoneWPlot2d,
+        AppZoneWSoilColumn,
+        AppZoneWSoilColumnWithAnchors,
         AppZoneWSptLiqPlotDepth,
         AppZoneWSptLiqPlotDepths,
         AppZoneWSptLiqPlotDepthsWithGrades,
@@ -139,6 +147,8 @@ export default {
     data: function() {
         let cmps = [
             { name: 'WPlot2d', },
+            { name: 'WSoilColumn', },
+            { name: 'WSoilColumnWithAnchors', },
             { name: 'WSptLiqPlotDepth', },
             { name: 'WSptLiqPlotDepths', },
             { name: 'WSptLiqPlotDepthsWithGrades', },

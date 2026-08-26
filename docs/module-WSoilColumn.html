@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>WSoilColumn - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">WSoilColumn</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+                <div class="description usertext"><p>以WSegmentsVertical繪製隨深度之土柱圖，各土層依土壤圖例代碼(legendCode)顯示對應土壤圖示，為WSoilColumnWithAnchors與WSptLiqPlotDepths共用之土柱圖核心</p>
+<p>深度方向約定：組件內部一律往下為正(地表為0、地下大於0)，傳入之土層深度(keyDepthStart/keyDepthEnd)須依此預先處理好正負號，刻度顯示符號另由tickDownPositive控制，僅影響刻度顯示文字不影響任何計算</p>
+<p>土壤圖示內建於套件(src/js/dataCivilSoilCodeIcon.mjs，取自w-demores)，不依賴網路載入，可支援無連外網路之環境；若需自訂圖示可由kpIcon給予</p>
+<p>具名插槽(slot)：'text'為土層右側描述文字區塊，提供作用域參數item與index，未給予時使用WSegmentsVertical之預設文字區(三角+keyText文字)；'popup'為土層彈窗內容區塊，提供作用域參數item與index；'support-left'與'support-right'為繪圖區左右側之附加內容區塊，提供作用域參數convertValueToY，為深度轉繪圖區y座標之函數，供外部定位水位等標記</p></p></div></div> 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
+<table data-jsdoc-vuejs="table-props">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Required?</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>items</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入土層項目物件陣列，各項目至少含keyDepthStart與keyDepthEnd兩數字欄位(往下為正)，並以keyLegendCode欄位對應土壤圖示，其餘欄位原樣供popup插槽使用，預設[]</td>
+    </tr><tr>
+        <td><code>keyDepthStart</code></td>
+        <td>String</td>
+        <td><code>'depthStart'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放起始深度之欄位字串，預設'depthStart'</td>
+    </tr><tr>
+        <td><code>keyDepthEnd</code></td>
+        <td>String</td>
+        <td><code>'depthEnd'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放結束深度之欄位字串，預設'depthEnd'</td>
+    </tr><tr>
+        <td><code>keyText</code></td>
+        <td>String</td>
+        <td><code>'description'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放說明文字之欄位字串，預設'description'</td>
+    </tr><tr>
+        <td><code>keyLegendCode</code></td>
+        <td>String</td>
+        <td><code>'legendCode'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放土壤圖例代碼之欄位字串，供對應土壤圖示，預設'legendCode'</td>
+    </tr><tr>
+        <td><code>mergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false</td>
+    </tr><tr>
+        <td><code>kpIcon</code></td>
+        <td>Object</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串，值為圖片data URI或網址字串，給予null時使用內建之dataCivilSoilCodeIcon，預設null</td>
+    </tr><tr>
+        <td><code>width</code></td>
+        <td>Number</td>
+        <td><code>191</code></td>
+        <td>No</td>
+        <td>輸入土柱繪圖寬度數字，單位px，預設191</td>
+    </tr><tr>
+        <td><code>height</code></td>
+        <td>Number</td>
+        <td><code>504</code></td>
+        <td>No</td>
+        <td>輸入土柱繪圖高度數字，單位px，預設504</td>
+    </tr><tr>
+        <td><code>paddingStyle</code></td>
+        <td>Object</td>
+        <td><code>{top:10,right:0,bottom:10,left:60}</code></td>
+        <td>No</td>
+        <td>輸入內距物件，可用鍵值為top、right、bottom、left，各為數字，單位px，left須容納深度刻度文字，預設{top:10,right:0,bottom:10,left:60}</td>
+    </tr><tr>
+        <td><code>depthMin</code></td>
+        <td>Number</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入深度軸最小值數字，給予null時自items自動計算，無items時為0，預設null</td>
+    </tr><tr>
+        <td><code>depthMax</code></td>
+        <td>Number</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入深度軸最大值數字，給予null時自items自動計算，無items時為12，預設null</td>
+    </tr><tr>
+        <td><code>title</code></td>
+        <td>String</td>
+        <td><code>''</code></td>
+        <td>No</td>
+        <td>輸入深度軸標題字串，給予空字串時不顯示，預設''</td>
+    </tr><tr>
+        <td><code>tickSize</code></td>
+        <td>Number</td>
+        <td><code>25</code></td>
+        <td>No</td>
+        <td>輸入深度刻度尺寸(為單側寬度)數字，刻度文字位於刻度左側，故須大於等於segmentSize文字才不會與土柱重疊，單位px，預設25</td>
+    </tr><tr>
+        <td><code>segmentSize</code></td>
+        <td>Number</td>
+        <td><code>20</code></td>
+        <td>No</td>
+        <td>輸入土柱區塊尺寸(為單側寬度)數字，單位px，預設20</td>
+    </tr><tr>
+        <td><code>tickDownPositive</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入深度刻度顯示符號布林值，true代表往下顯示為正(原值)，false代表往下顯示為負(深度0不加負號)，僅影響顯示不影響計算，預設true</td>
+    </tr><tr>
+        <td><code>tickDigits</code></td>
+        <td>Number</td>
+        <td><code>1</code></td>
+        <td>No</td>
+        <td>輸入深度刻度文字取用小數點位數數字，預設1</td>
+    </tr><tr>
+        <td><code>funFormatTickValue</code></td>
+        <td>function</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入處理深度刻度值用以顯示函數，給予時取代內建格式化(tickDownPositive與tickDigits失效)，預設null</td>
+    </tr><tr>
+        <td><code>layerWithPopup</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土層是否可點擊顯示popup彈窗布林值，彈窗內容由slot之popup提供，預設false</td>
+    </tr><tr>
+        <td><code>layerCanClick</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土層是否可點擊布林值，可點擊時發出click-layer事件，預設false</td>
+    </tr><tr>
+        <td><code>optionsSegments</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入向下傳遞至WSegmentsVertical之設定物件，鍵值同WSegmentsVertical之props(如tickColor、axisColor、segmentBorderColor、textShift、segmentBackgroundType等)，惟組件已顯式綁定之props(items、width、height、paddingStyle、keyValueStart、keyValueEnd、keyText、valueMin、valueMax、title、tickSize、segmentSize、segmentWithPopup、segmentCanClick、funSegmentBackgroundImage、funFormatTickValue)以組件為準不可覆蓋；另內建預設segmentBackgroundType為'image'、tickColor為'#444'、axisColor為'transparent'、segmentBorderColor為{v:'transparent',h:'#444'}、alignEnd為'left'，皆可由本物件覆蓋，預設{}</td>
+    </tr></tbody>
+</table>
+
+
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpIconEff</code></td>
+        <td>Object</td>
+        <td>回傳實際使用之土壤圖示物件，優先取用kpIcon，否則為內建圖示</td>
+    </tr><tr>
+        <td><code>useItems</code></td>
+        <td>Array</td>
+        <td>回傳實際供繪製之土層項目陣列，已依mergeSameLayers合併相鄰同層</td>
+    </tr><tr>
+        <td><code>depthMinEff</code></td>
+        <td>Number</td>
+        <td>回傳實際使用之深度軸最小值數字</td>
+    </tr><tr>
+        <td><code>depthMaxEff</code></td>
+        <td>Number</td>
+        <td>回傳實際使用之深度軸最大值數字</td>
+    </tr><tr>
+        <td><code>optionsSegmentsEff</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSegmentsVertical之設定物件，已套用內建預設</td>
+    </tr></tbody>
+</table>
+
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>click-layer</code></td>
+        <td>Object</td>
+        <td>當layerCanClick為true且使用者點擊土層時，回傳{ev,item}物件，item為該土層物件</td>
+    </tr></tbody>
+</table>
+
+
+<div class="container-overview"><div><p> 
+</div>
+            
+
+            
+                
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>以WSegmentsVertical繪製隨深度之土柱圖，各土層依土壤圖例代碼(legendCode)顯示對應土壤圖示，為WSoilColumnWithAnchors與WSptLiqPlotDepths共用之土柱圖核心</p>
+<p>深度方向約定：組件內部一律往下為正(地表為0、地下大於0)，傳入之土層深度(keyDepthStart/keyDepthEnd)須依此預先處理好正負號，刻度顯示符號另由tickDownPositive控制，僅影響刻度顯示文字不影響任何計算</p>
+<p>土壤圖示內建於套件(src/js/dataCivilSoilCodeIcon.mjs，取自w-demores)，不依賴網路載入，可支援無連外網路之環境；若需自訂圖示可由kpIcon給予</p>
+<p>具名插槽(slot)：'text'為土層右側描述文字區塊，提供作用域參數item與index，未給予時使用WSegmentsVertical之預設文字區(三角+keyText文字)；'popup'為土層彈窗內容區塊，提供作用域參數item與index；'support-left'與'support-right'為繪圖區左右側之附加內容區塊，提供作用域參數convertValueToY，為深度轉繪圖區y座標之函數，供外部定位水位等標記</p></p></div></div> 
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
+<table data-jsdoc-vuejs="table-props">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Required?</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>items</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>No</td>
+        <td>輸入土層項目物件陣列，各項目至少含keyDepthStart與keyDepthEnd兩數字欄位(往下為正)，並以keyLegendCode欄位對應土壤圖示，其餘欄位原樣供popup插槽使用，預設[]</td>
+    </tr><tr>
+        <td><code>keyDepthStart</code></td>
+        <td>String</td>
+        <td><code>'depthStart'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放起始深度之欄位字串，預設'depthStart'</td>
+    </tr><tr>
+        <td><code>keyDepthEnd</code></td>
+        <td>String</td>
+        <td><code>'depthEnd'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放結束深度之欄位字串，預設'depthEnd'</td>
+    </tr><tr>
+        <td><code>keyText</code></td>
+        <td>String</td>
+        <td><code>'description'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放說明文字之欄位字串，預設'description'</td>
+    </tr><tr>
+        <td><code>keyLegendCode</code></td>
+        <td>String</td>
+        <td><code>'legendCode'</code></td>
+        <td>No</td>
+        <td>輸入土層項目存放土壤圖例代碼之欄位字串，供對應土壤圖示，預設'legendCode'</td>
+    </tr><tr>
+        <td><code>mergeSameLayers</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false</td>
+    </tr><tr>
+        <td><code>kpIcon</code></td>
+        <td>Object</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串，值為圖片data URI或網址字串，給予null時使用內建之dataCivilSoilCodeIcon，預設null</td>
+    </tr><tr>
+        <td><code>width</code></td>
+        <td>Number</td>
+        <td><code>191</code></td>
+        <td>No</td>
+        <td>輸入土柱繪圖寬度數字，單位px，預設191</td>
+    </tr><tr>
+        <td><code>height</code></td>
+        <td>Number</td>
+        <td><code>504</code></td>
+        <td>No</td>
+        <td>輸入土柱繪圖高度數字，單位px，預設504</td>
+    </tr><tr>
+        <td><code>paddingStyle</code></td>
+        <td>Object</td>
+        <td><code>{top:10,right:0,bottom:10,left:60}</code></td>
+        <td>No</td>
+        <td>輸入內距物件，可用鍵值為top、right、bottom、left，各為數字，單位px，left須容納深度刻度文字，預設{top:10,right:0,bottom:10,left:60}</td>
+    </tr><tr>
+        <td><code>depthMin</code></td>
+        <td>Number</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入深度軸最小值數字，給予null時自items自動計算，無items時為0，預設null</td>
+    </tr><tr>
+        <td><code>depthMax</code></td>
+        <td>Number</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入深度軸最大值數字，給予null時自items自動計算，無items時為12，預設null</td>
+    </tr><tr>
+        <td><code>title</code></td>
+        <td>String</td>
+        <td><code>''</code></td>
+        <td>No</td>
+        <td>輸入深度軸標題字串，給予空字串時不顯示，預設''</td>
+    </tr><tr>
+        <td><code>tickSize</code></td>
+        <td>Number</td>
+        <td><code>25</code></td>
+        <td>No</td>
+        <td>輸入深度刻度尺寸(為單側寬度)數字，刻度文字位於刻度左側，故須大於等於segmentSize文字才不會與土柱重疊，單位px，預設25</td>
+    </tr><tr>
+        <td><code>segmentSize</code></td>
+        <td>Number</td>
+        <td><code>20</code></td>
+        <td>No</td>
+        <td>輸入土柱區塊尺寸(為單側寬度)數字，單位px，預設20</td>
+    </tr><tr>
+        <td><code>tickDownPositive</code></td>
+        <td>Boolean</td>
+        <td><code>true</code></td>
+        <td>No</td>
+        <td>輸入深度刻度顯示符號布林值，true代表往下顯示為正(原值)，false代表往下顯示為負(深度0不加負號)，僅影響顯示不影響計算，預設true</td>
+    </tr><tr>
+        <td><code>tickDigits</code></td>
+        <td>Number</td>
+        <td><code>1</code></td>
+        <td>No</td>
+        <td>輸入深度刻度文字取用小數點位數數字，預設1</td>
+    </tr><tr>
+        <td><code>funFormatTickValue</code></td>
+        <td>function</td>
+        <td><code>null</code></td>
+        <td>No</td>
+        <td>輸入處理深度刻度值用以顯示函數，給予時取代內建格式化(tickDownPositive與tickDigits失效)，預設null</td>
+    </tr><tr>
+        <td><code>layerWithPopup</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土層是否可點擊顯示popup彈窗布林值，彈窗內容由slot之popup提供，預設false</td>
+    </tr><tr>
+        <td><code>layerCanClick</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>No</td>
+        <td>輸入土層是否可點擊布林值，可點擊時發出click-layer事件，預設false</td>
+    </tr><tr>
+        <td><code>optionsSegments</code></td>
+        <td>Object</td>
+        <td><code>{}</code></td>
+        <td>No</td>
+        <td>輸入向下傳遞至WSegmentsVertical之設定物件，鍵值同WSegmentsVertical之props(如tickColor、axisColor、segmentBorderColor、textShift、segmentBackgroundType等)，惟組件已顯式綁定之props(items、width、height、paddingStyle、keyValueStart、keyValueEnd、keyText、valueMin、valueMax、title、tickSize、segmentSize、segmentWithPopup、segmentCanClick、funSegmentBackgroundImage、funFormatTickValue)以組件為準不可覆蓋；另內建預設segmentBackgroundType為'image'、tickColor為'#444'、axisColor為'transparent'、segmentBorderColor為{v:'transparent',h:'#444'}、alignEnd為'left'，皆可由本物件覆蓋，預設{}</td>
+    </tr></tbody>
+</table>
+
+
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>kpIconEff</code></td>
+        <td>Object</td>
+        <td>回傳實際使用之土壤圖示物件，優先取用kpIcon，否則為內建圖示</td>
+    </tr><tr>
+        <td><code>useItems</code></td>
+        <td>Array</td>
+        <td>回傳實際供繪製之土層項目陣列，已依mergeSameLayers合併相鄰同層</td>
+    </tr><tr>
+        <td><code>depthMinEff</code></td>
+        <td>Number</td>
+        <td>回傳實際使用之深度軸最小值數字</td>
+    </tr><tr>
+        <td><code>depthMaxEff</code></td>
+        <td>Number</td>
+        <td>回傳實際使用之深度軸最大值數字</td>
+    </tr><tr>
+        <td><code>optionsSegmentsEff</code></td>
+        <td>Object</td>
+        <td>回傳實際向下傳遞至WSegmentsVertical之設定物件，已套用內建預設</td>
+    </tr></tbody>
+</table>
+
+
+
+
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>click-layer</code></td>
+        <td>Object</td>
+        <td>當layerCanClick為true且使用者點擊土層時，回傳{ev,item}物件，item為該土層物件</td>
+    </tr></tbody>
+</table>
+
+
+<div class="container-overview"><div><p> 
+</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 26 2026 13:04:46 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

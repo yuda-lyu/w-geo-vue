@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
     
 </nav>
 
@@ -60,7 +60,7 @@
             
                 <div class="description usertext"><p>並排繪製多個參數之深度剖線圖，當sts第1筆之key為'Geolayer'時，會於最左側改以土柱圖繪製地層並標註地下水位，其餘參數則各自呼叫WSptLiqPlotDepth繪圖，且僅最左側參數圖保留深度軸標題與刻度文字</p>
 <p>具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制</p>
-<p>土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖</p></p></div></div> 
+<p>土柱圖由WSoilColumn繪製，土壤圖示為套件內建不依賴網路載入</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -160,11 +160,6 @@
         <td>Number</td>
         <td>-</td>
         <td>儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框</td>
-    </tr><tr>
-        <td><code>kpGlIcon</code></td>
-        <td>Object</td>
-        <td>-</td>
-        <td>儲存土壤圖例代碼對應土壤圖示物件</td>
     </tr></tbody>
 </table>
 
@@ -188,10 +183,6 @@
         <td>Object</td>
         <td>回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null</td>
     </tr><tr>
-        <td><code>hasKpGlIcon</code></td>
-        <td>Boolean</td>
-        <td>回傳是否已載入土壤圖示布林值</td>
-    </tr><tr>
         <td><code>hasGeolayer</code></td>
         <td>Boolean</td>
         <td>回傳是否繪製土柱圖布林值</td>
@@ -214,7 +205,7 @@
     </tr><tr>
         <td><code>geocolItems</code></td>
         <td>Array</td>
-        <td>回傳供土柱圖繪製之各土層數據陣列</td>
+        <td>回傳供土柱圖繪製之各土層數據陣列，相鄰同層合併由WSoilColumn依geocolMergeSameLayers處理</td>
     </tr><tr>
         <td><code>spaceGeolayer</code></td>
         <td>Number</td>
@@ -245,7 +236,7 @@
     <dt class="tag-description">Description:</dt>
     <dd class="tag-description"><ul class="dummy"><li><p>並排繪製多個參數之深度剖線圖，當sts第1筆之key為'Geolayer'時，會於最左側改以土柱圖繪製地層並標註地下水位，其餘參數則各自呼叫WSptLiqPlotDepth繪圖，且僅最左側參數圖保留深度軸標題與刻度文字</p>
 <p>具名插槽(slot)：'zone-top-geolayer'與'zone-bottom-geolayer'為土柱圖之上下方區塊，提供作用域參數width與height；'zone-top-pic'與'zone-bottom-pic'為各參數圖之上下方區塊，提供作用域參數width、height與st，各區塊高度由optionsPic之zoneTopHeight與zoneBottomHeight控制</p>
-<p>土柱圖示需由網路載入w-demores之dataCivilSoilCodeIcon，未載入完成前不繪製土柱圖</p></p></div></div> 
+<p>土柱圖由WSoilColumn繪製，土壤圖示為套件內建不依賴網路載入</p></p></div></div> 
 
 
 <h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
@@ -345,11 +336,6 @@
         <td>Number</td>
         <td>-</td>
         <td>儲存最左側參數圖之插槽區塊左移距離數字，單位px，供插槽內容能對齊至繪圖框</td>
-    </tr><tr>
-        <td><code>kpGlIcon</code></td>
-        <td>Object</td>
-        <td>-</td>
-        <td>儲存土壤圖例代碼對應土壤圖示物件</td>
     </tr></tbody>
 </table>
 
@@ -373,10 +359,6 @@
         <td>Object</td>
         <td>回傳土柱圖之繪圖狀態物件，若sts第1筆非土柱圖則回傳null</td>
     </tr><tr>
-        <td><code>hasKpGlIcon</code></td>
-        <td>Boolean</td>
-        <td>回傳是否已載入土壤圖示布林值</td>
-    </tr><tr>
         <td><code>hasGeolayer</code></td>
         <td>Boolean</td>
         <td>回傳是否繪製土柱圖布林值</td>
@@ -399,7 +381,7 @@
     </tr><tr>
         <td><code>geocolItems</code></td>
         <td>Array</td>
-        <td>回傳供土柱圖繪製之各土層數據陣列</td>
+        <td>回傳供土柱圖繪製之各土層數據陣列，相鄰同層合併由WSoilColumn依geocolMergeSameLayers處理</td>
     </tr><tr>
         <td><code>spaceGeolayer</code></td>
         <td>Number</td>
@@ -519,7 +501,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Aug 25 2026 16:58:36 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Aug 26 2026 13:04:46 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
