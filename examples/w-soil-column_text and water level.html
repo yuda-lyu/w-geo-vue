@@ -1,0 +1,274 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-tw">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>w-geo-vue</title>
+
+    <!-- @babel/polyfill -->
+    <script
+        nomodule
+        src="https://cdn.jsdelivr.net/npm/@babel/polyfill/dist/polyfill.min.js"
+    ></script>
+
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js"></script>
+
+    <!-- extractHtml已自動添加@babel/polyfill與vue -->
+
+    <!-- fontawesome -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"
+        rel="stylesheet"
+    />
+
+    <!-- mdi, 各組件使用mdi/js會於轉單頁時改為mdi icon, 故需引用mdi/css -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css"
+        rel="stylesheet"
+    />
+
+    <!-- google, 各組件使用mdi/js故不需引用 -->
+    <link
+        _href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+        rel="stylesheet"
+    />
+    <link
+        _href="https://fonts.googleapis.com/css?family=Material+Icons"
+        rel="stylesheet"
+    />
+
+    <!-- data -->
+    <script src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataAAPL.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataUSD2EUR.js"
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataTemperature.js"
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataHousePriceArea.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataFlare.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataRain.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/w-demores/res/data/dataRainClip.js"
+    ></script>
+
+    <!-- w-geo-vue -->
+    <script src="https://cdn.jsdelivr.net/npm/w-geo-vue@1.0.49/dist/w-geo-vue.umd.js"></script>
+
+    <style>
+  .item {
+    /* 因item位於demolink, 提取各範例html後會刪除demolink, 故得額外補上 */
+    border-left: 3px solid #ffba75;
+    margin: 5px 5px 8px 0px;
+    padding: 3px 3px 5px 10px;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .head1 {
+    padding: 0px 0px 20px 0px;
+    font-size: 2.5rem;
+  }
+  .bkh {
+    /* 寬 */
+    padding: 20px;
+  }
+  @media screen and (max-width: 800px) {
+    /* 中 */
+    .bkh {
+      padding: 10px;
+    }
+  }
+  @media screen and (max-width: 400px) {
+    /* 窄 */
+    .bkh {
+      padding: 5px;
+    }
+  }
+  .bk {
+    /* 寬 */
+    display: inline-block;
+    vertical-align: top;
+    padding: 0px 80px 60px 0px;
+  }
+  @media screen and (max-width: 1000px) {
+    /* 中窄 */
+    .bk {
+      display: block;
+      padding: 0px 0px 50px 0px;
+    }
+  }
+    </style>
+</head>
+<body
+    style="font-family:'Microsoft JhengHei','Avenir','Helvetica'; padding:0px; margin:0px;"
+>
+    <div id="app" class="bkh" style>
+        <div class="head1">
+            <span
+                style="cursor:pointer;"
+                title="open for copy link to view component"
+                onclick="window.open('//yuda-lyu.github.io/w-geo-vue/examples/app.html?cmp='+this.innerText,'_blank')"
+            >w-soil-column</span>
+        </div>
+        <div class="bk">
+            <div class="item">text and water level</div>
+
+            <w-soil-column
+                :items="WSoilColumn.items1"
+                :width="350"
+                :padding-style="{top:30,right:0,bottom:20,left:85}"
+                :tick-size="30"
+                :segment-size="25"
+                :title="'Depth(m)'"
+                :merge-same-layers="true"
+                :options-segments="{textShift:80}"
+            >
+                <template v-slot:support-right="props">
+                    <div
+                        :style="`padding-top:${props.convertValueToY(0.5)}px;`"
+                    >
+                        <div style="padding-left:19px;">
+                            <div style="position:relative;">
+                                <div
+                                    style="position:absolute; top:-30px; left:1px; transform:translateX(-50%);"
+                                >
+                                    <div
+                                        style="white-space:nowrap; transform-origin:center; transform:scale(0.6);"
+                                    >0.5m</div>
+                                </div>
+                                <div
+                                    style="position:absolute; top:-15px; left:0px; transform:translateX(-50%);"
+                                >
+                                    <svg
+                                        width="14"
+                                        height="12"
+                                        viewBox="0 0 14 12"
+                                    >
+                                        <polygon
+                                            points="2,0 12,0 7,9"
+                                            style="fill:rgba(0,0,0,0);stroke:#000;stroke-width:1"
+                                        />
+                                        <line
+                                            x1="0"
+                                            y1="9"
+                                            x2="14"
+                                            y2="9"
+                                            style="stroke:#000;stroke-width:1"
+                                        />
+                                        <line
+                                            x1="4"
+                                            y1="11"
+                                            x2="11"
+                                            y2="11"
+                                            style="stroke:#000;stroke-width:1"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </w-soil-column>
+        </div>
+    </div>
+
+    <script>
+  //install
+  Vue.use(window["w-geo-vue"]);
+
+  //initialize
+  new Vue({
+    el: "#app",
+
+    data: function() {
+      return {
+        WSoilColumn: {
+          items1: [
+            {
+              depthStart: 0,
+              depthEnd: 2.025,
+              legendCode: "207",
+              description: "Silty Gravel"
+            },
+            {
+              depthStart: 2.025,
+              depthEnd: 5.025,
+              legendCode: "227",
+              description: "Silty Fine Sand"
+            },
+            {
+              depthStart: 5.025,
+              depthEnd: 6.525,
+              legendCode: "227",
+              description: "Silty Fine Sand"
+            },
+            {
+              depthStart: 6.525,
+              depthEnd: 8.025,
+              legendCode: "106",
+              description: "Low Plasticity Clay"
+            },
+            {
+              depthStart: 8.025,
+              depthEnd: 9.525,
+              legendCode: "227",
+              description: "Silty Fine Sand"
+            },
+            {
+              depthStart: 9.525,
+              depthEnd: 11.025,
+              legendCode: "105",
+              description: "Low Plasticity Silt with Sand"
+            },
+            {
+              depthStart: 11.025,
+              depthEnd: 12.525,
+              legendCode: "105",
+              description: "Low Plasticity Silt"
+            },
+            {
+              depthStart: 12.525,
+              depthEnd: 14.025,
+              legendCode: "227",
+              description: "Silty Medium Fine Sand"
+            },
+            {
+              depthStart: 14.025,
+              depthEnd: 15.525,
+              legendCode: "227",
+              description: "Silty Coarse Medium Sand"
+            },
+            {
+              depthStart: 15.525,
+              depthEnd: 17.025,
+              legendCode: "105",
+              description: "Low Plasticity Silt with Sand"
+            },
+            {
+              depthStart: 17.025,
+              depthEnd: 20,
+              legendCode: "106",
+              description: "Low Plasticity Clay"
+            }
+          ]
+        }
+      };
+    },
+    mounted: function() {
+      return {};
+    },
+    computed: {},
+    methods: {}
+  });
+    </script>
+</body>
+</html>
