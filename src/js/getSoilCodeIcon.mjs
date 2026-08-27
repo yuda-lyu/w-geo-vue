@@ -1,4 +1,4 @@
-let dataCivilSoilCodeIcon = {
+let kpCodeIcon = {
     '000': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAYCAYAAAC8/X7cAAAAnElEQVR4nO2XwQ6AIAxD0f//Z7140IXJBi0DQhMPhvC6BrJpSrqu52GJyt/FB/I/cIYZlH8W1o+MKVLN/FIAiAmTbwnwNmGpmm8NMKy0ANQugeTnAgx956W0E6gx8bRENt+9ubWfU/lLF5/EuteMzTcXId+RJr98xhzo2sVYg6zb5F52EnsVNrkRAUInN+oEpvr8sGjq39JdvId/A4iHU9mHtw9HAAAAAElFTkSuQmCC',
     '001': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAYCAYAAAC8/X7cAAAAlUlEQVR4nO2W4Q6AIAiEsfd/Z/pTGyOcTMnDjW9zmaF5ge2IipywaCSunnlWfyv6xWyMedbYIuByxLSJdWfmhDL6grrE5LjVhzHapLzXsSlKqD3NsxlI2VgCUqTeSy8Dx4iw0s70LRsdZz3riYb/kYoiIeW13jkeL/Q35bWQLHstdAktey2EgNDUozIQJgJxmqO91tncE3c/5Ejs03QAAAAASUVORK5CYII=',
     '002': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAAcUlEQVR4nO3XMQ6AIBBEUTTe/8rYG0yALX7C/NdpHNhM5bYmRbs+z72QpfPVu5cO+fuOzG9l78nQsSyAHoBmAfQANAugB6DFF/AM3q38UY2Q+erdUhq3wc1D3AZPYQH0ADQLoAegWQA9AC2+ALdBSdFeWmAgE1gpgVcAAAAASUVORK5CYII=',
@@ -176,9 +176,15 @@ let dataCivilSoilCodeIcon = {
 
 
 /**
- * 土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串(如'105'、'227')，值為png之data URI字串，取自w-demores之dataCivilSoilCodeIcon並改為ES模組，隨套件內建以支援無連外網路之環境
+ * 取得土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串(如'105'、'227')，值為png之data URI字串，圖示取自w-demores之dataCivilSoilCodeIcon並內建於本套件，供無連外網路之環境使用
  *
- * @memberOf w-geo-vue
- * @type {Object}
+ * 因圖示數據量大，回傳者為內部物件本身而非複製品，故取用時僅可讀取不可改寫
+ *
+ * @returns {Object} 回傳土壤圖例代碼對應土壤圖示物件
  */
-export default dataCivilSoilCodeIcon
+function getSoilCodeIcon() {
+    return kpCodeIcon
+}
+
+
+export default getSoilCodeIcon

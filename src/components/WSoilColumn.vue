@@ -53,7 +53,7 @@ import isfun from 'wsemi/src/isfun.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import dig from 'wsemi/src/dig.mjs'
 import WSegmentsVertical from 'w-component-vue/src/components/WSegmentsVertical.vue'
-import dataCivilSoilCodeIcon from '../js/dataCivilSoilCodeIcon.mjs'
+import getSoilCodeIcon from '../js/getSoilCodeIcon.mjs'
 
 
 /**
@@ -61,7 +61,7 @@ import dataCivilSoilCodeIcon from '../js/dataCivilSoilCodeIcon.mjs'
  *
  * 深度方向約定：組件內部一律往下為正(地表為0、地下大於0)，傳入之土層深度(keyDepthStart/keyDepthEnd)須依此預先處理好正負號，刻度顯示符號另由tickDownPositive控制，僅影響刻度顯示文字不影響任何計算
  *
- * 土壤圖示內建於套件(src/js/dataCivilSoilCodeIcon.mjs，取自w-demores)，不依賴網路載入，可支援無連外網路之環境；若需自訂圖示可由kpIcon給予
+ * 土壤圖示內建於套件(src/js/getSoilCodeIcon.mjs，取自w-demores)，不依賴網路載入，可支援無連外網路之環境；若需自訂圖示可由kpIcon給予
  *
  * 具名插槽(slot)：'text'為土層右側描述文字區塊，提供作用域參數item與index，未給予時使用WSegmentsVertical之預設文字區(三角+keyText文字)；'popup'為土層彈窗內容區塊，提供作用域參數item與index；'support-left'與'support-right'為繪圖區左右側之附加內容區塊，提供作用域參數convertValueToY，為深度轉繪圖區y座標之函數，供外部定位水位等標記
  *
@@ -71,7 +71,7 @@ import dataCivilSoilCodeIcon from '../js/dataCivilSoilCodeIcon.mjs'
  * @vue-prop {String} [keyText='description'] 輸入土層項目存放說明文字之欄位字串，預設'description'
  * @vue-prop {String} [keyLegendCode='legendCode'] 輸入土層項目存放土壤圖例代碼之欄位字串，供對應土壤圖示，預設'legendCode'
  * @vue-prop {Boolean} [mergeSameLayers=false] 輸入是否合併相鄰且圖例代碼與說明文字皆相同土層布林值，預設false
- * @vue-prop {Object} [kpIcon=null] 輸入土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串，值為圖片data URI或網址字串，給予null時使用內建之dataCivilSoilCodeIcon，預設null
+ * @vue-prop {Object} [kpIcon=null] 輸入土壤圖例代碼對應土壤圖示物件，key為圖例代碼字串，值為圖片data URI或網址字串，給予null時使用內建之getSoilCodeIcon，預設null
  * @vue-prop {Number} [width=191] 輸入土柱繪圖寬度數字，單位px，預設191
  * @vue-prop {Number} [height=504] 輸入土柱繪圖高度數字，單位px，預設504
  * @vue-prop {Object} [paddingStyle={top:10,right:0,bottom:10,left:60}] 輸入內距物件，可用鍵值為top、right、bottom、left，各為數字，單位px，left須容納深度刻度文字，預設{top:10,right:0,bottom:10,left:60}
@@ -194,7 +194,7 @@ export default {
             if (iseobj(vo.kpIcon)) {
                 return vo.kpIcon
             }
-            return dataCivilSoilCodeIcon
+            return getSoilCodeIcon()
         },
 
         useItems: function() {
