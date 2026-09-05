@@ -1,13 +1,13 @@
 {
   "name": "w-geo-vue",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
-    "w-component-vue": "^2.5.11",
-    "w-geo": "^1.1.75",
-    "w-highcharts-vue": "^1.0.17",
-    "w-table-vue": "^1.0.15",
-    "wsemi": "^1.8.84"
+    "w-component-vue": "^2.5.12",
+    "w-geo": "^1.1.76",
+    "w-highcharts-vue": "^1.0.18",
+    "w-table-vue": "^1.0.16",
+    "wsemi": "^1.8.85"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",
