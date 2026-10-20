@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8" />
+    <title>liq-analysis host</title>
+
+    <!-- 宿主頁: 以本地 vue 開發版(有 Vue warn)與測試前建置之 w-geo-vue UMD(test/_tmp/liq-analysis/) 掛載 WSptLiqAnalysis -->
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../_tmp/liq-analysis/w-geo-vue.umd.js"></script>
+</head>
+<body>
+    <div id="app" style="width:1300px; padding:10px;">
+        <w-spt-liq-analysis
+            :rows="rows"
+            :spt-methods-selects="methods"
+            @error="onError"
+        >
+        </w-spt-liq-analysis>
+    </div>
+
+    <script>
+        Vue.use(window['w-geo-vue'])
+
+        //__errs, 元件發出之 error 事件(記錄訊息字串), 供測試端讀取
+        window.__errs = []
+
+        //__vm, 測試端經此換 rows(setup, 非 act)
+        window.__vm = new Vue({
+            el: '#app',
+            data: {
+                //測試端可於載入前以 addInitScript 設定 window.__initRows(首次即帶資料掛載)、window.__initMethods(分析方法勾選)
+                rows: window.__initRows || [],
+                methods: window.__initMethods || ['sptHBF2017', 'sptNJRA2017'],
+            },
+            methods: {
+                onError: function(err) {
+                    window.__errs.push(String(err && err.message ? err.message : err))
+                },
+            },
+        })
+    </script>
+</body>
+</html>

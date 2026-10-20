@@ -45,9 +45,30 @@
 
         </div>
 
+        <!-- 分析拋出例外時顯示錯誤訊息(同時發出error事件), 取代整區空白 -->
+        <div
+            style="padding-bottom:30px;"
+            role="alert"
+            v-if="hasErr"
+        >
+            <div style="display:flex; align-items:center;">
+                <div style="padding-top:2px;">
+                    <WIcon
+                        :icon="mdiAlertCircleOutline"
+                        :size="24"
+                        :color="'#f26'"
+                        :colorHover="'#f26'"
+                    ></WIcon>
+                </div>
+                <div style="padding-left:7px; font-size:0.85rem; color:#f26; word-break:break-word;">
+                    {{errMsg}}
+                </div>
+            </div>
+        </div>
+
         <div
             :style="``"
-            v-if="hasSelects"
+            v-if="hasSelects && !hasErr"
         >
 
             <div style="padding-bottom:10px;">
@@ -68,6 +89,7 @@
 
             <div style="padding-bottom:40px;">
                 <!-- 關閉編輯功能, 待日後開發 -->
+                <!-- 欄名(含上下標)、數值取位、-err與-stateFS欄提示皆經slot客製(w-aggrid-vue 2.0.56起已移除opt.kpHeadRender等舊鍵), slot由WTableEdit轉發 -->
                 <WTableEdit
                     :style="`width:100%; height:${heightTable}px;`"
                     :enableInfor="false"
@@ -78,7 +100,18 @@
                     @success="evSuccess"
                     @error="evError"
                     v-bind="optionsTable"
-                ></WTableEdit>
+                >
+                    <template v-slot:head-render="props">
+                        <span v-if="hasHeadHtml(props.key)" v-html="props.value"></span>
+                        <span v-else>{{props.value}}</span>
+                    </template>
+                    <template v-slot:cell-render="props">
+                        <span v-html="getCellHtml(props.key, props.value)"></span>
+                    </template>
+                    <template v-slot:cell-tooltip="props">
+                        <div v-if="hasCellTooltip(props.key)" v-html="getCellHtml(props.key, props.value)"></div>
+                    </template>
+                </WTableEdit>
             </div>
 
         </div>
@@ -110,147 +143,26 @@
 </template>
 
 <script>
-import { mdiBookOpenPageVariantOutline, mdiFileTableBoxOutline } from '@mdi/js'
+import { mdiBookOpenPageVariantOutline, mdiFileTableBoxOutline, mdiAlertCircleOutline } from '@mdi/js'
 import get from 'lodash-es/get.js'
 import each from 'lodash-es/each.js'
 import map from 'lodash-es/map.js'
 import size from 'lodash-es/size.js'
-import keys from 'lodash-es/keys.js'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 import isnum from 'wsemi/src/isnum.mjs'
 import isestr from 'wsemi/src/isestr.mjs'
 import isearr from 'wsemi/src/isearr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import cstr from 'wsemi/src/cstr.mjs'
-import dig from 'wsemi/src/dig.mjs'
 import haskey from 'wsemi/src/haskey.mjs'
-import calcLiquefaction from 'w-geo/src/calcLiquefaction.mjs'
 import WIcon from 'w-component-vue/src/components/WIcon.vue'
 import WCheckbox from 'w-component-vue/src/components/WCheckbox.vue'
 import WTableEdit from 'w-table-vue/src/components/WTableEdit.vue'
 import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAndTools.vue'
-import getSts from '../js/getSts.mjs'
 import spc2html from '../js/spc2html.mjs'
-
-
-function escapeHTML(c) {
-    c = cstr(c)
-    if (isestr(c)) {
-        c = c
-            // .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            // .replace(/"/g, '&quot;')
-            // .replace(/'/g, '&#39;')
-    }
-    return c
-}
-
-
-function anaSptLiq(rowsIn, opt = {}) {
-
-    //kpHead
-    let kpHead = get(opt, 'kpHead', {})
-
-    //kpDig
-    let kpDig = get(opt, 'kpDig', {})
-
-    //depthTitle
-    let depthTitle = get(opt, 'depthTitle', 'Depth(m)')
-
-    //geolayerWidth
-    let geolayerWidth = get(opt, 'geolayerWidth', 240)
-
-    //geolayerWaterLevel
-    let geolayerWaterLevel = get(opt, 'geolayerWaterLevel', 0)
-
-    //rowsOut
-    let rowsOut = calcLiquefaction.calc('SPT', rowsIn, opt)
-    // console.log('rowsOut', cloneDeep(rowsOut))
-
-    //escapeHTML, 因-err與-stateFS會含有<>符號, ag-grid會無法正常顯示, 得先取代成html專用顯示符號
-    rowsOut = map(rowsOut, (r) => {
-        let rr = {}
-        each(r, (v, k) => {
-            if (
-                k.indexOf('-err') >= 0 ||
-                k.indexOf('-stateFS') >= 0 ||
-                false
-            ) {
-                v = escapeHTML(v)
-            }
-            rr[k] = v
-        })
-        return rr
-    })
-    // console.log('rowsOut(escapeHTML)', cloneDeep(rowsOut))
-
-    //rowOut0
-    let rowOut0 = get(rowsOut, 0, {})
-
-    //ks
-    let ks = keys(rowOut0)
-    // console.log('ks', ks)
-
-    //kpHeadRender
-    let kpHeadRender = {}
-    each(kpHead, (v, k) => {
-        kpHeadRender[k] = () => {
-            return v
-        }
-    })
-
-    //kpCellTooltip, 因-err與-stateFS可能文字訊息過長, 故須開啟
-    let kpCellTooltip = {}
-    each(ks, (k) => {
-        if (
-            k.indexOf('-err') >= 0 ||
-            k.indexOf('-stateFS') >= 0 ||
-            false
-        ) {
-            kpCellTooltip[k] = (v) => {
-                return v
-            }
-        }
-    })
-
-    //kpCellRender
-    let kpCellRender = {}
-    each(kpDig, (idig, k) => {
-        kpCellRender[k] = (v) => {
-            if (isnum(v)) {
-                v = dig(v, idig)
-            }
-            return v
-        }
-    })
-    // console.log('kpCellRender', kpCellRender)
-
-    //optTable
-    let optTable = {}
-    if (true) {
-        optTable = {
-            keys: ks,
-            rows: rowsOut,
-            defHeadSortMethod: 'auto',
-            defCellEditable: false, //關閉編輯功能, 待日後開發
-            defCellAlighH: 'left',
-            kpHead,
-            kpHeadRender,
-            kpCellTooltip,
-            kpCellRender,
-        }
-    }
-
-    //sts
-    let sts = getSts(rowsOut, kpHead, depthTitle, geolayerWidth, geolayerWaterLevel)
-    // console.log('sts', sts)
-
-    return {
-        optTable,
-        sts,
-    }
-}
+import getCellText from '../js/getCellText.mjs'
+import getIdig from '../js/getIdig.mjs'
+import anaSptLiq, { isLongTextKey } from '../js/anaSptLiq.mjs'
 
 
 /**
@@ -259,6 +171,14 @@ function anaSptLiq(rowsIn, opt = {}) {
  * 內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)
  *
  * 表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框
+ *
+ * 表格之欄名(依kpHead顯示上下標)、儲存格(依kpDig取位)與提示框皆經WTableEdit之slot(head-render、cell-render、cell-tooltip)實作，不再使用w-aggrid-vue 2.0.56起已移除之kpHeadRender、kpCellRender、kpCellTooltip設定
+ *
+ * 計算結果中來源為文字之數值欄會於顯示文字不變之前提下轉為數值並使用數值過濾器，其餘有值之欄使用文字過濾器；數值過濾比對原值而非依kpDig取位後之顯示值(例如顯示15.275之原值15.274999999999999以15.275過濾不中)
+ *
+ * 儲存格值以HTML解析呈現(同既有語意)，rows不得含未經處理之不可信文字；'-err'與'-stateFS'欄之值為HTML實體字串，匯出值與rows插槽亦為實體字串，文字過濾須以實體字串比對
+ *
+ * 分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤
  *
  * 具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)
  *
@@ -281,18 +201,22 @@ function anaSptLiq(rowsIn, opt = {}) {
  * @vue-data {Object} kpMehtodSelect 儲存液化分析方法對應是否勾選物件
  * @vue-data {Number} heightTable 儲存數據表格高度數字，單位px
  * @vue-data {Array} rowsTrans 儲存內部使用之輸入數據物件陣列
- * @vue-data {Object} optTable 儲存供WTableEdit使用之表格設定物件
+ * @vue-data {Object} optTable 儲存供WTableEdit使用之表格設定物件，其列為已將文字數值欄轉為數值之列
+ * @vue-data {Array} rowsAna 儲存液化分析結果之數據物件陣列(未轉型，供rowsResult與zone-top插槽使用)
  * @vue-data {Array} sts 儲存分析結果各參數之繪圖狀態物件陣列
  * @vue-data {Array} keyStsSelects 儲存已勾選繪製參數之key字串陣列
+ * @vue-data {String} errMsg 儲存分析拋出例外之錯誤訊息字串，無錯誤時為空字串
  * @vue-computed {String} textMethods 回傳分析方法勾選區標題字串
  * @vue-computed {String} textTable 回傳數據表格區標題字串
  * @vue-computed {Boolean} hasSelects 回傳是否已勾選液化分析方法布林值
  * @vue-computed {Boolean} hasSts 回傳是否已有繪圖狀態物件布林值
+ * @vue-computed {Boolean} hasErr 回傳分析是否拋出例外而有錯誤訊息布林值
  * @vue-computed {Object} useKpHead 回傳已取代應力單位與轉換上下標語法之欄位標題對照物件
- * @vue-computed {Array} rowsResult 回傳液化分析結果之數據物件陣列
+ * @vue-computed {Array} rowsResult 回傳液化分析結果之數據物件陣列(各欄值型別同w-geo計算結果，不受表格數值欄轉型影響)
  * @vue-computed {Object} row0Result 回傳液化分析結果第1筆數據物件
  * @vue-computed {Object} rowNResult 回傳液化分析結果最末筆數據物件
  * @vue-event {Array} update:sptMethodsSelects 當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列
+ * @vue-event {Error} error 當分析(含w-geo計算)拋出例外時，回傳該例外物件(例如rows[0].PGA為空時之'rows[0].PGA or opt.PGA is not a number')，每次分析失敗皆發出一次
  */
 export default {
     components: {
@@ -474,10 +398,11 @@ export default {
         return {
             mdiBookOpenPageVariantOutline,
             mdiFileTableBoxOutline,
+            mdiAlertCircleOutline,
 
             // dbc: debounce(),
 
-            sptMethodsSelectsTrans: [],
+            sptMethodsSelectsTrans: this.sptMethodsSelects, //以prop為初值, 使首次渲染時之分析即用實際勾選之方法, 不先以空陣列分析一次再重算(分析失敗時會重複發出error事件)
             kpMehtodSelect: {},
 
             heightTable: 400,
@@ -486,8 +411,12 @@ export default {
 
             optTable: {},
 
+            rowsAna: [],
+
             sts: [],
             keyStsSelects: [],
+
+            errMsg: '',
 
         }
     },
@@ -603,6 +532,12 @@ export default {
             return b
         },
 
+        hasErr: function() {
+            let vo = this
+            let b = vo.errMsg !== ''
+            return b
+        },
+
         useKpHead: function() {
             let vo = this
             let kp = {}
@@ -617,8 +552,7 @@ export default {
 
         rowsResult: function() {
             let vo = this
-            let rows = get(vo, 'optTable.rows', [])
-            return rows
+            return vo.rowsAna
         },
 
         row0Result: function() {
@@ -640,8 +574,44 @@ export default {
         analysis: function() {
             let vo = this
 
+            //core
+            try {
+                vo.analysisCore()
+            }
+            catch (err) {
+
+                //分析(含w-geo計算)拋出例外, 清除舊結果, 改於組件內顯示錯誤訊息, 並發出error事件供使用端處理
+                vo.optTable = {}
+                vo.rowsAna = []
+                vo.sts = []
+                vo.errMsg = cstr(get(err, 'message', '')) || cstr(err) || 'Error'
+
+                //emit, 於nextTick發出, 避免在computed(渲染期間)內同步觸發使用端handler, 元件已銷毀則不再發出
+                vo.$nextTick(() => {
+                    if (vo._isDestroyed || vo._isBeingDestroyed) {
+                        return
+                    }
+                    vo.$emit('error', err)
+                })
+
+            }
+
+        },
+
+        analysisCore: function() {
+            let vo = this
+
             let rowsIn = vo.rowsTrans
             // console.log('rowsIn', cloneDeep(rowsIn))
+
+            //無數據(使用端資料載入前之常態)不算錯誤, 不進行計算
+            if (size(rowsIn) === 0) {
+                vo.optTable = {}
+                vo.rowsAna = []
+                vo.sts = []
+                vo.errMsg = ''
+                return
+            }
 
             //kpTransRowKey
             rowsIn = map(rowsIn, (row) => {
@@ -729,8 +699,31 @@ export default {
 
             //save
             vo.optTable = r.optTable
+            vo.rowsAna = r.rows
             vo.sts = r.sts
+            vo.errMsg = ''
 
+        },
+
+        hasHeadHtml: function(k) {
+            let vo = this
+
+            //僅kpHead有給予標題之欄位其標題含上下標等html語法, 無對應者表頭為欄位鍵字面, 以文字呈現(同修正前未經kpHeadRender之預設表頭)
+            return Object.prototype.hasOwnProperty.call(vo.useKpHead, k)
+        },
+
+        hasCellTooltip: function(k) {
+            return isLongTextKey(k)
+        },
+
+        getCellHtml: function(k, v) {
+            let vo = this
+
+            //idig, kpDig內有給予該欄位小數位數時取位
+            let idig = getIdig(vo.kpDig, k)
+
+            //getCellText, 輸出供v-html使用, -err與-stateFS欄之值已於分析時escapeHTML, 故顯示為原字元
+            return getCellText(v, idig)
         },
 
         evSuccess: function(msg) {
