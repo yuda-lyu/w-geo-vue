@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
     
 </nav>
 
@@ -61,6 +61,10 @@
                 <div class="description usertext"><p>提供SPT液化分析之整合組件，含分析方法勾選區、分析結果數據表格(WTableEdit)，以及分析結果之深度剖線繪圖區(WSptLiqPlotDepthsWithGradesAndTools)</p>
 <p>內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)</p>
 <p>表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框</p>
+<p>表格之欄名(依kpHead顯示上下標)、儲存格(依kpDig取位)與提示框皆經WTableEdit之slot(head-render、cell-render、cell-tooltip)實作，不再使用w-aggrid-vue 2.0.56起已移除之kpHeadRender、kpCellRender、kpCellTooltip設定</p>
+<p>計算結果中來源為文字之數值欄會於顯示文字不變之前提下轉為數值並使用數值過濾器，其餘有值之欄使用文字過濾器；數值過濾比對原值而非依kpDig取位後之顯示值(例如顯示15.275之原值15.274999999999999以15.275過濾不中)</p>
+<p>儲存格值以HTML解析呈現(同既有語意)，rows不得含未經處理之不可信文字；'-err'與'-stateFS'欄之值為HTML實體字串，匯出值與rows插槽亦為實體字串，文字過濾須以實體字串比對</p>
+<p>分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤</p>
 <p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
@@ -204,7 +208,12 @@
         <td><code>optTable</code></td>
         <td>Object</td>
         <td>-</td>
-        <td>儲存供WTableEdit使用之表格設定物件</td>
+        <td>儲存供WTableEdit使用之表格設定物件，其列為已將文字數值欄轉為數值之列</td>
+    </tr><tr>
+        <td><code>rowsAna</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存液化分析結果之數據物件陣列(未轉型，供rowsResult與zone-top插槽使用)</td>
     </tr><tr>
         <td><code>sts</code></td>
         <td>Array</td>
@@ -215,6 +224,11 @@
         <td>Array</td>
         <td>-</td>
         <td>儲存已勾選繪製參數之key字串陣列</td>
+    </tr><tr>
+        <td><code>errMsg</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>儲存分析拋出例外之錯誤訊息字串，無錯誤時為空字串</td>
     </tr></tbody>
 </table>
 
@@ -246,13 +260,17 @@
         <td>Boolean</td>
         <td>回傳是否已有繪圖狀態物件布林值</td>
     </tr><tr>
+        <td><code>hasErr</code></td>
+        <td>Boolean</td>
+        <td>回傳分析是否拋出例外而有錯誤訊息布林值</td>
+    </tr><tr>
         <td><code>useKpHead</code></td>
         <td>Object</td>
         <td>回傳已取代應力單位與轉換上下標語法之欄位標題對照物件</td>
     </tr><tr>
         <td><code>rowsResult</code></td>
         <td>Array</td>
-        <td>回傳液化分析結果之數據物件陣列</td>
+        <td>回傳液化分析結果之數據物件陣列(各欄值型別同w-geo計算結果，不受表格數值欄轉型影響)</td>
     </tr><tr>
         <td><code>row0Result</code></td>
         <td>Object</td>
@@ -280,6 +298,10 @@
         <td><code>update:sptMethodsSelects</code></td>
         <td>Array</td>
         <td>當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列</td>
+    </tr><tr>
+        <td><code>error</code></td>
+        <td>Error</td>
+        <td>當分析(含w-geo計算)拋出例外時，回傳該例外物件(例如rows[0].PGA為空時之'rows[0].PGA or opt.PGA is not a number')，每次分析失敗皆發出一次</td>
     </tr></tbody>
 </table>
 
@@ -300,6 +322,10 @@
     <dd class="tag-description"><ul class="dummy"><li><p>提供SPT液化分析之整合組件，含分析方法勾選區、分析結果數據表格(WTableEdit)，以及分析結果之深度剖線繪圖區(WSptLiqPlotDepthsWithGradesAndTools)</p>
 <p>內部先依kpTransRowKey轉換rows各欄位key，再以w-geo之calcLiquefaction計算液化分析，並由計算結果產生表格設定與各參數繪圖狀態物件。地下水位取自rows第1筆之waterLevel、waterLevelUsual、waterLevelDesign(依序覆蓋)</p>
 <p>表格為唯讀不提供編輯，計算結果中key含'-err'與'-stateFS'者會自動轉換角括號為HTML實體字元並開啟儲存格提示框</p>
+<p>表格之欄名(依kpHead顯示上下標)、儲存格(依kpDig取位)與提示框皆經WTableEdit之slot(head-render、cell-render、cell-tooltip)實作，不再使用w-aggrid-vue 2.0.56起已移除之kpHeadRender、kpCellRender、kpCellTooltip設定</p>
+<p>計算結果中來源為文字之數值欄會於顯示文字不變之前提下轉為數值並使用數值過濾器，其餘有值之欄使用文字過濾器；數值過濾比對原值而非依kpDig取位後之顯示值(例如顯示15.275之原值15.274999999999999以15.275過濾不中)</p>
+<p>儲存格值以HTML解析呈現(同既有語意)，rows不得含未經處理之不可信文字；'-err'與'-stateFS'欄之值為HTML實體字串，匯出值與rows插槽亦為實體字串，文字過濾須以實體字串比對</p>
+<p>分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤</p>
 <p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
@@ -443,7 +469,12 @@
         <td><code>optTable</code></td>
         <td>Object</td>
         <td>-</td>
-        <td>儲存供WTableEdit使用之表格設定物件</td>
+        <td>儲存供WTableEdit使用之表格設定物件，其列為已將文字數值欄轉為數值之列</td>
+    </tr><tr>
+        <td><code>rowsAna</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存液化分析結果之數據物件陣列(未轉型，供rowsResult與zone-top插槽使用)</td>
     </tr><tr>
         <td><code>sts</code></td>
         <td>Array</td>
@@ -454,6 +485,11 @@
         <td>Array</td>
         <td>-</td>
         <td>儲存已勾選繪製參數之key字串陣列</td>
+    </tr><tr>
+        <td><code>errMsg</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>儲存分析拋出例外之錯誤訊息字串，無錯誤時為空字串</td>
     </tr></tbody>
 </table>
 
@@ -485,13 +521,17 @@
         <td>Boolean</td>
         <td>回傳是否已有繪圖狀態物件布林值</td>
     </tr><tr>
+        <td><code>hasErr</code></td>
+        <td>Boolean</td>
+        <td>回傳分析是否拋出例外而有錯誤訊息布林值</td>
+    </tr><tr>
         <td><code>useKpHead</code></td>
         <td>Object</td>
         <td>回傳已取代應力單位與轉換上下標語法之欄位標題對照物件</td>
     </tr><tr>
         <td><code>rowsResult</code></td>
         <td>Array</td>
-        <td>回傳液化分析結果之數據物件陣列</td>
+        <td>回傳液化分析結果之數據物件陣列(各欄值型別同w-geo計算結果，不受表格數值欄轉型影響)</td>
     </tr><tr>
         <td><code>row0Result</code></td>
         <td>Object</td>
@@ -519,6 +559,10 @@
         <td><code>update:sptMethodsSelects</code></td>
         <td>Array</td>
         <td>當使用者勾選或取消液化分析方法時，回傳已勾選方法之字串陣列</td>
+    </tr><tr>
+        <td><code>error</code></td>
+        <td>Error</td>
+        <td>當分析(含w-geo計算)拋出例外時，回傳該例外物件(例如rows[0].PGA為空時之'rows[0].PGA or opt.PGA is not a number')，每次分析失敗皆發出一次</td>
     </tr></tbody>
 </table>
 
@@ -627,7 +671,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Oct 20 2026 07:00:49 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Oct 20 2026 21:06:40 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
