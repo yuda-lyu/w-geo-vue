@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getKeyStsSelects">getKeyStsSelects</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
     
 </nav>
 
@@ -65,6 +65,7 @@
 <p>計算結果中來源為文字之數值欄會於顯示文字不變之前提下轉為數值並使用數值過濾器，其餘有值之欄使用文字過濾器；數值過濾比對原值而非依kpDig取位後之顯示值(例如顯示15.275之原值15.274999999999999以15.275過濾不中)</p>
 <p>儲存格值以HTML解析呈現(同既有語意)，rows不得含未經處理之不可信文字；'-err'與'-stateFS'欄之值為HTML實體字串，匯出值與rows插槽亦為實體字串，文字過濾須以實體字串比對</p>
 <p>分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤</p>
+<p>繪圖參數之勾選：首次分析結果與日後新勾選之液化分析方法，其符合keyParamSelects之參數(-FS、-cmpFS、-PL、-stlTS、-stlIY等)自動勾選並繪圖；取消勾選方法時其參數與圖移除，再次勾選時重新自動勾選；已存在參數之勾選結果維持使用者之選擇，不因分析結果更新而改變</p>
 <p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
@@ -126,7 +127,7 @@
         <td>Array</td>
         <td>-</td>
         <td>No</td>
-        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
+        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，套用於首次出現與日後新出現之參數(例如新勾選液化分析方法後其-FS、-PL、-stlTS、-stlIY等)，已出現參數之勾選結果不因此改變，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
     </tr><tr>
         <td><code>depthTitle</code></td>
         <td>String</td>
@@ -220,10 +221,15 @@
         <td>-</td>
         <td>儲存分析結果各參數之繪圖狀態物件陣列</td>
     </tr><tr>
+        <td><code>stsKeysPrev</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存前次處理時分析結果各參數之key字串陣列，供判斷新出現與已消失之參數</td>
+    </tr><tr>
         <td><code>keyStsSelects</code></td>
         <td>Array</td>
         <td>-</td>
-        <td>儲存已勾選繪製參數之key字串陣列</td>
+        <td>儲存已勾選繪製參數之key字串陣列，新勾選液化分析方法時其符合keyParamSelects之參數會自動加入，取消勾選時其參數自此移除</td>
     </tr><tr>
         <td><code>errMsg</code></td>
         <td>String</td>
@@ -326,6 +332,7 @@
 <p>計算結果中來源為文字之數值欄會於顯示文字不變之前提下轉為數值並使用數值過濾器，其餘有值之欄使用文字過濾器；數值過濾比對原值而非依kpDig取位後之顯示值(例如顯示15.275之原值15.274999999999999以15.275過濾不中)</p>
 <p>儲存格值以HTML解析呈現(同既有語意)，rows不得含未經處理之不可信文字；'-err'與'-stateFS'欄之值為HTML實體字串，匯出值與rows插槽亦為實體字串，文字過濾須以實體字串比對</p>
 <p>分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤</p>
+<p>繪圖參數之勾選：首次分析結果與日後新勾選之液化分析方法，其符合keyParamSelects之參數(-FS、-cmpFS、-PL、-stlTS、-stlIY等)自動勾選並繪圖；取消勾選方法時其參數與圖移除，再次勾選時重新自動勾選；已存在參數之勾選結果維持使用者之選擇，不因分析結果更新而改變</p>
 <p>具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)</p></p></div></div> 
 
 
@@ -387,7 +394,7 @@
         <td>Array</td>
         <td>-</td>
         <td>No</td>
-        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
+        <td>輸入預設勾選繪圖參數之過濾設定物件陣列，套用於首次出現與日後新出現之參數(例如新勾選液化分析方法後其-FS、-PL、-stlTS、-stlIY等)，已出現參數之勾選結果不因此改變，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾</td>
     </tr><tr>
         <td><code>depthTitle</code></td>
         <td>String</td>
@@ -481,10 +488,15 @@
         <td>-</td>
         <td>儲存分析結果各參數之繪圖狀態物件陣列</td>
     </tr><tr>
+        <td><code>stsKeysPrev</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>儲存前次處理時分析結果各參數之key字串陣列，供判斷新出現與已消失之參數</td>
+    </tr><tr>
         <td><code>keyStsSelects</code></td>
         <td>Array</td>
         <td>-</td>
-        <td>儲存已勾選繪製參數之key字串陣列</td>
+        <td>儲存已勾選繪製參數之key字串陣列，新勾選液化分析方法時其符合keyParamSelects之參數會自動加入，取消勾選時其參數自此移除</td>
     </tr><tr>
         <td><code>errMsg</code></td>
         <td>String</td>
@@ -671,7 +683,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Oct 31 2026 18:10:58 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sun Nov 01 2026 02:34:55 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
