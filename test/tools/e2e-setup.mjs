@@ -3,6 +3,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
+import { mdiCheckboxMarked, mdiCheckboxBlankOutline } from '@mdi/js'
 import rollupFiles from 'w-package-tools/src/rollupFiles.mjs'
 import { launchBrowser, openCasePage, waitGridIdle, pollUntil } from './e2eLib.mjs'
 
@@ -244,6 +245,53 @@ export async function collectAllCells(page) {
         await scrollGridX(page, 600)
     }
     return all
+}
+
+
+//checkboxStates, 畫面上所有 WCheckbox(分析方法勾選區與繪圖參數勾選區)之 { 文字: 是否勾選 }; 勾選判斷為圖示路徑等於 mdiCheckboxMarked(已勾) / mdiCheckboxBlankOutline(未勾)
+export function checkboxStates(page) {
+    return page.evaluate(({ marked, blank }) => {
+        let out = {}
+        document.querySelectorAll('div[tabindex="0"]').forEach((el) => {
+            let t = (el.innerText || '').trim()
+            let isOn = !!el.querySelector(`svg path[d="${marked}"]`)
+            let isOff = !!el.querySelector(`svg path[d="${blank}"]`)
+            if (t !== '' && (isOn || isOff)) {
+                out[t] = isOn
+            }
+        })
+        return out
+    }, { marked: mdiCheckboxMarked, blank: mdiCheckboxBlankOutline })
+}
+
+
+//checkboxLocator, 某文字之 WCheckbox 根節點(以全文字完全相同比對, 不與同字之表頭或圖表軸標題混淆)
+export function checkboxLocator(page, text) {
+    let esc = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    return page.locator('div[tabindex="0"]', { hasText: new RegExp(`^\\s*${esc}\\s*$`) }).first()
+}
+
+
+//plotNames, 繪圖區各 Highcharts 圖之圖例文字(參數圖之數據線名稱即參數 key; 值軸標題為 FS、PL、Settlement(m) 等通稱, 不能用來辨識是哪個方法之圖)
+export function plotNames(page) {
+    return page.evaluate(() => {
+        return Array.from(document.querySelectorAll('.highcharts-container .highcharts-legend-item')).map((e) => (e.textContent || '').trim())
+    })
+}
+
+
+//plotCount, 繪圖區 Highcharts 圖之個數(土柱圖不計)
+export function plotCount(page) {
+    return page.evaluate(() => document.querySelectorAll('.highcharts-container').length)
+}
+
+
+//compState, 元件內部狀態(供交叉核對, 不作為唯一斷言): 已勾選方法、已勾選繪圖參數鍵、分析次數
+export function compState(page) {
+    return page.evaluate(() => {
+        let c = window.__vm.$children[0]
+        return { methodsTrans: c.sptMethodsSelectsTrans.slice(), keyStsSelects: c.keyStsSelects.slice(), nAna: window.__nAna, errs: window.__errs.slice() }
+    })
 }
 
 

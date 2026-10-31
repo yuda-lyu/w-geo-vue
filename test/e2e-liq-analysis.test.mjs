@@ -7,7 +7,8 @@ import getDataFromExcelFileU8Arr from 'wsemi/src/getDataFromExcelFileU8Arr.mjs'
 import calcLiquefaction from 'w-geo/src/calcLiquefaction.mjs'
 import dig from 'wsemi/src/dig.mjs'
 import isnum from 'wsemi/src/isnum.mjs'
-import { buildUmd, useTmpDir, openPage, setRows, cellsByCol, rowCount, headerCell, typeIntoFloatingFilter, waitRowCount, scrollToCol, collectAllCells } from './tools/e2e-setup.mjs'
+import isenum from 'wsemi/src/isenum.mjs'
+import { buildUmd, useTmpDir, openPage, setRows, cellsByCol, rowCount, headerCell, typeIntoFloatingFilter, waitRowCount, scrollToCol, collectAllCells, checkboxStates, checkboxLocator, plotNames, plotCount, compState } from './tools/e2e-setup.mjs'
 import { waitUntilExist, pollUntil, waitGridIdle } from './tools/e2eLib.mjs'
 import { getRowsLiq, getRowsLiqForColType, getRowsLiqForDepthFloat } from './fixtures/rowsLiq.mjs'
 
@@ -45,6 +46,54 @@ const KP_DIG = {
 const METHODS = ['sptHBF2017', 'sptNJRA2017']
 const KEY_STATE = 'sptHBF2017-stateFS'
 const MSG_NO_PGA = 'rows[0].PGA or opt.PGA is not a number'
+const ofM = (m) => [`${m}-FS`, `${m}-PL`, `${m}-stlTS`, `${m}-stlIY`] //規格(Gitea #34): 方法之 FS、PL 與沉陷量(stlTS、stlIY)參數
+const COMMON_SELECTS = ['Geolayer', 'N60', 'FC(%)', 'All-cmpFS'] //元件預設 keyParamSelects 對與方法無關之參數的預設勾選(sts 之 key)
+const TEXT_OF_KEY = { 'All-cmpFS': 'Compare-FS' } //參數勾選區顯示文字與 sts key 不同者(子元件 groupParams 之 text)
+
+
+//diagUi, 等待逾時時附上畫面現況(已勾選狀態、圖軸標題、圖個數), 供判讀失敗成因
+async function diagUi(page) {
+    let st = await checkboxStates(page)
+    let titles = await plotNames(page)
+    let n = await plotCount(page)
+    let html = await page.evaluate(() => {
+        let c = document.querySelector('.highcharts-container')
+        return c ? c.innerHTML.slice(0, 500) : '(no .highcharts-container)'
+    })
+    return `checkboxStates=${JSON.stringify(st)} plotNames=${JSON.stringify(titles)} plotCount=${n} firstContainer=${html}`
+}
+
+
+//waitSelected, 等畫面上某些參數已勾選(checkboxStates 為 true)且圖已繪出(軸標題含該 key)
+async function waitSelected(page, keys, label) {
+    try {
+        await pollUntil(`${label}: ${keys.join(',')} 已勾選並繪圖`, async () => {
+            let st = await checkboxStates(page)
+            let titles = await plotNames(page)
+            return keys.every((k) => st[k] === true && titles.includes(k))
+        }, { timeout: 20000, interval: 150 })
+    }
+    catch (err) {
+        err.message += '\n畫面現況: ' + (await diagUi(page))
+        throw err
+    }
+}
+
+
+//waitAbsent, 等畫面上某些參數已不存在(參數勾選區無此項、圖無其軸標題)
+async function waitAbsent(page, keys, label) {
+    try {
+        await pollUntil(`${label}: ${keys.join(',')} 已移除`, async () => {
+            let st = await checkboxStates(page)
+            let titles = await plotNames(page)
+            return keys.every((k) => st[k] === undefined && !titles.includes(k))
+        }, { timeout: 20000, interval: 150 })
+    }
+    catch (err) {
+        err.message += '\n畫面現況: ' + (await diagUi(page))
+        throw err
+    }
+}
 
 
 //calcRows, 同元件之鍵轉換與選項, 直接以 w-geo 計算
@@ -72,7 +121,7 @@ function expectCellsFromCalc(rowsIn) {
             if (v === null || v === undefined) {
                 t = ''
             }
-            else if (KP_DIG[k] !== undefined && isnum(v)) {
+            else if (KP_DIG[k] !== undefined && isenum(v)) { //取位只對有效數字(wsemi isenum), 十六進位字樣與 Infinity 等照原樣
                 t = dig(v, KP_DIG[k])
             }
             else {
@@ -511,6 +560,213 @@ describe('e2e-liq-analysis', function() {
             assert.deepStrictEqual(col('depthStart'), [0, 0.8, 2, 3.5, 5, 6.5, 8.4, 9.5])
             assert.deepStrictEqual(col('Ml'), ['6.8', '6.8', '6.80', '6.8', '6.8', '6.8', '6.8', '6.8'])
             assert.ok(nNum > 0, '應至少有一欄被轉為數值匯出')
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    //E2E-010 R06(Gitea #34 驗證建議1+3): 頁面初始已勾之方法(sptSeed)其 FS、PL、stlTS、stlIY 為已勾並有其圖; 首次渲染只分析一次
+    it('R06 初始已勾方法之FS/PL/stlTS/stlIY自動勾選並繪圖, 首次只分析一次', async function() {
+        let ctx = await openPage({ initRows: getRowsLiq(), initMethods: ['sptSeed'] })
+        try {
+            let { page } = ctx
+            await waitSelected(page, ofM('sptSeed'), '初始')
+            let st = await checkboxStates(page)
+            assert.strictEqual(st.sptSeed, true, '方法 sptSeed 為已勾') //spec: 頁面初始已勾之方法
+            assert.strictEqual(st.sptTY, false, '未勾之方法 sptTY 為未勾')
+            COMMON_SELECTS.forEach((k) => assert.strictEqual(st[TEXT_OF_KEY[k] || k], true, `與方法無關之預設參數 ${k} 為已勾`))
+            assert.strictEqual(st['sptSeed-CRR'], false, '不在預設過濾內之參數(CRR)為未勾')
+            assert.strictEqual((await plotNames(page)).includes('sptSeed-CRR'), false, '未勾選之參數不繪圖')
+            let s = await compState(page)
+            assert.deepStrictEqual([...s.keyStsSelects].sort(), [...COMMON_SELECTS, ...ofM('sptSeed')].sort(), 'keyStsSelects 為預設過濾所得')
+            assert.deepStrictEqual(s.errs, [], '無 error 事件')
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    //E2E-011 R06(Gitea #34 驗證建議2): 再以真滑鼠勾選 sptTY → 其 FS/PL/stlTS/stlIY 自動勾選, keyStsSelects 增加其鍵並增列其圖; 再取消勾選 → 其參數與圖移除
+    //未寫回(使用端不用 .sync, prop 不變)與寫回(.sync)兩種用法皆須成立, 且每次勾選只分析一次(寫回時 prop 變動不得再觸發分析)
+    for (let sync of [false, true]) {
+        it(`R06 勾選與取消勾選sptTY, 其參數自動勾選/移除(${sync ? '.sync寫回' : '不寫回'})`, async function() {
+            let ctx = await openPage({ initRows: getRowsLiq() }) //宿主頁預設方法 sptHBF2017、sptNJRA2017
+            try {
+                let { page } = ctx
+                await page.evaluate((b) => {
+                    window.__syncMethods = b
+                }, sync)
+                let base = [...COMMON_SELECTS, ...ofM('sptHBF2017'), ...ofM('sptNJRA2017')]
+                await waitSelected(page, [...ofM('sptHBF2017'), ...ofM('sptNJRA2017')], '初始')
+                await waitAbsent(page, ofM('sptTY'), '初始')
+                let n0 = await plotCount(page)
+                let s0 = await compState(page)
+                assert.deepStrictEqual([...s0.keyStsSelects].sort(), [...base].sort(), '初始 keyStsSelects')
+
+                //act: 真滑鼠勾選 sptTY
+                await checkboxLocator(page, 'sptTY').click()
+                await waitSelected(page, ofM('sptTY'), '勾選 sptTY')
+                let st = await checkboxStates(page)
+                assert.strictEqual(st.sptTY, true)
+                let s1 = await compState(page)
+                assert.deepStrictEqual([...s1.keyStsSelects].sort(), [...base, ...ofM('sptTY')].sort(), 'keyStsSelects 增加 sptTY 之 FS/PL/stlTS/stlIY') //驗證建議2
+                assert.strictEqual(await plotCount(page), n0 + 4, '增列 sptTY 之 4 張圖')
+                assert.strictEqual((await page.evaluate(() => window.__updMethods)).length, 1)
+
+                //act: 真滑鼠取消勾選 sptTY
+                await checkboxLocator(page, 'sptTY').click()
+                await waitAbsent(page, ofM('sptTY'), '取消勾選 sptTY')
+                let s2 = await compState(page)
+                assert.deepStrictEqual([...s2.keyStsSelects].sort(), [...base].sort(), '取消勾選後 sptTY 之鍵自 keyStsSelects 移除')
+                assert.strictEqual(await plotCount(page), n0, '取消勾選後其圖移除')
+                assert.strictEqual((await checkboxStates(page)).sptTY, false)
+
+                //再勾選: 重新自動勾選(新勾選之方法)
+                await checkboxLocator(page, 'sptTY').click()
+                await waitSelected(page, ofM('sptTY'), '再勾選 sptTY')
+
+                let errLogs = ctx.pageErrors.concat(ctx.logs.filter((m) => m.type === 'error').map((m) => m.text))
+                assert.deepStrictEqual(errLogs, [], 'pageerror 或 console error')
+            }
+            finally {
+                await ctx.close()
+            }
+        })
+    }
+
+
+    //E2E-012 R06: 使用端於掛載後才改 sptMethodsSelects(例如先以預設方法掛載再載入設定): 新方法之參數自動勾選並繪圖, 舊方法之參數與圖移除
+    it('R06 掛載後使用端改變sptMethodsSelects, 新方法參數自動勾選', async function() {
+        let ctx = await openPage({ initRows: getRowsLiq() }) //預設 sptHBF2017、sptNJRA2017
+        try {
+            let { page } = ctx
+            await waitSelected(page, ofM('sptHBF2017'), '初始')
+
+            //setup: 使用端改 prop(非 act)
+            await page.evaluate(() => {
+                window.__vm.methods = ['sptSeed']
+            })
+            await waitSelected(page, ofM('sptSeed'), '改為 sptSeed')
+            await waitAbsent(page, [...ofM('sptHBF2017'), ...ofM('sptNJRA2017')], '改為 sptSeed')
+            let s = await compState(page)
+            assert.deepStrictEqual([...s.keyStsSelects].sort(), [...COMMON_SELECTS, ...ofM('sptSeed')].sort())
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    //E2E-013 R06: 掛載時無資料(使用端資料載入前之常態)、其後才給 rows: 首次出現之參數照常自動勾選
+    it('R06 掛載時無資料, 其後才給rows, 參數自動勾選', async function() {
+        let ctx = await openPage({ initMethods: ['sptSeed'] }) //空列掛載
+        try {
+            let { page } = ctx
+            await setRows(ctx, getRowsLiq())
+            await waitSelected(page, ofM('sptSeed'), '資料載入後')
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    //E2E-014 R06: 使用者對既有參數之勾選結果不因勾選方法而改變(取消勾選之 sptSeed-PL 不恢復); 全部方法取消再勾選時視為新勾選而重新自動勾選
+    it('R06 使用者對既有參數之選擇維持, 全部方法取消後再勾選重新自動勾選', async function() {
+        let ctx = await openPage({ initRows: getRowsLiq(), initMethods: ['sptSeed'] })
+        try {
+            let { page } = ctx
+            await waitSelected(page, ofM('sptSeed'), '初始')
+
+            //act: 使用者取消勾選參數 sptSeed-PL
+            await checkboxLocator(page, 'sptSeed-PL').click()
+            await pollUntil('sptSeed-PL 取消勾選', async () => (await checkboxStates(page))['sptSeed-PL'] === false, { timeout: 10000, interval: 100 })
+            assert.strictEqual((await plotNames(page)).includes('sptSeed-PL'), false, '取消勾選後其圖移除')
+
+            //act: 勾選 sptTY → sptTY 參數自動勾選, sptSeed-PL 維持使用者之取消
+            await checkboxLocator(page, 'sptTY').click()
+            await waitSelected(page, ofM('sptTY'), '勾選 sptTY')
+            let st = await checkboxStates(page)
+            assert.strictEqual(st['sptSeed-PL'], false, '使用者取消勾選之參數不因勾選其他方法而恢復')
+            assert.strictEqual(st['sptSeed-FS'], true)
+
+            //act: 取消全部方法 → 參數區與繪圖區消失, 內部勾選清空
+            await checkboxLocator(page, 'sptTY').click()
+            await checkboxLocator(page, 'sptSeed').click()
+            await pollUntil('參數區消失', async () => (await page.getByText('Parameters', { exact: true }).count()) === 0, { timeout: 10000, interval: 100 })
+            assert.deepStrictEqual((await compState(page)).keyStsSelects, [], '全部方法取消後勾選清空')
+
+            //act: 再勾選 sptSeed → 新勾選之方法, 其 4 個參數(含先前取消之 PL)重新自動勾選
+            await checkboxLocator(page, 'sptSeed').click()
+            await waitSelected(page, ofM('sptSeed'), '再勾選 sptSeed')
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    //E2E-015 R06(Gitea #34 驗證建議3): 保留 1.1.x 之改進: 首次渲染以實際勾選之方法只分析一次; 之後每次勾選方法或使用端改 prop 各分析一次(參數自動勾選與 prop 寫回皆不得多觸發分析)
+    for (let sync of [false, true]) {
+        it(`R06 分析次數: 首次渲染一次, 每次勾選一次(${sync ? '.sync寫回' : '不寫回'})`, async function() {
+            let ctx = await openPage({ initRows: getRowsLiq() })
+            try {
+                let { page } = ctx
+                await page.evaluate((b) => {
+                    window.__syncMethods = b
+                }, sync)
+                await waitSelected(page, ofM('sptHBF2017'), '初始')
+                assert.strictEqual((await compState(page)).nAna, 1, '首次渲染只分析一次') //驗證建議3: 首次渲染只分析一次
+
+                await checkboxLocator(page, 'sptTY').click()
+                await waitSelected(page, ofM('sptTY'), '勾選 sptTY')
+                await page.waitForTimeout(500) //負向觀察窗: 待可能之重複分析出齊
+                assert.strictEqual((await compState(page)).nAna, 2, '勾選一次只分析一次')
+
+                await checkboxLocator(page, 'sptTY').click()
+                await waitAbsent(page, ofM('sptTY'), '取消勾選 sptTY')
+                await page.waitForTimeout(500)
+                assert.strictEqual((await compState(page)).nAna, 3, '取消勾選一次只分析一次')
+            }
+            finally {
+                await ctx.close()
+            }
+        })
+    }
+
+
+    it('R06 分析次數: 使用端改 sptMethodsSelects 只分析一次', async function() {
+        let ctx = await openPage({ initRows: getRowsLiq() })
+        try {
+            let { page } = ctx
+            await waitSelected(page, ofM('sptHBF2017'), '初始')
+            await page.evaluate(() => {
+                window.__vm.methods = ['sptSeed']
+            })
+            await waitSelected(page, ofM('sptSeed'), '改為 sptSeed')
+            await page.waitForTimeout(500)
+            assert.strictEqual((await compState(page)).nAna, 2, 'prop 改變只分析一次')
+        }
+        finally {
+            await ctx.close()
+        }
+    })
+
+
+    it('R06 分析失敗: 首次即帶錯誤資料只分析一次且只發出一次error事件', async function() {
+        let bad = getRowsLiq().map((r) => ({ ...r, PGA: '' }))
+        let ctx = await openPage({ initRows: bad, initMethods: ['sptSeed'] })
+        try {
+            let { page } = ctx
+            let alert = page.getByRole('alert')
+            await alert.waitFor({ state: 'visible', timeout: 10000 })
+            await page.waitForTimeout(1000) //負向觀察窗: 待可能之重複分析與 nextTick 事件出齊
+            let s = await compState(page)
+            assert.strictEqual(s.nAna, 1, '首次渲染只分析一次') //驗證建議3
+            assert.strictEqual(s.errs.length, 1, '分析失敗時 error 事件不重複發出') //驗證建議3
         }
         finally {
             await ctx.close()

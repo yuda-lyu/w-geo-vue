@@ -150,8 +150,6 @@ import map from 'lodash-es/map.js'
 import size from 'lodash-es/size.js'
 import cloneDeep from 'lodash-es/cloneDeep.js'
 import isnum from 'wsemi/src/isnum.mjs'
-import isestr from 'wsemi/src/isestr.mjs'
-import isearr from 'wsemi/src/isearr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import cstr from 'wsemi/src/cstr.mjs'
 import haskey from 'wsemi/src/haskey.mjs'
@@ -162,6 +160,7 @@ import WSptLiqPlotDepthsWithGradesAndTools from './WSptLiqPlotDepthsWithGradesAn
 import spc2html from '../js/spc2html.mjs'
 import getCellText from '../js/getCellText.mjs'
 import getIdig from '../js/getIdig.mjs'
+import getKeyStsSelects from '../js/getKeyStsSelects.mjs'
 import anaSptLiq, { isLongTextKey } from '../js/anaSptLiq.mjs'
 
 
@@ -180,6 +179,8 @@ import anaSptLiq, { isLongTextKey } from '../js/anaSptLiq.mjs'
  *
  * 分析(含w-geo計算)拋出例外時，不顯示表格與繪圖並於組件內顯示錯誤訊息，同時發出error事件；輸入rows為空時視為尚無數據，不計算亦不視為錯誤
  *
+ * 繪圖參數之勾選：首次分析結果與日後新勾選之液化分析方法，其符合keyParamSelects之參數(-FS、-cmpFS、-PL、-stlTS、-stlIY等)自動勾選並繪圖；取消勾選方法時其參數與圖移除，再次勾選時重新自動勾選；已存在參數之勾選結果維持使用者之選擇，不因分析結果更新而改變
+ *
  * 具名插槽(slot)：'zone-top'為繪圖區上方之資訊區塊，提供作用域參數row0(分析結果第1筆)、rown(分析結果最末筆)、rows(分析結果全部)
  *
  * @vue-prop {Array} [sptMethods] 輸入可供勾選之液化分析方法字串陣列，預設['sptSeed','sptHBF2012','sptHBF2017','sptNCEER','sptNJRA1996','sptNJRA2017','sptTY']
@@ -189,7 +190,7 @@ import anaSptLiq, { isLongTextKey } from '../js/anaSptLiq.mjs'
  * @vue-prop {Object} [kpTransRowKey] 輸入rows各欄位key之轉換對照物件，key為輸入資料欄位key，值為分析用欄位key，預設已提供SPTN、Gt_dry、Gt_sat、ctFine、code、USCS等對照
  * @vue-prop {Object} [kpHead] 輸入分析用欄位key對應表格標題與繪圖軸標題之物件，值可使用底線與上下標語法，並可使用'{unitSvSvp}'標記代表應力單位，預設已提供PGA、depth、waterLevel、WC、PI、FC、γ、σ等對照
  * @vue-prop {Object} [kpDig] 輸入分析用欄位key對應表格數值取用小數點位數之物件，預設已提供depth、N60、WC、γ、σ、D10等對照
- * @vue-prop {Array} [keyParamSelects] 輸入預設勾選繪圖參數之過濾設定物件陣列，僅於外部未給予keyStsSelects時套用，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾
+ * @vue-prop {Array} [keyParamSelects] 輸入預設勾選繪圖參數之過濾設定物件陣列，套用於首次出現與日後新出現之參數(例如新勾選液化分析方法後其-FS、-PL、-stlTS、-stlIY等)，已出現參數之勾選結果不因此改變，物件可給予keyFull(需完全相同)或keyPart(需部份含有)，預設已提供Geolayer、N60、FC(%)、-FS、-cmpFS、-PL、-stl等過濾
  * @vue-prop {String} [depthTitle='Depth(m)'] 輸入繪圖深度軸標題字串，預設'Depth(m)'
  * @vue-prop {Object} [optionsPic={}] 輸入繪圖設定物件，鍵值同WSptLiqPlotDepthsWithGradesAndTools之optionsPic並向下傳遞，預設{}
  * @vue-prop {Object} [optionsTable={}] 輸入提供組件WTableEdit之額外參數物件，預設{}
@@ -204,7 +205,8 @@ import anaSptLiq, { isLongTextKey } from '../js/anaSptLiq.mjs'
  * @vue-data {Object} optTable 儲存供WTableEdit使用之表格設定物件，其列為已將文字數值欄轉為數值之列
  * @vue-data {Array} rowsAna 儲存液化分析結果之數據物件陣列(未轉型，供rowsResult與zone-top插槽使用)
  * @vue-data {Array} sts 儲存分析結果各參數之繪圖狀態物件陣列
- * @vue-data {Array} keyStsSelects 儲存已勾選繪製參數之key字串陣列
+ * @vue-data {Array} stsKeysPrev 儲存前次處理時分析結果各參數之key字串陣列，供判斷新出現與已消失之參數
+ * @vue-data {Array} keyStsSelects 儲存已勾選繪製參數之key字串陣列，新勾選液化分析方法時其符合keyParamSelects之參數會自動加入，取消勾選時其參數自此移除
  * @vue-data {String} errMsg 儲存分析拋出例外之錯誤訊息字串，無錯誤時為空字串
  * @vue-computed {String} textMethods 回傳分析方法勾選區標題字串
  * @vue-computed {String} textTable 回傳數據表格區標題字串
@@ -414,6 +416,7 @@ export default {
             rowsAna: [],
 
             sts: [],
+            stsKeysPrev: [],
             keyStsSelects: [],
 
             errMsg: '',
@@ -462,48 +465,28 @@ export default {
         changeStsAndKeyParamSelects: function() {
             let vo = this
 
-            //check, 若已經有預選或使用者已切換選則, 則不再變更
-            if (isearr(vo.keyStsSelects)) {
+            //check, 未勾選任何分析方法時w-geo會以全部方法計算(結果不顯示), 不依其結果判斷參數之新出現; 勾選與前次鍵集一併清空, 再勾選方法時視為首次出現而重新自動勾選
+            if (!vo.hasSelects) {
+                if (size(vo.keyStsSelects) > 0) {
+                    vo.keyStsSelects = []
+                }
+                if (size(vo.stsKeysPrev) > 0) {
+                    vo.stsKeysPrev = []
+                }
                 return ''
             }
 
-            //kpPis
-            let kpPis = {}
-            if (isearr(vo.keyParamSelects)) {
-                each(vo.sts, (v) => {
-                    let k = v.key
-                    each(vo.keyParamSelects, (flt) => {
+            //getKeyStsSelects, 新出現之參數(首次分析結果與新勾選方法之-FS,-PL,-stl等)依keyParamSelects自動勾選, 已消失者(取消勾選方法)移除, 其餘維持使用者之勾選結果
+            let r = getKeyStsSelects(map(vo.sts, 'key'), vo.stsKeysPrev, vo.keyStsSelects, vo.keyParamSelects)
+            // console.log('getKeyStsSelects', r)
 
-                        //b
-                        let b = false
-                        if (isestr(flt.keyPart)) {
-                            b = k.indexOf(flt.keyPart) >= 0
-                        }
-                        else if (isestr(flt.keyFull)) {
-                            b = k === flt.keyFull
-                        }
-
-                        //check
-                        if (b) {
-                            kpPis[k] = true
-                        }
-
-                    })
-                })
+            //update, 參照不變(無變更)則不寫回, 避免此computed因自身依賴被寫入而重複觸發
+            if (r.keysPrev !== vo.stsKeysPrev) {
+                vo.stsKeysPrev = r.keysPrev
             }
-            // console.log('kpPis', kpPis)
-
-            //keyStsSelects
-            let keyStsSelects = []
-            each(kpPis, (b, k) => {
-                if (b) {
-                    keyStsSelects.push(k)
-                }
-            })
-            // console.log('keyStsSelects', keyStsSelects)
-
-            //update
-            vo.keyStsSelects = keyStsSelects
+            if (r.keyStsSelects !== vo.keyStsSelects) {
+                vo.keyStsSelects = r.keyStsSelects
+            }
 
             return ''
         },

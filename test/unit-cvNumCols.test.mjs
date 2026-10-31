@@ -51,7 +51,6 @@ describe('unit-cvNumCols', function() {
             [[' 5 ', '6'], 1],
             [['1e3', '2'], 0],
             [['+5', '6'], 1],
-            [['0x10', '1'], 0],
         ]
         cases.forEach(([vs, idig]) => {
             let r = one(vs, { x: idig })
@@ -61,6 +60,47 @@ describe('unit-cvNumCols', function() {
                 assert.strictEqual(getCellText(r.vals[i], idig), getCellText(v, idig), `顯示文字轉型前後須相同: ${JSON.stringify(v)}`)
             })
         })
+    })
+
+    //依使用者 2026-10-31 對「有效數字」之定義(wsemi 1.9.36 isenum/dig): 十六進位、八進位、二進位字串與 Infinity 不屬有效數字, 取位只對有效數字
+    //故 '0x10' 等非有效數字之字串, 即使該欄有 kpDig 亦不取位、照原樣顯示(不得為空字串), 該欄維持文字欄(不轉數值)而非先前之轉為 16
+    it('有kpDig時十六進位等非有效數字字串維持文字且顯示原樣', function() {
+        let cases = ['0x10', '0X1F', '0b11', '0o7']
+        cases.forEach((s) => {
+            let r = one([s, '1'], { x: 0 })
+            assert.deepStrictEqual(r, { vals: [s, '1'], type: 'text' }, `${s} 須維持文字欄且值原樣`)
+            assert.strictEqual(getCellText(s, 0), s, `${s} 顯示須為原樣, 不得為空字串`)
+            assert.strictEqual(getCellText(s, 2), s)
+        })
+        //有效數字字串仍取位
+        assert.strictEqual(getCellText('16', 2), '16.00')
+        assert.strictEqual(getCellText(' 1.005 ', 2), '1.01')
+    })
+
+    //Infinity 與溢位科學記號 '1e400'(轉數值為 Infinity)非有效數字: 取位不套用, 顯示原樣而非空字串; 字串者維持文字欄
+    it('Infinity與1e400不取位, 顯示原樣', function() {
+        //getCellText: 有 idig 時亦照原樣文字化
+        assert.strictEqual(getCellText(Infinity, 2), 'Infinity')
+        assert.strictEqual(getCellText(-Infinity, 2), '-Infinity')
+        assert.strictEqual(getCellText('Infinity', 2), 'Infinity')
+        assert.strictEqual(getCellText('-Infinity', 2), '-Infinity')
+        assert.strictEqual(getCellText('1e400', 2), '1e400')
+        assert.strictEqual(getCellText('-1e400', 2), '-1e400')
+        assert.notStrictEqual(getCellText(1e300, 0), '', '有限大數仍取位(非有效數字之界線為非有限, 不是大小)')
+
+        //cvNumCols: 字串者維持文字欄且值原樣(有無 kpDig 皆然)
+        let kpDigs = [{}, { x: 0 }, { x: 2 }]
+        let colsText = [['Infinity', '1'], ['-Infinity', '1'], ['1e400', '1'], ['-1e400', '2']]
+        kpDigs.forEach((kpDig) => {
+            colsText.forEach((vs) => {
+                assert.deepStrictEqual(one(vs, kpDig), { vals: vs, type: 'text' }, `${JSON.stringify(vs)} ${JSON.stringify(kpDig)}`)
+            })
+        })
+
+        //原生 Infinity 數值無須轉換: 值不變(不轉為其他值), 顯示為 Infinity
+        let r = one([Infinity, 1], { x: 2 })
+        assert.deepStrictEqual(r.vals, [Infinity, 1])
+        assert.strictEqual(getCellText(r.vals[0], 2), 'Infinity')
     })
 
     //數值字串須為有限值且不超過安全整數: Infinity、溢位科學記號、超過 2^53 之整數即使有 kpDig 亦維持文字(轉換會夾限或失去精度)
@@ -130,7 +170,7 @@ describe('unit-cvNumCols', function() {
         assert.deepStrictEqual(r.kpHeadFilterType, { x: 'num', y: 'text' })
     })
 
-    //getCellText 與 w-aggrid-vue 預設儲存格文字化一致: 空值為空字串, 字串數字原樣, 物件/陣列 JSON, 循環參照空字串; 有 idig 且為數字(含數字字串)時取位
+    //getCellText 與 w-aggrid-vue 預設儲存格文字化一致: 空值為空字串, 字串數字原樣, 物件/陣列 JSON, 循環參照空字串; 有 idig 且為有效數字(含十進位數字字串)時取位
     it('getCellText 文字化規則', function() {
         assert.strictEqual(getCellText(null), '')
         assert.strictEqual(getCellText(undefined), '')

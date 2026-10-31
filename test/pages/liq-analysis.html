@@ -19,10 +19,33 @@
     </div>
 
     <script>
+        //__nAna, 元件分析方法之呼叫次數(須在 Vue.use 之前註冊, 於元件建立前包裝其 methods), 供測試端驗證「首次渲染只分析一次」
+        //包裝 analysisCore(1.1.x 起 analysis 內呼叫之核心, 空列時亦計次但提早返回); 無 analysisCore 之舊版(1.0.56)改包裝 analysis
+        window.__nAna = 0
+        Vue.mixin({
+            beforeCreate: function() {
+                var m = this.$options.methods
+                var key = m && m.analysisCore ? 'analysisCore' : (m && m.analysis ? 'analysis' : '')
+                if (key !== '' && !m[key].__counted) {
+                    var orig = m[key]
+                    var f = function() {
+                        window.__nAna++
+                        return orig.apply(this, arguments)
+                    }
+                    f.__counted = true
+                    m[key] = f
+                }
+            },
+        })
+
         Vue.use(window['w-geo-vue'])
 
         //__errs, 元件發出之 error 事件(記錄訊息字串), 供測試端讀取
         window.__errs = []
+
+        //__updMethods, 元件發出之 update:sptMethodsSelects 事件內容(使用者勾選或取消方法); __syncMethods 為 true 時如 .sync 寫回 methods(預設不寫回)
+        window.__updMethods = []
+        window.__syncMethods = false
 
         //__vm, 測試端經此換 rows(setup, 非 act)
         window.__vm = new Vue({
@@ -36,7 +59,18 @@
                 onError: function(err) {
                     window.__errs.push(String(err && err.message ? err.message : err))
                 },
+                onUpdMethods: function(v) {
+                    window.__updMethods.push(JSON.stringify(v))
+                    if (window.__syncMethods) {
+                        this.methods = v
+                    }
+                },
             },
+        })
+
+        //DOM 模板無法寫 camelCase 事件名, 故以程式掛接元件之 update:sptMethodsSelects
+        window.__vm.$children[0].$on('update:sptMethodsSelects', function(v) {
+            window.__vm.onUpdMethods(v)
         })
     </script>
 </body>

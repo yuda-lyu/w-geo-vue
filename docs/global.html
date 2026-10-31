@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getKeyStsSelects">getKeyStsSelects</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
     
 </nav>
 
@@ -142,17 +142,18 @@
     <dt class="tag-description">Description:</dt>
     <dd class="tag-description"><ul class="dummy"><li><p>將表格各列中以文字傳入之數值欄轉為數值，並依欄位型別給予過濾器型別</p>
 <p>計算結果列之數值欄在來源列為文字時會原樣保留文字，表格預設之數值過濾器('num')比對文字值會得不到列。
-逐欄判型：①欄內非空值皆為數值或數值字串，且各值轉為數值前後之顯示文字(含kpDig取位)皆相同時，該欄文字值轉為數值並給予'num'過濾器；
+逐欄判型：①欄內非空值皆為數值或有效數字字串(isenum：十進位寫法，可帶正負號、小數點、科學記號，轉換後為有限值)，且各值轉為數值前後之顯示文字(含kpDig取位)皆相同時，該欄文字值轉為數值並給予'num'過濾器；
 ②其餘有非空值之欄維持原值並給予'text'過濾器(例如含NP、-之欄，或不取位而尾零會因轉數值消失之欄)；③全為空值之欄不指定(沿用表格預設之數值過濾器，因無資料故無實質影響)。
-顯示文字不變為硬約束，故轉換不會改變儲存格所見：有kpDig之欄因取位函數內部即先轉數值，轉換前後之顯示文字必然相同(檢查恆成立，保障來自取位本身)，
-無kpDig之欄才實際比對字面(尾零、前導零、前後空白、科學記號、正負號、十六進位字樣等字面不同者維持文字)；
-數值字串另須為有限值且絕對值不超過安全整數上限，否則(Infinity、1e309、超過2^53之整數)維持文字，避免轉換時夾限或失去精度</p></li></ul></dd>
+顯示文字不變為硬約束，故轉換不會改變儲存格所見：有kpDig之欄，有效數字字串取位前後之顯示文字必然相同(檢查恆成立，保障來自取位本身)，
+無kpDig之欄才實際比對字面(尾零、前導零、前後空白、科學記號、正負號等字面不同者維持文字)；
+十六進位、八進位、二進位字樣('0x10')、'Infinity'、溢位科學記號('1e400')等非有效數字之字串，不論有無kpDig皆維持文字(與getCellText不取位、照原樣顯示一致)；
+有效數字字串另須絕對值不超過安全整數上限，否則(超過2^53之整數)維持文字，避免轉換時失去精度；原生數值(含Infinity)無須轉換，不改動其值與顯示</p></li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cvNumCols.mjs.html">cvNumCols.mjs</a>, <a href="cvNumCols.mjs.html#line41">line 41</a>
+        <a href="cvNumCols.mjs.html">cvNumCols.mjs</a>, <a href="cvNumCols.mjs.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -361,14 +362,16 @@
     
     <dt class="tag-description">Description:</dt>
     <dd class="tag-description"><ul class="dummy"><li><p>取得表格儲存格之顯示文字</p>
-<p>給予idig(kpDig內該欄位之小數位數)且值為數字(含數字字串)時取位，其餘空值為空字串、字串與數字原樣轉字串、物件與陣列轉JSON字串(含循環參照時為空字串)，
+<p>給予idig(kpDig內該欄位之小數位數)且值為有效數字(isenum：有限數字，或去頭尾空白後為十進位寫法之數字字串)時取位，
+其餘空值為空字串、字串與數字原樣轉字串、物件與陣列轉JSON字串(含循環參照時為空字串)，
+故十六進位字樣('0x10')、Infinity、溢位科學記號('1e400')等非有效數字不取位，照原樣當文字顯示(不為空字串)，
 轉換規則同w-aggrid-vue預設儲存格顯示，使儲存格slot與數值欄轉型前後之顯示比對共用同一份定義</p></li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="getCellText.mjs.html">getCellText.mjs</a>, <a href="getCellText.mjs.html#line19">line 19</a>
+        <a href="getCellText.mjs.html">getCellText.mjs</a>, <a href="getCellText.mjs.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -1449,6 +1452,240 @@
 
     
 
+    <h4 class="name" id="getKeyStsSelects"><span class="type-signature"></span>getKeyStsSelects<span class="signature">(keysNow, keysPrev, keyStsSelects, keyParamSelects)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>依分析結果之參數鍵變化計算已勾選之繪圖參數鍵</p>
+<p>首次出現(keysPrev為空)與日後新出現(例如新勾選液化分析方法而增加其-FS、-PL、-stlTS、-stlIY等參數)之參數鍵，符合keyParamSelects過濾設定者自動加入勾選；
+已消失(例如取消勾選液化分析方法)之參數鍵自勾選移除，再次出現時視為新出現而重新自動勾選；
+前後皆存在之參數鍵維持使用者之勾選結果，不因分析結果更新而改變；keysNow為空(尚無分析結果或分析失敗)時不變更</p>
+<p>未變更時回傳之keyStsSelects與keysPrev為輸入之原陣列(同一參照)，供呼叫端以參照比較判斷是否需寫回</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="getKeyStsSelects.mjs.html">getKeyStsSelects.mjs</a>, <a href="getKeyStsSelects.mjs.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keysNow</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>輸入目前分析結果各參數之key字串陣列</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keysPrev</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>輸入前次處理時各參數之key字串陣列</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyStsSelects</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>輸入目前已勾選繪圖參數之key字串陣列</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyParamSelects</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>輸入預設勾選繪圖參數之過濾設定物件陣列，物件可給予keyFull(需完全相同)或keyPart(需部份含有)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>回傳物件，keysPrev為更新後之參數key字串陣列，keyStsSelects為更新後之已勾選繪圖參數key字串陣列</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="getSoilCodeIcon"><span class="type-signature"></span>getSoilCodeIcon<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -1791,7 +2028,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Oct 31 2026 18:10:58 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sun Nov 01 2026 02:34:55 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

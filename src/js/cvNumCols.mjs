@@ -6,6 +6,7 @@ import every from 'lodash-es/every.js'
 import size from 'lodash-es/size.js'
 import keys from 'lodash-es/keys.js'
 import isnum from 'wsemi/src/isnum.mjs'
+import isenum from 'wsemi/src/isenum.mjs'
 import isstr from 'wsemi/src/isstr.mjs'
 import cdbl from 'wsemi/src/cdbl.mjs'
 import getCellText from './getCellText.mjs'
@@ -28,11 +29,12 @@ function isSafeNum(v) {
  * 將表格各列中以文字傳入之數值欄轉為數值，並依欄位型別給予過濾器型別
  *
  * 計算結果列之數值欄在來源列為文字時會原樣保留文字，表格預設之數值過濾器('num')比對文字值會得不到列。
- * 逐欄判型：①欄內非空值皆為數值或數值字串，且各值轉為數值前後之顯示文字(含kpDig取位)皆相同時，該欄文字值轉為數值並給予'num'過濾器；
+ * 逐欄判型：①欄內非空值皆為數值或有效數字字串(isenum：十進位寫法，可帶正負號、小數點、科學記號，轉換後為有限值)，且各值轉為數值前後之顯示文字(含kpDig取位)皆相同時，該欄文字值轉為數值並給予'num'過濾器；
  * ②其餘有非空值之欄維持原值並給予'text'過濾器(例如含NP、-之欄，或不取位而尾零會因轉數值消失之欄)；③全為空值之欄不指定(沿用表格預設之數值過濾器，因無資料故無實質影響)。
- * 顯示文字不變為硬約束，故轉換不會改變儲存格所見：有kpDig之欄因取位函數內部即先轉數值，轉換前後之顯示文字必然相同(檢查恆成立，保障來自取位本身)，
- * 無kpDig之欄才實際比對字面(尾零、前導零、前後空白、科學記號、正負號、十六進位字樣等字面不同者維持文字)；
- * 數值字串另須為有限值且絕對值不超過安全整數上限，否則(Infinity、1e309、超過2^53之整數)維持文字，避免轉換時夾限或失去精度
+ * 顯示文字不變為硬約束，故轉換不會改變儲存格所見：有kpDig之欄，有效數字字串取位前後之顯示文字必然相同(檢查恆成立，保障來自取位本身)，
+ * 無kpDig之欄才實際比對字面(尾零、前導零、前後空白、科學記號、正負號等字面不同者維持文字)；
+ * 十六進位、八進位、二進位字樣('0x10')、'Infinity'、溢位科學記號('1e400')等非有效數字之字串，不論有無kpDig皆維持文字(與getCellText不取位、照原樣顯示一致)；
+ * 有效數字字串另須絕對值不超過安全整數上限，否則(超過2^53之整數)維持文字，避免轉換時失去精度；原生數值(含Infinity)無須轉換，不改動其值與顯示
  *
  * @param {Array} rows 輸入列物件陣列，各列鍵同第1列
  * @param {Object} [kpDig={}] 輸入欄位鍵對應顯示小數位數之物件
@@ -57,13 +59,13 @@ function cvNumCols(rows, kpDig = {}) {
             return true
         }
 
-        //b, 皆為數值且轉數值前後顯示文字相同
+        //b, 皆為數值且轉數值前後顯示文字相同; 非字串者無須轉換(含Infinity, 不改動其值與顯示); 字串須為有效數字(isenum, 與getCellText取位之判斷一致)方可轉換
         let b = every(vs, (v) => {
-            if (!isnum(v)) {
-                return false
-            }
             if (!isstr(v)) {
-                return true
+                return isnum(v)
+            }
+            if (!isenum(v)) {
+                return false
             }
             if (!isSafeNum(v)) {
                 return false

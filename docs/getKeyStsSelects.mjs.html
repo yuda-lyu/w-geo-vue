@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>getKeyStsSelects.mjs - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-WPlot2d.html">WPlot2d</a></li><li><a href="module-WSoilColumn.html">WSoilColumn</a></li><li><a href="module-WSoilColumnWithAnchors.html">WSoilColumnWithAnchors</a></li><li><a href="module-WSptLiqAnalysis.html">WSptLiqAnalysis</a></li><li><a href="module-WSptLiqPlotDepth.html">WSptLiqPlotDepth</a></li><li><a href="module-WSptLiqPlotDepths.html">WSptLiqPlotDepths</a></li><li><a href="module-WSptLiqPlotDepthsWithGrades.html">WSptLiqPlotDepthsWithGrades</a></li><li><a href="module-WSptLiqPlotDepthsWithGradesAndTools.html">WSptLiqPlotDepthsWithGradesAndTools</a></li></ul><h3>Global</h3><ul><li><a href="global.html#cvNumCols">cvNumCols</a></li><li><a href="global.html#getCellText">getCellText</a></li><li><a href="global.html#getDefAxis">getDefAxis</a></li><li><a href="global.html#getDefChart">getDefChart</a></li><li><a href="global.html#getDefLegend">getDefLegend</a></li><li><a href="global.html#getDefOpt">getDefOpt</a></li><li><a href="global.html#getIdig">getIdig</a></li><li><a href="global.html#getKeyStsSelects">getKeyStsSelects</a></li><li><a href="global.html#getSoilCodeIcon">getSoilCodeIcon</a></li><li><a href="global.html#setLegendLoc">setLegendLoc</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">getKeyStsSelects.mjs</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import isestr from 'wsemi/src/isestr.mjs'
+import isearr from 'wsemi/src/isearr.mjs'
+
+
+function isSame(a, b) {
+    if (a.length !== b.length) {
+        return false
+    }
+    for (let i = 0; i &lt; a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false
+        }
+    }
+    return true
+}
+
+
+function isMatch(k, keyParamSelects) {
+    for (let i = 0; i &lt; keyParamSelects.length; i++) {
+        let flt = keyParamSelects[i]
+        if (isestr(flt.keyPart) &amp;&amp; k.indexOf(flt.keyPart) >= 0) {
+            return true
+        }
+        if (isestr(flt.keyFull) &amp;&amp; k === flt.keyFull) {
+            return true
+        }
+    }
+    return false
+}
+
+
+/**
+ * 依分析結果之參數鍵變化計算已勾選之繪圖參數鍵
+ *
+ * 首次出現(keysPrev為空)與日後新出現(例如新勾選液化分析方法而增加其-FS、-PL、-stlTS、-stlIY等參數)之參數鍵，符合keyParamSelects過濾設定者自動加入勾選；
+ * 已消失(例如取消勾選液化分析方法)之參數鍵自勾選移除，再次出現時視為新出現而重新自動勾選；
+ * 前後皆存在之參數鍵維持使用者之勾選結果，不因分析結果更新而改變；keysNow為空(尚無分析結果或分析失敗)時不變更
+ *
+ * 未變更時回傳之keyStsSelects與keysPrev為輸入之原陣列(同一參照)，供呼叫端以參照比較判斷是否需寫回
+ *
+ * @param {Array} keysNow 輸入目前分析結果各參數之key字串陣列
+ * @param {Array} keysPrev 輸入前次處理時各參數之key字串陣列
+ * @param {Array} keyStsSelects 輸入目前已勾選繪圖參數之key字串陣列
+ * @param {Array} keyParamSelects 輸入預設勾選繪圖參數之過濾設定物件陣列，物件可給予keyFull(需完全相同)或keyPart(需部份含有)
+ * @returns {Object} 回傳物件，keysPrev為更新後之參數key字串陣列，keyStsSelects為更新後之已勾選繪圖參數key字串陣列
+ */
+function getKeyStsSelects(keysNow, keysPrev, keyStsSelects, keyParamSelects) {
+
+    //check
+    if (!isearr(keysNow)) {
+        return { keysPrev, keyStsSelects }
+    }
+
+    //kpNow, kpPrev
+    let kpNow = {}
+    keysNow.forEach((k) => {
+        kpNow[k] = true
+    })
+    let kpPrev = {}
+    keysPrev.forEach((k) => {
+        kpPrev[k] = true
+    })
+
+    //keep, 已消失之參數鍵不再勾選
+    let keep = keyStsSelects.filter((k) => kpNow[k] === true)
+
+    //add, 新出現且符合預設勾選過濾設定之參數鍵
+    let kpKeep = {}
+    keep.forEach((k) => {
+        kpKeep[k] = true
+    })
+    let add = []
+    if (isearr(keyParamSelects)) {
+        keysNow.forEach((k) => {
+            if (kpPrev[k] !== true &amp;&amp; kpKeep[k] !== true &amp;&amp; isMatch(k, keyParamSelects)) {
+                kpKeep[k] = true
+                add.push(k)
+            }
+        })
+    }
+
+    //keyStsSelectsNew
+    let keyStsSelectsNew = [...keep, ...add]
+
+    return {
+        keysPrev: isSame(keysNow, keysPrev) ? keysPrev : keysNow,
+        keyStsSelects: isSame(keyStsSelectsNew, keyStsSelects) ? keyStsSelects : keyStsSelectsNew,
+    }
+}
+
+
+export default getKeyStsSelects
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sun Nov 01 2026 02:34:55 GMT+0800 (台北標準時間) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
