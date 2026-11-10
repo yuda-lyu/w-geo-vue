@@ -1,13 +1,13 @@
 {
   "name": "w-geo-vue",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "main": "dist/w-geo-vue.umd.js",
   "dependencies": {
-    "w-component-vue": "^2.5.45",
-    "w-geo": "^1.2.20",
-    "w-highcharts-vue": "^1.0.38",
-    "w-table-vue": "^1.0.38",
-    "wsemi": "^1.9.54"
+    "w-component-vue": "^2.5.46",
+    "w-geo": "^1.2.21",
+    "w-highcharts-vue": "^1.0.39",
+    "w-table-vue": "^1.0.39",
+    "wsemi": "^1.9.55"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",
@@ -21,8 +21,8 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.10.0",
     "vue": "^2.7.16",
-    "w-package-tools": "^1.1.24",
-    "w-package-tools-e2e": "^1.0.27"
+    "w-package-tools": "^1.1.25",
+    "w-package-tools-e2e": "^1.0.28"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
